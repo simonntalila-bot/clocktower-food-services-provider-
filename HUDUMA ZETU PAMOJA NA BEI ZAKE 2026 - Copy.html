@@ -220,10 +220,11 @@
   .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center;}
   .hero-overlay{
     position:absolute;inset:0;z-index:1;
-    background:linear-gradient(90deg, rgba(5,10,15,0.82) 0%, rgba(5,10,15,0.60) 40%, rgba(5,10,15,0.25) 75%, rgba(5,10,15,0.40) 100%);
+    background:
+      radial-gradient(ellipse at center, rgba(5,10,15,0.68) 0%, rgba(5,10,15,0.46) 65%, rgba(5,10,15,0.54) 100%);
   }
   .hero-content{
-    position:relative;z-index:2;max-width:680px;width:100%;
+    position:relative;z-index:2;max-width:780px;width:100%;margin:0 auto;text-align:center;
     animation:heroIn .7s ease both;
   }
   @keyframes heroIn{
@@ -246,9 +247,9 @@
   }
   .hero-content h1 span{color:#ffb84d;}
   .hero-content .lede{
-    color:rgba(255,255,255,0.92);font-size:17.5px;line-height:1.65;max-width:600px;margin:0 0 30px;
+    color:rgba(255,255,255,0.92);font-size:17.5px;line-height:1.65;max-width:600px;margin:0 auto 30px;
   }
-  .hero-content .hero-btns{justify-content:flex-start;}
+  .hero-content .hero-btns{justify-content:center;}
   .btn{
     display:inline-flex;align-items:center;gap:8px;
     padding:14px 26px;border-radius:13px;
@@ -274,7 +275,7 @@
   .hero-content .btn-ghost:hover{border-color:#ffb84d;color:#ffd9a0;}
   .hero-content .btn-primary:hover,.hero-content .btn-ghost:hover{transform:translateY(-2px);}
   .hero-feats{
-    display:flex;gap:20px;flex-wrap:wrap;margin-top:40px;
+    display:flex;gap:20px;flex-wrap:wrap;margin-top:40px;justify-content:center;
     color:rgba(255,255,255,0.85);font-size:13.5px;font-weight:600;
   }
   .hero-feats span{display:inline-flex;align-items:center;gap:7px;}
