@@ -326,50 +326,41 @@
 
   /* ---------- FOOD GRID ---------- */
   .food-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
   }
   .food-card{
-    background:var(--card);border:1px solid var(--border);border-radius:18px;
-    overflow:hidden;display:flex;flex-direction:column;
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;
+    min-height:150px;cursor:pointer;
     transition:border-color .16s ease, transform .16s ease, box-shadow .16s ease;
   }
-  .food-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:var(--shadow);}
-  .food-img{
-    aspect-ratio:3/2;position:relative;display:flex;align-items:center;justify-content:center;
-    font-size:60px;cursor:pointer;background:var(--card2);
+  .food-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow);}
+  .fc-top{display:flex;align-items:center;gap:7px;min-width:0;}
+  .fc-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .fc-top h3{
+    margin:0;font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
-  .food-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%, rgba(0,0,0,0.35));pointer-events:none;}
-  .food-img .em{filter:drop-shadow(0 6px 10px rgba(0,0,0,0.3));transition:transform .2s ease;}
-  .food-card:hover .food-img .em{transform:scale(1.08);}
-  .food-img .cat-tag{
-    position:absolute;top:12px;left:12px;z-index:2;
-    font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;
-    padding:5px 10px;border-radius:100px;color:#fff;background:rgba(0,0,0,0.35);
-    backdrop-filter:blur(4px);
-  }
-  .food-body{padding:16px 16px 18px;display:flex;flex-direction:column;flex:1;}
-  .food-body h3{margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16.5px;font-weight:700;}
-  .food-desc{margin:0 0 12px;color:var(--muted);font-size:12.5px;line-height:1.55;flex:1;}
-  .food-price{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--accent);margin-bottom:12px;}
-  .food-actions{display:flex;align-items:center;gap:8px;}
+  .food-price{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--accent);}
+  .food-actions{display:flex;align-items:center;gap:8px;margin-top:auto;}
   .qty{
     display:flex;align-items:center;gap:2px;
-    background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:3px;
+    background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:3px;
   }
   .qty button{
-    width:30px;height:30px;border:none;border-radius:8px;
-    background:transparent;color:var(--muted);font-size:16px;font-weight:700;
+    width:26px;height:26px;border:none;border-radius:7px;
+    background:transparent;color:var(--muted);font-size:15px;font-weight:700;
     display:flex;align-items:center;justify-content:center;transition:all .12s ease;
   }
   .qty button:hover{background:var(--card2);color:var(--accent);}
-  .qty .qv{min-width:26px;text-align:center;font-weight:700;font-size:14px;}
+  .qty .qv{min-width:22px;text-align:center;font-weight:700;font-size:13px;}
   .add-btn{
     flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
-    padding:11px 10px;border:none;border-radius:11px;
+    padding:9px 8px;border:none;border-radius:9px;
     background:linear-gradient(90deg, var(--accent), var(--accent2));
-    color:#221303;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
+    color:#221303;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
     transition:transform .12s ease, box-shadow .12s ease;
-    min-height:38px;
+    min-height:33px;
   }
   .add-btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px -8px rgba(255,184,77,0.55);}
   .food-card.added{border-color:var(--green);}
@@ -411,16 +402,16 @@
   .close-x:hover{color:var(--danger);border-color:var(--danger);}
   .cart-list{flex:1;overflow-y:auto;padding:8px 22px;}
   .cart-item{
-    display:flex;gap:14px;padding:16px 0;
+    display:flex;gap:12px;padding:13px 0;
     border-bottom:1px solid var(--border);align-items:center;
   }
   .cart-item .ci-img{
-    flex:none;width:58px;height:58px;border-radius:13px;
-    display:flex;align-items:center;justify-content:center;font-size:30px;
+    flex:none;width:52px;height:52px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;font-size:26px;
   }
   .cart-item .ci-mid{flex:1;min-width:0;}
-  .cart-item .ci-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14.5px;margin-bottom:3px;}
-  .cart-item .ci-unit{font-size:11.5px;color:var(--muted);margin-bottom:8px;}
+  .cart-item .ci-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;margin-bottom:3px;}
+  .cart-item .ci-unit{font-size:11.5px;color:var(--muted);margin-bottom:6px;}
   .cart-item .ci-bottom{display:flex;align-items:center;gap:10px;}
   .cart-item .ci-line{font-weight:700;font-size:14px;color:var(--accent);}
   .cart-remove{
@@ -718,10 +709,9 @@
     .section-head .line{width:34px;}
     h2{font-size:clamp(22px,7vw,26px);}
     .sub{font-size:14px;margin-bottom:26px;}
-    .food-img{font-size:52px;}
-    .food-body{padding:14px 14px 16px;}
-    .food-body h3{font-size:15.5px;}
-    .add-btn{font-size:12.5px;min-height:40px;}
+    .food-card{padding:16px 14px 14px;min-height:168px;}
+    .fc-top h3{font-size:15.5px;}
+    .add-btn{font-size:13px;min-height:42px;}
     .qty button{width:34px;height:34px;}
     .qty .qv{min-width:24px;}
     .cart-head{padding:16px 48px;}
@@ -767,9 +757,6 @@
   }
 
   /* ---------- REAL IMAGES ---------- */
-  .food-img{overflow:hidden;}
-  .food-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
-  .food-card:hover .food-img img{transform:scale(1.06);}
   .cat-card .cat-thumb{width:74px;height:74px;margin:0 auto 16px;border-radius:22px;overflow:hidden;border:1px solid var(--border);display:block;background:var(--card2);}
   .cat-card .cat-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease;}
   .cat-card:hover .cat-thumb img{transform:scale(1.08);}
@@ -777,14 +764,6 @@
   .detail-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
   .cart-item .ci-img{overflow:hidden;}
   .cart-item .ci-img img{width:100%;height:100%;object-fit:cover;display:block;}
-
-  /* ---------- POPULAR BADGE ---------- */
-  .pop-badge{
-    position:absolute;top:12px;right:12px;z-index:3;
-    font-size:10.5px;font-weight:700;
-    padding:4px 10px;border-radius:100px;
-    color:#221303;background:linear-gradient(90deg,var(--accent),var(--accent2));
-  }
 
   /* ---------- RATINGS ---------- */
   .stars{display:inline-flex;align-items:center;gap:2px;color:var(--accent);font-size:12px;letter-spacing:1px;}
@@ -1112,7 +1091,7 @@
           <span class="qv" id="detailQty">1</span>
           <button type="button" data-act="inc" id="detailInc">+</button>
         </div>
-        <button class="add-btn" id="detailAdd" type="button" data-i18n="food.add">Add to Cart</button>
+        <button class="add-btn" id="detailAdd" type="button" data-i18n="food.addBtn">Add</button>
       </div>
     </div>
   </div>
@@ -1211,34 +1190,34 @@
   };
 
   var FOODS = [
-    { id: 1,  name: 'Chapati',         nameSw: 'Chapati',         category: 'breakfast', price: 2000,  icon: '🫓', img: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Soft, layered flatbread grilled to a golden finish.', descSw: 'Chapati laini linalopakwa hadi kuwa la rangi ya dhahabu.' },
+    { id: 1,  name: 'Chapati',         nameSw: 'Chapati',         category: 'breakfast', price: 2000,  icon: '🫓', img: 'https://images.unsplash.com/photo-1600935926387-12d9b03066f0?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Soft, layered flatbread grilled to a golden finish.', descSw: 'Chapati laini linalopakwa hadi kuwa la rangi ya dhahabu.' },
     { id: 2,  name: 'Mandazi',         nameSw: 'Mandazi',         category: 'breakfast', price: 1000,  icon: '🍩', img: 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: true,  desc: 'Light, fluffy fried dough — a breakfast classic.', descSw: 'Mandazi laini yenye hewa — tamu ya asubuhi.' },
     { id: 3,  name: 'Tea',             nameSw: 'Chai',            category: 'breakfast', price: 1500,  icon: '🍵', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Hot, sweet and milky tea to start your morning.', descSw: 'Chai moto, tamu na ya maziwa kuanza asubuhi yako.' },
     { id: 4,  name: 'Coffee',          nameSw: 'Kahawa',          category: 'breakfast', price: 2500,  icon: '☕', img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Freshly brewed coffee — bold and aromatic.', descSw: 'Kahawa iliyotengenezwa upya — kali na yenye harufu nzuri.' },
-    { id: 5,  name: 'Eggs',            nameSw: 'Mayai',           category: 'breakfast', price: 3000,  icon: '🍳', img: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Farm-fresh eggs cooked to your liking.', descSw: 'Mayai safi yakapikwa kulingana na utakavyo.' },
-    { id: 6,  name: 'Sausage',         nameSw: 'Soseji',          category: 'breakfast', price: 4000,  icon: '🌭', img: 'https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Juicy grilled sausages served hot.', descSw: 'Soseji zilizochomwa kikamilifu zikitolewa moto.' },
+    { id: 5,  name: 'Eggs',            nameSw: 'Mayai',           category: 'breakfast', price: 3000,  icon: '🍳', img: 'https://images.unsplash.com/photo-1518476381266-33596bddffc0?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Farm-fresh eggs cooked to your liking.', descSw: 'Mayai safi yakapikwa kulingana na utakavyo.' },
+    { id: 6,  name: 'Sausage',         nameSw: 'Soseji',          category: 'breakfast', price: 4000,  icon: '🌭', img: 'https://images.unsplash.com/photo-1624234734133-7f1342047e30?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Juicy grilled sausages served hot.', descSw: 'Soseji zilizochomwa kikamilifu zikitolewa moto.' },
     { id: 7,  name: 'Pancakes',        nameSw: 'Pancakes',        category: 'breakfast', price: 5000,  icon: '🥞', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Fluffy pancakes drizzled with honey or syrup.', descSw: 'Pancakes laini zilizowekwa asali au syrup.' },
     { id: 8,  name: 'Bread',           nameSw: 'Mkate',           category: 'breakfast', price: 2000,  icon: '🍞', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=70', rating: 4.3, popular: false, desc: 'Freshly baked bread, soft and warm.', descSw: 'Mkate uliookwa upya, laini na wa joto.' },
     { id: 9,  name: 'Fruit Salad',     nameSw: 'Saladi ya Matunda', category: 'breakfast', price: 4000,  icon: '🥗', img: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'A refreshing mix of seasonal fruits.', descSw: 'Mchanganyiko wa matunda ya msimu yenye kuburudisha.' },
 
     { id: 10, name: 'Chicken & Chips',  nameSw: 'Kuku na Chips',   category: 'lunch', price: 12000, icon: '🍗', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Crispy grilled chicken served with golden chips.', descSw: 'Kuku aliyechomwa akitolewa na chips za dhahabu.' },
-    { id: 11, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'lunch', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Steamed rice with tender, flavourful chicken.', descSw: 'Wali wa mvuke na kuku laini wenye ladha nzuri.' },
-    { id: 12, name: 'Beef & Rice',      nameSw: 'Wali na Nyama',   category: 'lunch', price: 10000, icon: '🥩', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Slow-cooked beef served over fluffy rice.', descSw: 'Nyama ya ng\'ombe iliyopikwa polepole juu ya wali laini.' },
+    { id: 11, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'lunch', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1603496987674-79600a000f55?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Steamed rice with tender, flavourful chicken.', descSw: 'Wali wa mvuke na kuku laini wenye ladha nzuri.' },
+    { id: 12, name: 'Beef & Rice',      nameSw: 'Wali na Nyama',   category: 'lunch', price: 10000, icon: '🥩', img: 'https://images.unsplash.com/photo-1574095443374-6748e7dd6c84?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Slow-cooked beef served over fluffy rice.', descSw: 'Nyama ya ng\'ombe iliyopikwa polepole juu ya wali laini.' },
     { id: 13, name: 'Pilau',            nameSw: 'Pilau',           category: 'lunch', price: 8000,  icon: '🍚', img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Fragrant spiced rice with tender meat.', descSw: 'Pilau yenye harufu nzuri ya viungo na nyama laini.' },
-    { id: 14, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'lunch', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Soft ugali with rich, savoury beef stew.', descSw: 'Ugali laini na mchuzi mzito wa nyama ya ng\'ombe.' },
-    { id: 15, name: 'Ugali & Chicken',  nameSw: 'Ugali na Kuku',   category: 'lunch', price: 9000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Soft ugali with hearty chicken stew.', descSw: 'Ugali laini na mchuzi wa kuku wenye kutosheleza.' },
+    { id: 14, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'lunch', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Soft ugali with rich, savoury beef stew.', descSw: 'Ugali laini na mchuzi mzito wa nyama ya ng\'ombe.' },
+    { id: 15, name: 'Ugali & Chicken',  nameSw: 'Ugali na Kuku',   category: 'lunch', price: 9000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Soft ugali with hearty chicken stew.', descSw: 'Ugali laini na mchuzi wa kuku wenye kutosheleza.' },
     { id: 16, name: 'Fish & Rice',      nameSw: 'Samaki na Wali',  category: 'lunch', price: 11000, icon: '🐟', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Grilled fish fillet served with steamed rice.', descSw: 'Samaki aliyechomwa akitolewa na wali wa mvuke.' },
     { id: 17, name: 'Chips Mayai',      nameSw: 'Chips Mayai',     category: 'lunch', price: 7000,  icon: '🍟', img: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Golden chips cooked into a savoury egg omelette.', descSw: 'Chips za dhahabu zilizopikwa kwenye omeleti ya mayai.' },
     { id: 18, name: 'Vegetable Rice',   nameSw: 'Wali wa Mboga',   category: 'lunch', price: 6000,  icon: '🥦', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Rice stir-fried with fresh seasonal vegetables.', descSw: 'Wali uliochanganywa na mboga mbichi za msimu.' },
 
-    { id: 19, name: 'Grilled Chicken',  nameSw: 'Kuku Mchoma',     category: 'dinner', price: 15000, icon: '🍗', img: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Whole grilled chicken, smoky and juicy.', descSw: 'Kuku mzima aliyechomwa, wenye moshi na juisi.' },
+    { id: 19, name: 'Grilled Chicken',  nameSw: 'Kuku Mchoma',     category: 'dinner', price: 15000, icon: '🍗', img: 'https://images.unsplash.com/photo-1712579733874-c3a79f0f9d12?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Whole grilled chicken, smoky and juicy.', descSw: 'Kuku mzima aliyechomwa, wenye moshi na juisi.' },
     { id: 20, name: 'Beef Steak',       nameSw: 'Steki ya Nyama',  category: 'dinner', price: 14000, icon: '🥩', img: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Juicy steak grilled to perfection.', descSw: 'Steki ya juisi iliyochomwa kikamilifu.' },
-    { id: 21, name: 'Fish & Chips',     nameSw: 'Samaki na Chips', category: 'dinner', price: 12000, icon: '🐟', img: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Crispy fish fillet with golden chips.', descSw: 'Samaki aliyekaanga akitolewa na chips za dhahabu.' },
+    { id: 21, name: 'Fish & Chips',     nameSw: 'Samaki na Chips', category: 'dinner', price: 12000, icon: '🐟', img: 'https://images.unsplash.com/photo-1697748836791-9ddf7e616ece?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Crispy fish fillet with golden chips.', descSw: 'Samaki aliyekaanga akitolewa na chips za dhahabu.' },
     { id: 22, name: 'Pilau',            nameSw: 'Pilau',           category: 'dinner', price: 8000,  icon: '🍚', img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Evening pilau — fragrant, spiced and satisfying.', descSw: 'Pilau ya jioni — yenye harufu nzuri na kutosheleza.' },
-    { id: 23, name: 'Rice & Beef',      nameSw: 'Wali na Nyama',   category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Fluffy rice with tender beef chunks.', descSw: 'Wali laini na vipande vya nyama laini.' },
-    { id: 24, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Steamed rice with grilled chicken.', descSw: 'Wali wa mvuke na kuku aliyechomwa.' },
+    { id: 23, name: 'Rice & Beef',      nameSw: 'Wali na Nyama',   category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1519699788450-ad34386a3bfc?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Fluffy rice with tender beef chunks.', descSw: 'Wali laini na vipande vya nyama laini.' },
+    { id: 24, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1775039983787-3fe9b416c545?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Steamed rice with grilled chicken.', descSw: 'Wali wa mvuke na kuku aliyechomwa.' },
     { id: 25, name: 'Ugali & Fish',     nameSw: 'Ugali na Samaki', category: 'dinner', price: 9000,  icon: '🐠', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Soft ugali with a fresh fish stew.', descSw: 'Ugali laini na mchuzi wa samaki safi.' },
-    { id: 26, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'dinner', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Hearty ugali with beef in rich gravy.', descSw: 'Ugali wenye nyama ya ng\'ombe kwenye mchuzi mzuri.' },
+    { id: 26, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'dinner', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Hearty ugali with beef in rich gravy.', descSw: 'Ugali wenye nyama ya ng\'ombe kwenye mchuzi mzuri.' },
     { id: 27, name: 'Vegetable Dinner', nameSw: 'Mboga za Jioni',  category: 'dinner', price: 6000,  icon: '🥦', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'A warm platter of fresh vegetables and rice.', descSw: 'Sahani ya joto ya mboga safi na wali.' },
 
     { id: 28, name: 'Soda',             nameSw: 'Soda',            category: 'drinks', price: 2500,  icon: '🥤', img: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: true,  desc: 'Ice-cold soda to refresh your day.', descSw: 'Soda ya barafu kukuburudisha.' },
@@ -1300,7 +1279,7 @@
       'menu.search': 'Search food...',
       'menu.none': 'No foods found. Try a different search.',
       'f.all': 'All',
-      'food.add': 'Add to Cart',
+      'food.add': 'Add to Cart', 'food.addBtn': 'Add',
       'cart.head': 'YOUR <span>CART</span>',
       'cart.empty': 'Your cart is empty.',
       'cart.emptySub': 'Browse our menu and add your favourite food.',
@@ -1367,7 +1346,7 @@
       'menu.search': 'Tafuta chakula...',
       'menu.none': 'Hakuna chakula kilichopatikana. Jaribu utafute kingine.',
       'f.all': 'Zote',
-      'food.add': 'Ongeza Kikapuni',
+      'food.add': 'Ongeza Kikapuni', 'food.addBtn': 'Ongeza',
       'cart.head': 'KIKAPU <span>CHAKO</span>',
       'cart.empty': 'Kikapu chako hakina kitu.',
       'cart.emptySub': 'Tembelea menyu yetu na ongeza chakula unachokipenda.',
@@ -1570,24 +1549,15 @@
       card.className = 'food-card' + (inCart ? ' added' : '');
       card.dataset.id = f.id;
       card.innerHTML =
-        '<div class="food-img" style="background:' + cm.grad + ';" data-act="open">' +
-          '<img src="' + f.img + '" alt="' + foodName(f) + '" loading="lazy">' +
-          '<span class="cat-tag">' + catLabel(f.category) + '</span>' +
-          (f.popular ? '<span class="pop-badge">🔥 ' + t('food.popular') + '</span>' : '') +
-        '</div>' +
-        '<div class="food-body">' +
-          '<h3>' + foodName(f) + '</h3>' +
-          '<div class="stars" style="margin-bottom:6px;">' + starHtml(f.rating || 4.5) + '</div>' +
-          '<p class="food-desc">' + foodDesc(f) + '</p>' +
-          '<div class="food-price">' + fmt(f.price) + '</div>' +
-          '<div class="food-actions">' +
-            '<div class="qty">' +
-              '<button type="button" data-act="dec">−</button>' +
-              '<span class="qv">' + qty + '</span>' +
-              '<button type="button" data-act="inc">+</button>' +
-            '</div>' +
-            '<button type="button" class="add-btn" data-act="add">+ ' + t('food.add') + '</button>' +
+        '<div class="fc-top"><span class="fc-dot" style="background:' + cm.color + ';box-shadow:0 0 0 3px ' + cm.color + '33;"></span><h3>' + foodName(f) + '</h3></div>' +
+        '<div class="food-price">' + fmt(f.price) + '</div>' +
+        '<div class="food-actions">' +
+          '<div class="qty">' +
+            '<button type="button" data-act="dec">−</button>' +
+            '<span class="qv">' + qty + '</span>' +
+            '<button type="button" data-act="inc">+</button>' +
           '</div>' +
+          '<button type="button" class="add-btn" data-act="add">' + t('food.addBtn') + '</button>' +
         '</div>';
       grid.appendChild(card);
     });
@@ -1597,13 +1567,12 @@
     var card = e.target.closest('.food-card');
     if(!card) return;
     var id = Number(card.dataset.id);
-    var btn = e.target.closest('button, .food-img');
+    var btn = e.target.closest('button');
     if(!btn){ openFood(id); return; }
-    var act = btn.getAttribute('data-act') || (btn.classList.contains('food-img') ? 'open' : '');
+    var act = btn.getAttribute('data-act');
     var qtyEl = card.querySelector('.qv');
 
-    if(act === 'open'){ openFood(id); }
-    else if(act === 'inc'){
+    if(act === 'inc'){
       cardQty[id] = (cardQty[id] || 1) + 1;
       qtyEl.textContent = cardQty[id];
     }
