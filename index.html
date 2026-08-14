@@ -772,13 +772,28 @@
   .stars .rt{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:0;margin-left:3px;}
 
   /* ---------- HOW IT WORKS ---------- */
-  .about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto;}
-  .step-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px 22px;text-align:center;}
-  .step-card .step-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;color:var(--accent);letter-spacing:0.12em;}
-  .step-card .step-ico{width:64px;height:64px;margin:14px auto 12px;border-radius:18px;overflow:hidden;border:1px solid var(--border);}
-  .step-card .step-ico img{width:100%;height:100%;object-fit:cover;display:block;}
-  .step-card h3{margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-size:17px;}
+  .about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:840px;margin:0 auto;}
+  .step-card{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;
+    padding:22px 18px 20px;text-align:center;max-width:320px;margin:0 auto;width:100%;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .step-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,0.18);}
+  .step-card .step-num{
+    display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;
+    letter-spacing:0.12em;color:var(--accent);background:rgba(255,184,77,0.12);
+    border:1px solid rgba(255,184,77,0.3);padding:5px 14px;border-radius:100px;margin-bottom:14px;
+  }
+  .step-card .step-ico{
+    width:80px;height:80px;margin:0 auto 14px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:36px;
+    background:var(--card2);border:1px solid var(--border);
+  }
+  .step-card h3{margin:0 0 6px;font-family:'Space Grotesk',sans-serif;font-size:16px;}
   .step-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.6;}
+  .about-cta{text-align:center;margin-top:30px;}
+  .about-cta .add-btn{flex:none;padding:0 32px;min-height:46px;font-size:14px;margin:0 auto;}
+  .about-tag{margin:14px 0 0;color:var(--muted);font-size:13px;font-weight:600;}
 
   /* ---------- TESTIMONIALS ---------- */
   .testi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:800px;margin:0 auto;}
@@ -946,27 +961,31 @@
 
   <section class="section" id="about">
     <div class="section-head"><span class="dot"></span><span data-i18n="sec.about">How It Works</span><span class="line"></span></div>
-    <h2 data-i18n="about.title">Order in <span>3 easy steps.</span></h2>
-    <p class="sub" data-i18n="about.sub">From menu to your table — faster than ever.</p>
+    <h2 data-i18n="about.title">Order your favorite food in <span>3 simple steps.</span></h2>
+    <p class="sub" data-i18n="about.sub">Choose, add, enjoy — it only takes seconds.</p>
     <div class="about-grid">
       <div class="step-card">
         <span class="step-num">STEP 1</span>
-        <span class="step-ico"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy"></span>
-        <h3 data-i18n="about.st1">Browse the menu</h3>
-        <p data-i18n="about.s1">Explore our fresh dishes and pick your favourites.</p>
+        <span class="step-ico">🍽️</span>
+        <h3 data-i18n="about.st1">Choose Food</h3>
+        <p data-i18n="about.s1">Browse the menu and pick your favorite meal.</p>
       </div>
       <div class="step-card">
         <span class="step-num">STEP 2</span>
-        <span class="step-ico"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy"></span>
-        <h3 data-i18n="about.st2">Order in seconds</h3>
-        <p data-i18n="about.s2">Add to cart, checkout and confirm on WhatsApp.</p>
+        <span class="step-ico">🛒</span>
+        <h3 data-i18n="about.st2">Add to Cart</h3>
+        <p data-i18n="about.s2">Select your food and add it to your cart.</p>
       </div>
       <div class="step-card">
         <span class="step-num">STEP 3</span>
-        <span class="step-ico"><img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy"></span>
-        <h3 data-i18n="about.st3">Served hot</h3>
-        <p data-i18n="about.s3">Our team prepares and delivers your food fast.</p>
+        <span class="step-ico">✅</span>
+        <h3 data-i18n="about.st3">Enjoy Meal</h3>
+        <p data-i18n="about.s3">Confirm your order and enjoy your meal.</p>
       </div>
+    </div>
+    <div class="about-cta">
+      <button class="add-btn" id="aboutBrowse" type="button" data-i18n="about.cta">Browse Menu</button>
+      <p class="about-tag" data-i18n="about.tag">Fresh. Fast. Delicious.</p>
     </div>
   </section>
 
@@ -1316,11 +1335,12 @@
       'confirm.fast': '<i class="fas fa-rocket" aria-hidden="true"></i> We will bring you your food <b>fast</b> — our team is already preparing your order!',
       'confirm.onum': 'Order Number', 'confirm.total': 'Total:', 'confirm.done': 'Order Again',
       'nav.about': 'How It Works', 'sec.about': 'How It Works',
-      'about.title': 'Order in <span>3 easy steps.</span>',
-      'about.sub': 'From menu to your table — faster than ever.',
-      'about.st1': 'Browse the menu', 'about.s1': 'Explore our fresh dishes and pick your favourites.',
-      'about.st2': 'Order in seconds', 'about.s2': 'Add to cart, checkout and confirm on WhatsApp.',
-      'about.st3': 'Served hot', 'about.s3': 'Our team prepares and delivers your food fast.',
+      'about.title': 'Order your favorite food in <span>3 simple steps.</span>',
+      'about.sub': 'Choose, add, enjoy — it only takes seconds.',
+      'about.st1': 'Choose Food', 'about.s1': 'Browse the menu and pick your favorite meal.',
+      'about.st2': 'Add to Cart', 'about.s2': 'Select your food and add it to your cart.',
+      'about.st3': 'Enjoy Meal', 'about.s3': 'Confirm your order and enjoy your meal.',
+      'about.cta': 'Browse Menu', 'about.tag': 'Fresh. Fast. Delicious.',
       'food.popular': 'Popular',
       'sec.testi': 'What Customers Say',
       'testi.title': 'Loved by <span>our customers.</span>',
@@ -1383,11 +1403,12 @@
       'confirm.fast': '<i class="fas fa-rocket" aria-hidden="true"></i> Tutakuletea chakula chako <b>haraka</b> — timu yetu tayari inakitayarisha!',
       'confirm.onum': 'Nambari ya Agizo', 'confirm.total': 'Jumla:', 'confirm.done': 'Agiza Tena',
       'nav.about': 'Jinsi Inavyofanya Kazi', 'sec.about': 'Jinsi Inavyofanya Kazi',
-      'about.title': 'Agiza kwa <span>hatua 3 rahisi.</span>',
-      'about.sub': 'Kutoka menyu hadi mezani kwako — haraka kuliko awali.',
-      'about.st1': 'Angalia menyu', 'about.s1': 'Tazama sahani zetu mpya na uchague unazozipenda.',
-      'about.st2': 'Agiza kwa sekunde', 'about.s2': 'Ongeza kwenye kikapu, lipa na thibitisha kwa WhatsApp.',
-      'about.st3': 'Kitolewe moto', 'about.s3': 'Timu yetu hukitayarisha na kukipeleka chakula haraka.',
+      'about.title': 'Agiza chakula unachokipenda kwa <span>hatua 3 rahisi.</span>',
+      'about.sub': 'Chagua, ongeza kikapuni, furahia — inachukua sekunde.',
+      'about.st1': 'Chagua Chakula', 'about.s1': 'Tazama menyu na uchague chakula unachokipenda.',
+      'about.st2': 'Ongeza Kikapuni', 'about.s2': 'Chagua chakula chako na ukiongeze kwenye kikapu.',
+      'about.st3': 'Furahia Mlo', 'about.s3': 'Thibitisha agizo lako na ufurahie mlo wako.',
+      'about.cta': 'Angalia Menyu', 'about.tag': 'Safi. Haraka. Tamu.',
       'food.popular': 'Maarufu',
       'sec.testi': 'Wateja Wetu Wanasema',
       'testi.title': 'Wanapendwa na <span>wateja wetu.</span>',
@@ -1709,6 +1730,7 @@
     setFilter('all', true);
   });
   document.getElementById('heroMenu').addEventListener('click', function(){ setFilter('all', true); });
+  document.getElementById('aboutBrowse').addEventListener('click', function(){ setFilter('all', true); });
 
   function closeModal(id){ document.getElementById(id).classList.remove('show'); }
   function openModal(id){ document.getElementById(id).classList.add('show'); }
