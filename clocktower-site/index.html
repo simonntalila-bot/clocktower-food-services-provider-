@@ -356,13 +356,14 @@
   .qty .qv{min-width:22px;text-align:center;font-weight:700;font-size:13px;}
   .add-btn{
     flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
-    padding:9px 8px;border:none;border-radius:9px;
-    background:linear-gradient(90deg, var(--accent), var(--accent2));
-    color:#221303;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
-    transition:transform .12s ease, box-shadow .12s ease;
-    min-height:33px;
+    padding:0 14px;border:none;border-radius:10px;
+    background:#087F3D;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
+    transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
+    min-height:44px;cursor:pointer;white-space:nowrap;
   }
-  .add-btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px -8px rgba(255,184,77,0.55);}
+  .add-btn:hover{background:#0A9A4A;transform:translateY(-1px);box-shadow:0 8px 22px -8px rgba(10,154,74,0.55);}
+  .add-btn:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+  .add-btn.success{background:#16A34A;}
   .food-card.added{border-color:var(--green);}
 
   /* ---------- CART SIDEBAR ---------- */
@@ -711,7 +712,7 @@
     .sub{font-size:14px;margin-bottom:26px;}
     .food-card{padding:16px 14px 14px;min-height:168px;}
     .fc-top h3{font-size:15.5px;}
-    .add-btn{font-size:13px;min-height:42px;}
+    .add-btn{font-size:14px;min-height:44px;padding:0 12px;}
     .qty button{width:34px;height:34px;}
     .qty .qv{min-width:24px;}
     .cart-head{padding:16px 48px;}
@@ -1557,7 +1558,7 @@
             '<span class="qv">' + qty + '</span>' +
             '<button type="button" data-act="inc">+</button>' +
           '</div>' +
-          '<button type="button" class="add-btn" data-act="add">' + t('food.addBtn') + '</button>' +
+          '<button type="button" class="add-btn" data-act="add" aria-label="' + t('food.addBtn') + ' ' + foodName(f) + '">' + t('food.addBtn') + '</button>' +
         '</div>';
       grid.appendChild(card);
     });
@@ -1583,6 +1584,13 @@
     else if(act === 'add'){
       addToCart(id, cardQty[id] || 1);
       card.classList.add('added');
+      var lbl = t('food.addBtn');
+      btn.classList.add('success');
+      btn.textContent = '✓ ' + lbl;
+      setTimeout(function(){
+        btn.classList.remove('success');
+        btn.textContent = lbl;
+      }, 1100);
     }
   });
 
