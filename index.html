@@ -268,7 +268,7 @@
   }
 
   /* ---------- SERVICE CATEGORIES ---------- */
-  .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
   .cat-card{
     position:relative;overflow:hidden;
     background:var(--card);border:1px solid var(--border);border-radius:20px;
@@ -650,7 +650,6 @@
   }
   @media (max-width:960px){
     .food-grid{grid-template-columns:repeat(2,1fr);}
-    .cats{grid-template-columns:repeat(3,1fr);}
     .hero{padding-top:112px;}
   }
   @media (max-width:860px){
@@ -661,7 +660,7 @@
     .wrap{max-width:720px;}
   }
   @media (max-width:720px){
-    .cats{grid-template-columns:repeat(3,1fr);gap:10px;}
+    .cats{grid-template-columns:repeat(2,1fr);gap:10px;}
     .cat-card{padding:24px 14px;}
     .cat-card .em{width:60px;height:60px;font-size:30px;margin-bottom:12px;}
     .cat-card h3{font-size:16px;}
@@ -779,19 +778,9 @@
   .cart-item .ci-img{overflow:hidden;}
   .cart-item .ci-img img{width:100%;height:100%;object-fit:cover;display:block;}
 
-  /* ---------- FAVOURITES ---------- */
-  .fav-btn{
-    position:absolute;top:12px;right:12px;z-index:3;
-    width:34px;height:34px;border:none;border-radius:50%;
-    background:rgba(0,0,0,0.38);backdrop-filter:blur(4px);
-    color:#fff;font-size:16px;line-height:1;
-    display:flex;align-items:center;justify-content:center;
-    transition:transform .12s ease, color .12s ease, background .12s ease;
-  }
-  .fav-btn:hover{transform:scale(1.12);}
-  .fav-btn.active{color:#ff5d73;background:rgba(0,0,0,0.5);}
+  /* ---------- POPULAR BADGE ---------- */
   .pop-badge{
-    position:absolute;top:52px;left:12px;z-index:3;
+    position:absolute;top:12px;right:12px;z-index:3;
     font-size:10.5px;font-weight:700;
     padding:4px 10px;border-radius:100px;
     color:#221303;background:linear-gradient(90deg,var(--accent),var(--accent2));
@@ -882,7 +871,6 @@
   @media (max-width:480px){
     .hero-foods img{width:40px;height:40px;border-radius:12px;}
     .back-top{bottom:14px;right:14px;width:40px;height:40px;}
-    .pop-badge{top:48px;}
   }
 </style>
 </head>
@@ -905,6 +893,7 @@
             <a href="#menu" data-cat="breakfast"><span class="em" style="background:rgba(255,184,77,0.12);">🍳</span> <span data-i18n="cat.breakfast">Breakfast</span></a>
             <a href="#menu" data-cat="lunch"><span class="em" style="background:rgba(52,211,153,0.12);">🍛</span> <span data-i18n="cat.lunch">Lunch</span></a>
             <a href="#menu" data-cat="dinner"><span class="em" style="background:rgba(167,139,250,0.14);">🍽️</span> <span data-i18n="cat.dinner">Dinner</span></a>
+            <a href="#menu" data-cat="drinks"><span class="em" style="background:rgba(56,189,248,0.14);">🥤</span> <span data-i18n="cat.drinks">Drinks</span></a>
           </div>
         </li>
         <li><a href="#services" data-i18n="nav.services">Food Services</a></li>
@@ -934,6 +923,7 @@
   <a href="#menu" data-cat="breakfast">🍳 <span data-i18n="cat.breakfast">Breakfast</span></a>
   <a href="#menu" data-cat="lunch">🍛 <span data-i18n="cat.lunch">Lunch</span></a>
   <a href="#menu" data-cat="dinner">🍽️ <span data-i18n="cat.dinner">Dinner</span></a>
+  <a href="#menu" data-cat="drinks">🥤 <span data-i18n="cat.drinks">Drinks</span></a>
   <a href="#services" data-i18n="nav.services">Food Services</a>
   <a href="#about" data-i18n="nav.about">How It Works</a>
   <a href="#scan" data-i18n="nav.scan">Scan Order</a>
@@ -959,8 +949,8 @@
       <button class="btn btn-ghost" type="button" id="heroCart" data-i18n="hero.viewcart">View Cart</button>
     </div>
     <div class="hero-stats">
-      <div class="stat"><b>27+</b><span data-i18n="stat.items">Menu items</span></div>
-      <div class="stat"><b>3</b><span data-i18n="stat.meals">Meals a day</span></div>
+      <div class="stat"><b>33+</b><span data-i18n="stat.items">Menu items</span></div>
+      <div class="stat"><b>4</b><span data-i18n="stat.meals">Meals a day</span></div>
       <div class="stat"><b>TSh</b><span data-i18n="stat.price">Local prices</span></div>
       <div class="stat"><b>Hot</b><span data-i18n="stat.fresh">&amp; fresh daily</span></div>
     </div>
@@ -1013,7 +1003,7 @@
         <button class="filter-btn" data-cat="breakfast" data-i18n="cat.breakfast">Breakfast</button>
         <button class="filter-btn" data-cat="lunch" data-i18n="cat.lunch">Lunch</button>
         <button class="filter-btn" data-cat="dinner" data-i18n="cat.dinner">Dinner</button>
-        <button class="filter-btn" data-cat="fav" data-i18n="f.fav">♥ Favourites</button>
+        <button class="filter-btn" data-cat="drinks" data-i18n="cat.drinks">Drinks</button>
       </div>
     </div>
     <div class="food-grid" id="foodGrid"></div>
@@ -1122,7 +1112,6 @@
           <span class="qv" id="detailQty">1</span>
           <button type="button" data-act="inc" id="detailInc">+</button>
         </div>
-        <button class="btn btn-ghost" id="detailFav" type="button" style="padding:12px 16px;font-size:16px;" aria-label="Favourite">♡</button>
         <button class="add-btn" id="detailAdd" type="button" data-i18n="food.add">Add to Cart</button>
       </div>
     </div>
@@ -1217,7 +1206,8 @@
   var CATEGORY_META = {
     breakfast: { emoji: '🍳', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=70', color: '#ffb84d', grad: 'linear-gradient(135deg,#3a2f14,#241d0e)', label: { en: 'Breakfast', sw: 'Kifungua Kinywa' }, tag: { en: 'Morning meals.', sw: 'Chakula cha asubuhi.' } },
     lunch:     { emoji: '🍛', img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=70', color: '#34d399', grad: 'linear-gradient(135deg,#123a2c,#0c241c)', label: { en: 'Lunch', sw: 'Chakula cha Mchana' }, tag: { en: 'Midday meals.', sw: 'Chakula cha mchana.' } },
-    dinner:    { emoji: '🍽️', img: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=400&q=70', color: '#a78bfa', grad: 'linear-gradient(135deg,#2d2350,#1b1533)', label: { en: 'Dinner', sw: 'Chakula cha Jioni' }, tag: { en: 'Evening meals.', sw: 'Chakula cha jioni.' } }
+    dinner:    { emoji: '🍽️', img: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=400&q=70', color: '#a78bfa', grad: 'linear-gradient(135deg,#2d2350,#1b1533)', label: { en: 'Dinner', sw: 'Chakula cha Jioni' }, tag: { en: 'Evening meals.', sw: 'Chakula cha jioni.' } },
+    drinks:    { emoji: '🥤', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=400&q=70', color: '#38bdf8', grad: 'linear-gradient(135deg,#0f2c3d,#0a1e2b)', label: { en: 'Drinks', sw: 'Vinywaji' }, tag: { en: 'Fresh drinks & refreshments.', sw: 'Vinywaji baridi na safi.' } }
   };
 
   var FOODS = [
@@ -1249,7 +1239,14 @@
     { id: 24, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Steamed rice with grilled chicken.', descSw: 'Wali wa mvuke na kuku aliyechomwa.' },
     { id: 25, name: 'Ugali & Fish',     nameSw: 'Ugali na Samaki', category: 'dinner', price: 9000,  icon: '🐠', img: 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Soft ugali with a fresh fish stew.', descSw: 'Ugali laini na mchuzi wa samaki safi.' },
     { id: 26, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'dinner', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Hearty ugali with beef in rich gravy.', descSw: 'Ugali wenye nyama ya ng\'ombe kwenye mchuzi mzuri.' },
-    { id: 27, name: 'Vegetable Dinner', nameSw: 'Mboga za Jioni',  category: 'dinner', price: 6000,  icon: '🥦', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'A warm platter of fresh vegetables and rice.', descSw: 'Sahani ya joto ya mboga safi na wali.' }
+    { id: 27, name: 'Vegetable Dinner', nameSw: 'Mboga za Jioni',  category: 'dinner', price: 6000,  icon: '🥦', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'A warm platter of fresh vegetables and rice.', descSw: 'Sahani ya joto ya mboga safi na wali.' },
+
+    { id: 28, name: 'Soda',             nameSw: 'Soda',            category: 'drinks', price: 2500,  icon: '🥤', img: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: true,  desc: 'Ice-cold soda to refresh your day.', descSw: 'Soda ya barafu kukuburudisha.' },
+    { id: 29, name: 'Bottled Water',    nameSw: 'Maji ya Chupa',   category: 'drinks', price: 1500,  icon: '💧', img: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Pure, clean drinking water.', descSw: 'Maji safi ya kunywa.' },
+    { id: 30, name: 'Fruit Juice',      nameSw: 'Juisi ya Matunda', category: 'drinks', price: 4000, icon: '🧃', img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: true,  desc: 'Freshly squeezed seasonal fruit juice.', descSw: 'Juisi mpya ya matunda ya msimu.' },
+    { id: 31, name: 'Passion Juice',    nameSw: 'Juisi ya Passion', category: 'drinks', price: 4000, icon: '🍹', img: 'https://images.unsplash.com/photo-1525875884482-a1bda1e8bfb1?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Sweet, tangy passion fruit juice.', descSw: 'Juisi ya passion tamu na kali kidogo.' },
+    { id: 32, name: 'Mango Smoothie',   nameSw: 'Smoothie ya Embe', category: 'drinks', price: 5000, icon: '🥭', img: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: false, desc: 'Creamy, thick mango smoothie.', descSw: 'Smoothie laini ya embe.' },
+    { id: 33, name: 'Yogurt',           nameSw: 'Yoghurt',          category: 'drinks', price: 3000,  icon: '🥛', img: 'https://images.unsplash.com/photo-1571210862729-78a52d3779a2?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Cool, creamy yogurt.', descSw: 'Yoghurt baridi na laini.' }
   ];
 
   var TESTIMONIALS = [
@@ -1271,20 +1268,7 @@
   var detailQty = 1;
   var activeFood = null;
 
-  var FAV_KEY = 'ctfFavs';
   var HISTORY_KEY = 'ctfOrders';
-  var favs = [];
-
-  function loadFavs(){ try{ favs = JSON.parse(localStorage.getItem(FAV_KEY) || '[]') || []; }catch(e){ favs = []; } }
-  function saveFavs(){ try{ localStorage.setItem(FAV_KEY, JSON.stringify(favs)); }catch(e){} }
-  function isFav(id){ return favs.indexOf(id) !== -1; }
-  function toggleFav(id){
-    if(isFav(id)){ favs = favs.filter(function(x){ return x !== id; }); toast(t('food.favOff'), '♡'); }
-    else { favs.push(id); toast(t('food.favOn'), '♥'); }
-    saveFavs();
-    renderFoods();
-    if(activeFood && activeFood.id === id) openFood(id);
-  }
 
   function loadHistory(){ try{ return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]') || []; }catch(e){ return []; } }
   function saveOrder(order){
@@ -1304,7 +1288,7 @@
   var LANG = {
     en: {
       'nav.home': 'Home', 'nav.menu': 'Menu', 'nav.services': 'Food Services', 'nav.contact': 'Contact', 'nav.cart': 'Cart', 'nav.scan': 'Scan Order',
-      'cat.breakfast': 'Breakfast', 'cat.lunch': 'Lunch', 'cat.dinner': 'Dinner',
+      'cat.breakfast': 'Breakfast', 'cat.lunch': 'Lunch', 'cat.dinner': 'Dinner', 'cat.drinks': 'Drinks',
       'hero.badge': 'CLOCKTOWER FOOD SERVICE PROVIDER',
       'hero.title': 'DELICIOUS FOOD.<br><span>SERVING EVERY MOMENT.</span>',
       'hero.lede': 'Fresh and delicious meals for Breakfast, Lunch and Dinner — order in seconds, served hot and made with love.',
@@ -1360,8 +1344,7 @@
       'about.st1': 'Browse the menu', 'about.s1': 'Explore our fresh dishes and pick your favourites.',
       'about.st2': 'Order in seconds', 'about.s2': 'Add to cart, checkout and confirm on WhatsApp.',
       'about.st3': 'Served hot', 'about.s3': 'Our team prepares and delivers your food fast.',
-      'f.fav': 'Favourites',
-      'food.popular': 'Popular', 'food.favOn': 'Saved to favourites', 'food.favOff': 'Removed from favourites',
+      'food.popular': 'Popular',
       'sec.testi': 'What Customers Say',
       'testi.title': 'Loved by <span>our customers.</span>',
       'testi.sub': 'Real feedback from people who order from us every day.',
@@ -1372,7 +1355,7 @@
     },
     sw: {
       'nav.home': 'Nyumbani', 'nav.menu': 'Menyu', 'nav.services': 'Huduma za Chakula', 'nav.contact': 'Wasiliana', 'nav.cart': 'Kikapu', 'nav.scan': 'Changanua Agiza',
-      'cat.breakfast': 'Kifungua Kinywa', 'cat.lunch': 'Chakula cha Mchana', 'cat.dinner': 'Chakula cha Jioni',
+      'cat.breakfast': 'Kifungua Kinywa', 'cat.lunch': 'Chakula cha Mchana', 'cat.dinner': 'Chakula cha Jioni', 'cat.drinks': 'Vinywaji',
       'hero.badge': 'CLOCKTOWER FOOD SERVICE PROVIDER',
       'hero.title': 'CHAKULA TAMU.<br><span>KUKUHUDUMIA KILA WAKATI.</span>',
       'hero.lede': 'Chakula kipya na kitamu cha Kifungua Kinywa, Mchana na Jioni — agiza kwa sekunde chache, kitolewe moto na kwa upendo.',
@@ -1428,8 +1411,7 @@
       'about.st1': 'Angalia menyu', 'about.s1': 'Tazama sahani zetu mpya na uchague unazozipenda.',
       'about.st2': 'Agiza kwa sekunde', 'about.s2': 'Ongeza kwenye kikapu, lipa na thibitisha kwa WhatsApp.',
       'about.st3': 'Kitolewe moto', 'about.s3': 'Timu yetu hukitayarisha na kukipeleka chakula haraka.',
-      'f.fav': 'Vipendwa',
-      'food.popular': 'Maarufu', 'food.favOn': 'Kimehifadhiwa kwenye vipendwa', 'food.favOff': 'Kimeondolewa kwenye vipendwa',
+      'food.popular': 'Maarufu',
       'sec.testi': 'Wateja Wetu Wanasema',
       'testi.title': 'Wanapendwa na <span>wateja wetu.</span>',
       'testi.sub': 'Maoni halisi kutoka kwa watu wanaotununulia kila siku.',
@@ -1552,7 +1534,7 @@
   function renderCats(){
     var grid = document.getElementById('catCards');
     grid.innerHTML = '';
-    ['breakfast', 'lunch', 'dinner'].forEach(function(c){
+    ['breakfast', 'lunch', 'dinner', 'drinks'].forEach(function(c){
       var m = catMeta(c);
       var count = FOODS.filter(function(f){ return f.category === c; }).length;
       var btn = document.createElement('button');
@@ -1574,9 +1556,7 @@
     grid.innerHTML = '';
     var q = searchTerm.toLowerCase();
     var list = FOODS.filter(function(f){
-      if(currentCat === 'fav'){
-        if(!isFav(f.id)) return false;
-      } else if(currentCat !== 'all' && f.category !== currentCat){
+      if(currentCat !== 'all' && f.category !== currentCat){
         return false;
       }
       if(q && f.name.toLowerCase().indexOf(q) === -1 && (f.nameSw || '').toLowerCase().indexOf(q) === -1) return false;
@@ -1590,7 +1570,6 @@
       var cm = catMeta(f.category);
       var qty = cardQty[f.id] || 1;
       var inCart = cart.find(function(i){ return i.foodId === f.id; });
-      var favd = isFav(f.id);
       var card = document.createElement('article');
       card.className = 'food-card' + (inCart ? ' added' : '');
       card.dataset.id = f.id;
@@ -1599,7 +1578,6 @@
           '<img src="' + f.img + '" alt="' + foodName(f) + '" loading="lazy">' +
           '<span class="cat-tag">' + catLabel(f.category) + '</span>' +
           (f.popular ? '<span class="pop-badge">🔥 ' + t('food.popular') + '</span>' : '') +
-          '<button type="button" class="fav-btn' + (favd ? ' active' : '') + '" data-act="fav" aria-label="Favourite">' + (favd ? '♥' : '♡') + '</button>' +
         '</div>' +
         '<div class="food-body">' +
           '<h3>' + foodName(f) + '</h3>' +
@@ -1629,7 +1607,6 @@
     var qtyEl = card.querySelector('.qv');
 
     if(act === 'open'){ openFood(id); }
-    else if(act === 'fav'){ toggleFav(id); return; }
     else if(act === 'inc'){
       cardQty[id] = (cardQty[id] || 1) + 1;
       qtyEl.textContent = cardQty[id];
@@ -1660,9 +1637,6 @@
     document.getElementById('detailStars').innerHTML = starHtml(f.rating || 4.5);
     document.getElementById('detailPrice').textContent = fmt(f.price);
     document.getElementById('detailQty').textContent = detailQty;
-    var favBtn = document.getElementById('detailFav');
-    favBtn.textContent = isFav(f.id) ? '♥' : '♡';
-    favBtn.style.color = isFav(f.id) ? '#ff5d73' : '';
     document.getElementById('foodModal').classList.add('show');
   }
 
@@ -1679,9 +1653,6 @@
       addToCart(activeFood.id, detailQty);
       closeModal('foodModal');
     }
-  });
-  document.getElementById('detailFav').addEventListener('click', function(){
-    if(activeFood) toggleFav(activeFood.id);
   });
 
   document.getElementById('cartList').addEventListener('click', function(e){
@@ -2115,7 +2086,6 @@
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  loadFavs();
   loadCart();
   applyLang();
   setQrCode();
