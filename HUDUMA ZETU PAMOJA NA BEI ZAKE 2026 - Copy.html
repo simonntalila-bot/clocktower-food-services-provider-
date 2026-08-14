@@ -208,41 +208,47 @@
 
   /* ---------- HERO ---------- */
   .hero{
-    padding:128px 0 30px;
-    text-align:center;
     position:relative;
+    min-height:100vh;
+    display:flex;align-items:center;
+    overflow:hidden;
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    padding:110px max(20px, calc(50% - 590px)) 40px;
   }
-  .hero .badge{
+  .hero-bg{position:absolute;inset:0;z-index:0;}
+  .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center;}
+  .hero-overlay{
+    position:absolute;inset:0;z-index:1;
+    background:linear-gradient(90deg, rgba(5,10,15,0.82) 0%, rgba(5,10,15,0.60) 40%, rgba(5,10,15,0.25) 75%, rgba(5,10,15,0.40) 100%);
+  }
+  .hero-content{
+    position:relative;z-index:2;max-width:680px;width:100%;
+    animation:heroIn .7s ease both;
+  }
+  @keyframes heroIn{
+    from{opacity:0;transform:translateY(24px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .hero-content .badge{
     display:inline-flex;align-items:center;gap:8px;
-    font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--accent);
-    border:1px solid rgba(255,184,77,0.35);
-    background:rgba(255,184,77,0.08);
-    padding:8px 16px;border-radius:100px;margin-bottom:24px;
+    font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;
+    color:#ffd9a0;
+    border:1px solid rgba(255,217,160,0.35);
+    background:rgba(5,10,15,0.35);
+    backdrop-filter:blur(4px);
+    padding:8px 16px;border-radius:100px;margin-bottom:22px;
   }
-  .hero h1{
+  .hero-content h1{
     font-family:'Space Grotesk',sans-serif;
-    font-size:clamp(38px,7vw,64px);line-height:1.05;margin:0 auto 18px;
-    font-weight:700;letter-spacing:-0.02em;
+    font-size:clamp(46px,6vw,84px);line-height:0.98;margin:0 0 20px;
+    font-weight:800;letter-spacing:-0.02em;color:#fff;
   }
-  .hero h1 span{color:var(--accent);}
-  .hero .lede{
-    color:var(--muted);font-size:17px;line-height:1.65;max-width:52ch;margin:0 auto 30px;
+  .hero-content h1 span{color:#ffb84d;}
+  .hero-content .lede{
+    color:rgba(255,255,255,0.92);font-size:17.5px;line-height:1.65;max-width:600px;margin:0 0 30px;
   }
-  .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-  .hero-inner{
-    display:grid;grid-template-columns:1.15fr 0.85fr;gap:48px;align-items:center;
-    text-align:left;max-width:1060px;margin:0 auto;position:relative;
-  }
-  .hero-copy{position:relative;min-width:0;}
-  .hero-copy h1{margin:0 0 16px;}
-  .hero-copy .lede{margin:0 0 28px;}
-  .hero-copy .hero-btns{justify-content:flex-start;}
-  .hero-media{position:relative;}
-  .hero-media img{
-    display:block;width:100%;max-width:360px;margin:0 auto;
-    border-radius:26px;border:1px solid var(--border);box-shadow:var(--shadow);
-  }
+  .hero-content .hero-btns{justify-content:flex-start;}
   .btn{
     display:inline-flex;align-items:center;gap:8px;
     padding:14px 26px;border-radius:13px;
@@ -257,29 +263,22 @@
     border:1px solid var(--border);color:var(--text);background:var(--card);
   }
   .btn-primary:hover,.btn-ghost:hover{transform:translateY(-2px);}
-  .hero-stats{
-    display:flex;gap:12px;justify-content:center;margin-top:48px;flex-wrap:wrap;
+  .hero-content .btn-primary{
+    background:#087F3D;color:#fff;box-shadow:0 12px 32px -10px rgba(10,154,74,0.55);
   }
-  .stat{padding:16px 26px;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:16px;}
-  .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:22px;color:var(--accent);}
-  .stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
-  .hero-foods{
-    position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  .hero-content .btn-primary:hover{background:#0A9A4A;}
+  .hero-content .btn-ghost{
+    border:1px solid rgba(255,255,255,0.30);color:#fff;background:rgba(5,10,15,0.35);
+    backdrop-filter:blur(6px);
   }
-  .hero-foods span{
-    position:absolute;font-size:38px;opacity:0.16;filter:blur(0.5px);
-    animation:float 7s ease-in-out infinite;
+  .hero-content .btn-ghost:hover{border-color:#ffb84d;color:#ffd9a0;}
+  .hero-content .btn-primary:hover,.hero-content .btn-ghost:hover{transform:translateY(-2px);}
+  .hero-feats{
+    display:flex;gap:20px;flex-wrap:wrap;margin-top:40px;
+    color:rgba(255,255,255,0.85);font-size:13.5px;font-weight:600;
   }
-  .hf1{top:110px;left:8%;}
-  .hf2{top:150px;right:10%;animation-delay:1.2s;}
-  .hf3{top:230px;left:16%;animation-delay:2s;}
-  .hf4{top:260px;right:20%;animation-delay:0.6s;}
-  .hf5{top:360px;left:6%;animation-delay:2.6s;}
-  .hf6{top:380px;right:7%;animation-delay:1.8s;}
-  @keyframes float{
-    0%,100%{transform:translateY(0) rotate(-4deg);}
-    50%{transform:translateY(-16px) rotate(5deg);}
-  }
+  .hero-feats span{display:inline-flex;align-items:center;gap:7px;}
+
 
   /* ---------- SERVICE CATEGORIES ---------- */
   .cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
@@ -651,7 +650,7 @@
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:1080px){
     .hero{padding-top:118px;}
-    .hero h1{font-size:clamp(34px,6.4vw,56px);}
+    .hero-content h1{font-size:clamp(38px,7vw,66px);}
     .section{padding-top:78px;}
   }
   @media (max-width:960px){
@@ -662,11 +661,13 @@
     .nav-toggle{display:flex;}
     .nav-links{display:none;}
     .checkout-grid{grid-template-columns:1fr;}
-    .hero-inner{grid-template-columns:1fr;gap:28px;text-align:center;}
-    .hero-copy .hero-btns{justify-content:center;}
-    .hero-copy .lede{margin:0 auto 28px;}
-    .hero-media img{max-width:300px;}
-    .hero-stats{margin-top:32px;}
+    .hero{min-height:100svh;padding:104px max(16px, calc(50% - 360px)) 36px;}
+    .hero-content{max-width:100%;}
+    .hero-content .hero-btns{justify-content:center;}
+    .hero-content .lede{margin:0 auto 30px;text-align:center;}
+    .hero-content .badge{margin-left:auto;margin-right:auto;}
+    .hero-content h1{text-align:center;}
+    .hero-feats{justify-content:center;gap:14px 20px;}
     .wrap{max-width:720px;}
   }
   @media (max-width:720px){
@@ -680,15 +681,12 @@
   @media (max-width:640px){
     .section{padding-top:62px;}
     .wrap{padding:0 14px;}
-    .hero{padding-top:108px;}
+    .hero{padding-top:108px;min-height:100svh;}
     .hero .badge{font-size:10.5px;padding:7px 12px;}
     .hero .lede{font-size:15.5px;}
-    .hero h1{font-size:clamp(30px,8vw,40px);}
+    .hero-content h1{font-size:clamp(34px,9vw,48px);}
     .cats{grid-template-columns:1fr 1fr;}
     .food-grid{grid-template-columns:1fr;}
-    .hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-    .stat{padding:13px 10px;}
-    .stat b{font-size:19px;}
     .toasts{left:14px;right:14px;align-items:stretch;}
     .toast{max-width:none;}
     .detail-body{padding:20px;}
@@ -715,12 +713,11 @@
     .lang-btn{padding:8px 9px;font-size:11.5px;}
     .theme-btn,.nav-toggle{width:36px;height:36px;}
     .mobile-menu{top:60px;padding:10px 14px 16px;}
-    .hero{padding-top:98px;}
-    .hero h1{font-size:clamp(27px,9vw,34px);}
+    .hero{padding-top:98px;min-height:100svh;}
+    .hero-content h1{font-size:clamp(30px,10vw,40px);}
     .hero .badge{margin-bottom:16px;}
     .hero .btn{padding:12px 18px;font-size:14px;}
-    .hero-foods span{font-size:26px;}
-    .hero-stats{gap:8px;}
+    .hero-feats{margin-top:28px;font-size:12.5px;}
     .cats{grid-template-columns:1fr;}
     .cat-card .em{width:58px;height:58px;font-size:28px;}
     .cat-card .cnt-badge{top:10px;right:10px;font-size:10px;padding:3px 8px;}
@@ -754,11 +751,8 @@
   @media (max-width:360px){
     .wrap{padding:0 10px;}
     .brand .b1{font-size:15px;}
-    .hero h1{font-size:26px;}
+    .hero-content h1{font-size:26px;}
     .hero .lede{font-size:14.5px;}
-    .stat{padding:11px 6px;}
-    .stat b{font-size:17px;}
-    .stat span{font-size:10.5px;}
     .cat-card{padding:20px 10px;}
     .detail-actions .qty button{width:34px;height:34px;}
     .filters{gap:6px;}
@@ -862,19 +856,6 @@
   .foot-social a:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px);}
   .foot-note{margin-top:14px;font-size:12px;color:var(--muted);}
 
-  /* ---------- HERO FLOAT IMAGES ---------- */
-  .hero-foods img{
-    position:absolute;width:54px;height:54px;border-radius:16px;object-fit:cover;
-    border:1px solid var(--border);box-shadow:var(--shadow);opacity:0.6;
-    animation:float 7s ease-in-out infinite;
-  }
-  .hero-foods .hf1{top:110px;left:8%;}
-  .hero-foods .hf2{top:150px;right:10%;animation-delay:1.2s;}
-  .hero-foods .hf3{top:230px;left:16%;animation-delay:2s;}
-  .hero-foods .hf4{top:260px;right:20%;animation-delay:0.6s;}
-  .hero-foods .hf5{top:360px;left:6%;animation-delay:2.6s;}
-  .hero-foods .hf6{top:380px;right:7%;animation-delay:1.8s;}
-
   @media (max-width:860px){
     .about-grid,.testi-grid{grid-template-columns:1fr;}
   }
@@ -882,7 +863,6 @@
     .cat-card .cat-thumb{width:60px;height:60px;margin-bottom:12px;}
   }
   @media (max-width:480px){
-    .hero-foods img{width:40px;height:40px;border-radius:12px;}
     .back-top{bottom:14px;right:14px;width:40px;height:40px;}
   }
 </style>
@@ -946,33 +926,24 @@
 <main class="wrap">
 
   <section class="hero" id="home">
-    <div class="hero-foods">
-      <img class="hf1" src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy">
-      <img class="hf2" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy">
-      <img class="hf3" src="https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy">
-      <img class="hf4" src="https://images.unsplash.com/photo-1518013431117-eb1465fa5752?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy">
-      <img class="hf5" src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy">
-      <img class="hf6" src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=300&q=70" alt="" loading="lazy">
+    <div class="hero-bg">
+      <img src="https://simonntalila-bot.github.io/clocktower-food-services-provider-/1.jpg" alt="ClockTower Food Service Provider Restaurant" loading="eager">
     </div>
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <span class="badge" data-i18n="hero.badge">CLOCKTOWER FOOD SERVICE PROVIDER</span>
-        <h1 data-i18n="hero.title">DELICIOUS FOOD.<br><span>SERVING EVERY MOMENT.</span></h1>
-        <p class="lede" data-i18n="hero.lede">Fresh and delicious meals for Breakfast, Lunch and Dinner — order in seconds, served hot and made with love.</p>
-        <div class="hero-btns">
-          <button class="btn btn-primary" type="button" id="heroMenu" data-i18n="hero.explore">Explore Menu</button>
-          <button class="btn btn-ghost" type="button" id="heroCart" data-i18n="hero.viewcart">View Cart</button>
-        </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="badge" data-i18n="hero.badge">WELCOME TO CLOCKTOWER</span>
+      <h1 data-i18n="hero.title">DELICIOUS FOOD.<br><span>SERVING EVERY MOMENT.</span></h1>
+      <p class="lede" data-i18n="hero.lede">Fresh and delicious meals for Breakfast, Lunch and Dinner — order in seconds, served hot and made with love.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" type="button" id="heroMenu" data-i18n="hero.explore">Browse Menu</button>
+        <button class="btn btn-ghost" type="button" id="heroCart" data-i18n="hero.viewcart">Order Now</button>
       </div>
-      <div class="hero-media">
-        <img src="https://simonntalila-bot.github.io/clocktower-food-services-provider-/1.jpg" alt="ClockTower Food Service Provider" loading="eager">
+      <div class="hero-feats">
+        <span>🌿 <span data-i18n="feat.fresh">Fresh Ingredients</span></span>
+        <span>⚡ <span data-i18n="feat.fast">Fast Service</span></span>
+        <span>✓ <span data-i18n="feat.hyg">Hygienic &amp; Safe</span></span>
+        <span>♥ <span data-i18n="feat.love">Made with Love</span></span>
       </div>
-    </div>
-    <div class="hero-stats">
-      <div class="stat"><b>33+</b><span data-i18n="stat.items">Menu items</span></div>
-      <div class="stat"><b>4</b><span data-i18n="stat.meals">Meals a day</span></div>
-      <div class="stat"><b>TSh</b><span data-i18n="stat.price">Local prices</span></div>
-      <div class="stat"><b>Hot</b><span data-i18n="stat.fresh">&amp; fresh daily</span></div>
     </div>
   </section>
 
@@ -1309,10 +1280,11 @@
     en: {
       'nav.home': 'Home', 'nav.menu': 'Menu', 'nav.services': 'Food Services', 'nav.contact': 'Contact', 'nav.cart': 'Cart', 'nav.scan': 'Scan Order',
       'cat.breakfast': 'Breakfast', 'cat.lunch': 'Lunch', 'cat.dinner': 'Dinner', 'cat.drinks': 'Drinks',
-      'hero.badge': 'CLOCKTOWER FOOD SERVICE PROVIDER',
+      'hero.badge': 'WELCOME TO CLOCKTOWER',
       'hero.title': 'DELICIOUS FOOD.<br><span>SERVING EVERY MOMENT.</span>',
       'hero.lede': 'Fresh and delicious meals for Breakfast, Lunch and Dinner — order in seconds, served hot and made with love.',
-      'hero.explore': 'Explore Menu', 'hero.viewcart': 'View Cart',
+      'hero.explore': 'Browse Menu', 'hero.viewcart': 'Order Now',
+      'feat.fresh': 'Fresh Ingredients', 'feat.fast': 'Fast Service', 'feat.hyg': 'Hygienic &amp; Safe', 'feat.love': 'Made with Love',
       'stat.items': 'Menu items', 'stat.meals': 'Meals a day', 'stat.price': 'Local prices', 'stat.fresh': 'Hot &amp; fresh daily',
       'sec.services': 'Our Food Services',
       'services.title': 'Choose your <span>meal time.</span>',
@@ -1377,10 +1349,11 @@
     sw: {
       'nav.home': 'Nyumbani', 'nav.menu': 'Menyu', 'nav.services': 'Huduma za Chakula', 'nav.contact': 'Wasiliana', 'nav.cart': 'Kikapu', 'nav.scan': 'Changanua Agiza',
       'cat.breakfast': 'Kifungua Kinywa', 'cat.lunch': 'Chakula cha Mchana', 'cat.dinner': 'Chakula cha Jioni', 'cat.drinks': 'Vinywaji',
-      'hero.badge': 'CLOCKTOWER FOOD SERVICE PROVIDER',
+      'hero.badge': 'KARIBU CLOCKTOWER',
       'hero.title': 'CHAKULA TAMU.<br><span>KUKUHUDUMIA KILA WAKATI.</span>',
       'hero.lede': 'Chakula kipya na kitamu cha Kifungua Kinywa, Mchana na Jioni — agiza kwa sekunde chache, kitolewe moto na kwa upendo.',
-      'hero.explore': 'Angalia Menyu', 'hero.viewcart': 'Tazama Kikapu',
+      'hero.explore': 'Angalia Menyu', 'hero.viewcart': 'Agiza Sasa',
+      'feat.fresh': 'Viungo Safi', 'feat.fast': 'Huduma ya Haraka', 'feat.hyg': 'Usafi na Usalama', 'feat.love': 'Kwa Upendo',
       'stat.items': 'Vitu vya menyu', 'stat.meals': 'Milo kwa siku', 'stat.price': 'Bei za hapa', 'stat.fresh': 'Moto na mapya kila siku',
       'sec.services': 'Huduma Zetu za Chakula',
       'services.title': 'Chagua <span>wakati wa mlo.</span>',
@@ -1748,7 +1721,7 @@
   document.getElementById('cartOpen').addEventListener('click', openCart);
   document.getElementById('cartClose').addEventListener('click', closeCart);
   document.getElementById('cartOverlay').addEventListener('click', closeCart);
-  document.getElementById('heroCart').addEventListener('click', openCart);
+  document.getElementById('heroCart').addEventListener('click', function(){ setFilter('all', true); });
   document.getElementById('browseBtn').addEventListener('click', function(){
     closeCart();
     setFilter('all', true);
