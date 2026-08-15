@@ -564,16 +564,18 @@
   .field{margin-bottom:14px;}
   .field label{display:block;font-size:12.5px;font-weight:500;color:var(--muted);margin-bottom:7px;}
   .field label .req{color:var(--accent);}
-  .field input,.field textarea{
+  .field input,.field textarea,.field select{
     width:100%;background:var(--card);border:1px solid var(--border);
     border-radius:11px;padding:12px 14px;color:var(--text);
     font-family:'Inter',sans-serif;font-size:14.5px;
     transition:border-color .15s ease, box-shadow .15s ease;
   }
-  .field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,184,77,0.14);}
+  .field select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;}
+  .field select option{background:var(--card);color:var(--text);}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,184,77,0.14);}
   .field textarea{resize:vertical;min-height:84px;}
   .field .err{font-size:12px;color:var(--danger);margin-top:5px;display:none;}
-  .field.invalid input,.field.invalid textarea{border-color:var(--danger);}
+  .field.invalid input,.field.invalid textarea,.field.invalid select{border-color:var(--danger);}
   .field.invalid .err{display:block;}
   .place-btn{
     width:100%;padding:15px;border:none;border-radius:13px;
@@ -1163,6 +1165,16 @@
             <input type="text" id="coTable" placeholder="e.g. Table 12 or Mbezi Beach" data-i18n-ph="co.ph.table">
           </div>
           <div class="field">
+            <label for="coPayment" data-i18n="co.lbl.payment">Payment Method <span class="req">*</span></label>
+            <select id="coPayment">
+              <option value="M-Pesa" data-i18n="co.pay.mpesa">M-Pesa</option>
+              <option value="Tigo Pesa" data-i18n="co.pay.tigo">Tigo Pesa</option>
+              <option value="Airtel Money" data-i18n="co.pay.airtel">Airtel Money</option>
+              <option value="Halopesa" data-i18n="co.pay.halo">Halopesa</option>
+              <option value="Bank Transfer" data-i18n="co.pay.bank">Bank Transfer</option>
+            </select>
+          </div>
+          <div class="field">
             <label for="coNotes" data-i18n="co.lbl.notes">Special Instructions / Order Notes</label>
             <textarea id="coNotes" placeholder="e.g. Less spicy, extra sauce..." data-i18n-ph="co.ph.notes"></textarea>
           </div>
@@ -1333,6 +1345,8 @@
       'co.lbl.name': 'Full Name <span class="req">*</span>', 'co.lbl.phone': 'Phone Number <span class="req">*</span>',
       'co.lbl.email': 'Email Address', 'co.lbl.table': 'Table Number / Delivery Location',
       'co.lbl.notes': 'Special Instructions / Order Notes', 'co.lbl.comments': 'Comments',
+      'co.lbl.payment': 'Payment Method',
+      'co.pay.mpesa': 'M-Pesa', 'co.pay.tigo': 'Tigo Pesa', 'co.pay.airtel': 'Airtel Money', 'co.pay.halo': 'Halopesa', 'co.pay.bank': 'Bank Transfer',
       'co.ph.name': 'e.g. Amina Juma', 'co.ph.phone': '+255 7XX XXX XXX', 'co.ph.email': 'you@example.com',
       'co.ph.table': 'e.g. Table 12 or Mbezi Beach', 'co.ph.notes': 'e.g. Less spicy, extra sauce...',
       'co.ph.comments': 'Leave a comment or feedback...',
@@ -1402,6 +1416,8 @@
       'co.lbl.name': 'Jina Kamili <span class="req">*</span>', 'co.lbl.phone': 'Nambari ya Simu <span class="req">*</span>',
       'co.lbl.email': 'Barua Pepe', 'co.lbl.table': 'Nambari ya Meza / Mahali pa Uwasilishaji',
       'co.lbl.notes': 'Maelekezo Maalum / Vidokezo vya Agizo', 'co.lbl.comments': 'Maoni',
+      'co.lbl.payment': 'Njia ya Malipo',
+      'co.pay.mpesa': 'M-Pesa', 'co.pay.tigo': 'Tigo Pesa', 'co.pay.airtel': 'Airtel Money', 'co.pay.halo': 'Halopesa', 'co.pay.bank': 'Benki (Uhamisho)',
       'co.ph.name': 'mf. Amina Juma', 'co.ph.phone': '+255 7XX XXX XXX', 'co.ph.email': 'you@example.com',
       'co.ph.table': 'mf. Meza 12 au Mbezi Beach', 'co.ph.notes': 'mf. Si kali sana, mchuzi zaidi...',
       'co.ph.comments': 'Acha maoni yako hapa...',
@@ -1795,6 +1811,7 @@
     lines.push('Phone: ' + (document.getElementById('coPhone').value.trim() || '-'));
     lines.push('Email: ' + (document.getElementById('coEmail').value.trim() || '-'));
     lines.push('Table / Location: ' + (document.getElementById('coTable').value.trim() || '-'));
+    lines.push('Payment: ' + document.getElementById('coPayment').value);
     lines.push('Notes: ' + (document.getElementById('coNotes').value.trim() || '-'));
     lines.push('Comments: ' + (document.getElementById('coComments').value.trim() || '-'));
     lines.push('');
