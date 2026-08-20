@@ -23,8 +23,7 @@ const categories = [
 
 const navLinks = [
   { id: 'home', icon: 'fa-house', labelKey: 'nav.home' },
-  { id: 'services', icon: 'fa-concierge-bell', labelKey: 'nav.services' },
-  { id: 'about', icon: 'fa-circle-info', labelKey: 'nav.about' },
+  { id: 'menu', icon: 'fa-utensils', labelKey: 'nav.menu' },
   { id: 'scan', icon: 'fa-qrcode', labelKey: 'nav.scan' },
   { id: 'contact', icon: 'fa-envelope', labelKey: 'nav.contact' },
 ];
@@ -56,8 +55,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
   <header class="nav" :class="{ 'nav-scrolled': scrolled }">
     <div class="nav-inner">
       <a class="brand" href="#home" @click.prevent="scrollTo('home')">
-        <span class="b1">CLOCKTOWER<em>.</em></span>
-        <span class="b2">Food Service Provider</span>
+        <span class="b1">Clocktower<em>.</em></span>
+        <span class="b2">food service provider</span>
       </a>
       <nav>
         <ul class="nav-links">
@@ -66,19 +65,6 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
               <i class="fas" :class="link.icon" aria-hidden="true"></i>
               <span>{{ lang.$t(link.labelKey) }}</span>
             </a>
-          </li>
-          <li class="drop" :class="{ open: menuDropOpen }">
-            <button class="drop-trigger" type="button" @click="toggleDrop">
-              <i class="fas fa-utensils" aria-hidden="true"></i>
-              <span>{{ lang.$t('nav.menu') }}</span>
-              <svg class="car" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-            </button>
-            <div class="drop-menu">
-              <a v-for="cat in categories" :key="cat.key" href="#menu" @click.prevent="handleFilter(cat.key)">
-                <span class="em" :style="{ background: cat.bg }"><i class="fas" :class="cat.icon" aria-hidden="true"></i></span>
-                <span>{{ lang.$t('cat.' + cat.key) }}</span>
-              </a>
-            </div>
           </li>
           <li>
             <a href="admin.html" class="nav-login-link">
@@ -121,14 +107,6 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll));
     <a v-for="cat in categories" :key="cat.key" href="#menu" @click.prevent="handleFilter(cat.key)" class="mobile-sub">
       <i class="fas" :class="cat.icon" aria-hidden="true"></i>
       <span>{{ lang.$t('cat.' + cat.key) }}</span>
-    </a>
-    <a href="#services" @click.prevent="scrollTo('services')">
-      <i class="fas fa-concierge-bell" aria-hidden="true"></i>
-      <span>{{ lang.$t('nav.services') }}</span>
-    </a>
-    <a href="#about" @click.prevent="scrollTo('about')">
-      <i class="fas fa-circle-info" aria-hidden="true"></i>
-      <span>{{ lang.$t('nav.about') }}</span>
     </a>
     <a href="#scan" @click.prevent="scrollTo('scan')">
       <i class="fas fa-qrcode" aria-hidden="true"></i>

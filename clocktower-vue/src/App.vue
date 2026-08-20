@@ -6,11 +6,9 @@ import { useLangStore } from './stores/lang';
 
 import NavBar from './components/NavBar.vue';
 import HeroSection from './components/HeroSection.vue';
-import ServiceCategories from './components/ServiceCategories.vue';
-import HowItWorks from './components/HowItWorks.vue';
+
 import MenuSection from './components/MenuSection.vue';
 import ScanSection from './components/ScanSection.vue';
-import Testimonials from './components/Testimonials.vue';
 import ContactSection from './components/ContactSection.vue';
 import AppFooter from './components/AppFooter.vue';
 import FoodDetailModal from './components/FoodDetailModal.vue';
@@ -79,14 +77,13 @@ function handleOrderPlaced(info) {
   />
 
   <main>
-    <ServiceCategories @set-filter="handleSetFilter" />
 
     <MenuSection
       id="menu"
       @open-food="openDetail"
+      @add-to-cart="addToCart"
     />
 
-    <HowItWorks @scroll-to-menu="scrollToMenu" />
 
     <section id="scan" class="section">
       <div class="container">
@@ -99,16 +96,6 @@ function handleOrderPlaced(info) {
       </div>
     </section>
 
-    <section id="testi" class="section">
-      <div class="container">
-        <div class="section-head" style="justify-content:center;text-align:center">
-          <div class="dot"></div>
-          <h2>{{ lang.$t('testi.title') }}</h2>
-          <div class="line"></div>
-        </div>
-        <Testimonials />
-      </div>
-    </section>
 
     <section id="contact" class="section">
       <div class="container">

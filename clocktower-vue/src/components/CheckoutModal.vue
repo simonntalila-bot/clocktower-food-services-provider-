@@ -22,6 +22,8 @@ const sharePayment = ref('');
 const sharePhone = ref('');
 const nameError = ref(false);
 const phoneError = ref(false);
+const processing = ref(false);
+const done = ref(false);
 
 const mobilePayMethods = ['M-Pesa', 'Tigo Pesa', 'Airtel Money', 'Halopesa'];
 const showPayPhone = computed(() => mobilePayMethods.includes(payment.value));
@@ -67,8 +69,8 @@ function buildOrderMessage(orderNum) {
     if (f) lines.push('- ' + lang.$foodName(f) + ' x' + i.quantity + ': ' + fmt(f.price * i.quantity));
   });
   lines.push('');
-  lines.push('TOTAL: ' + fmt(cart.cartSubtotal.value));
-  lines.push('Items: ' + cart.cartQuantity.value);
+  lines.push('TOTAL: ' + fmt(cart.cartSubtotal));
+  lines.push('Items: ' + cart.cartQuantity);
   return lines.join('\n');
 }
 
@@ -99,26 +101,36 @@ function handleSubmit() {
   phoneError.value = !/^[0-9+\s()-]{7,}$/.test(phone.value.trim());
   if (nameError.value || phoneError.value) return;
 
-  const orderNum = cart.nextOrderNumber();
-  const total = cart.cartSubtotal.value;
+  processing.value = true;
 
-  cart.saveOrder({
-    num: orderNum,
-    date: new Date().toISOString(),
-    total: total,
-    name: name.value.trim(),
-    items: cart.items.map(i => {
-      const f = menu.byId(i.foodId);
-      return f ? lang.$foodName(f) + ' x' + i.quantity : '';
-    })
-  });
+  setTimeout(() => {
+    const orderNum = cart.nextOrderNumber();
+    const total = cart.cartSubtotal;
 
-  const msg = buildOrderMessage(orderNum);
-  sendOrderToProviders(msg);
+    cart.saveOrder({
+      num: orderNum,
+      date: new Date().toISOString(),
+      total: total,
+      name: name.value.trim(),
+      items: cart.items.map(i => {
+        const f = menu.byId(i.foodId);
+        return f ? lang.$foodName(f) + ' x' + i.quantity : '';
+      })
+    });
 
-  emit('order-placed', { orderNum, total, customerName: name.value.trim() });
-  cart.clearCart();
-  resetForm();
+    const msg = buildOrderMessage(orderNum);
+    sendOrderToProviders(msg);
+
+    emit('order-placed', { orderNum, total, customerName: name.value.trim() });
+    cart.clearCart();
+    processing.value = false;
+    done.value = true;
+
+    setTimeout(() => {
+      done.value = false;
+      resetForm();
+    }, 4000);
+  }, 5000);
 }
 
 function handleClose() {
@@ -133,7 +145,25 @@ function handleOverlayClick(e) {
 <template>
   <div class="modal" :class="{ show }" @click="handleOverlayClick">
     <div class="modal-card" style="max-width:720px;">
-      <button class="modal-close" type="button" aria-label="Close" @click="handleClose">&times;</button>
+      <button class="modal-close" type="button" aria-label="Close" @click="handleClose" v-show="!processing && !done">&times;</button>
+
+      <div v-if="processing" class="pay-processing">
+        <div class="pay-spinner"></div>
+        <p>Inatafakari malipo yako...</p>
+        <span>Processing payment</span>
+      </div>
+
+      <div v-else-if="done" class="pay-done">
+        <div class="pay-done-circle">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <path d="M4 12.5l5 5L20 6.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Malipo yamekamilika!</h3>
+        <p>Payment successful. Your order has been sent to Clocktower Food Service Provider.</p>
+      </div>
+
+      <template v-else>
       <div style="padding:24px 26px 0;text-align:center;">
         <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;" v-html="lang.$t('co.title')"></h3>
         <p style="color:var(--muted);font-size:13.5px;margin:6px 0 0;" v-html="lang.$t('co.sub')"></p>
@@ -153,9 +183,9 @@ function handleOverlayClick(e) {
           </ul>
           <div class="co-total">
             <span v-html="lang.$t('co.total')"></span>
-            <b>{{ fmt(cart.cartSubtotal.value) }}</b>
+            <b>{{ fmt(cart.cartSubtotal) }}</b>
           </div>
-          <div class="co-meta">{{ cart.cartQuantity.value }} {{ lang.$t('co.metaItems') }}{{ cart.cartQuantity.value === 1 ? '' : 's' }} &bull; {{ cart.items.length }} {{ lang.$t('co.metaFoods') }}{{ cart.items.length === 1 ? '' : 's' }}</div>
+          <div class="co-meta">{{ cart.cartQuantity }} {{ lang.$t('co.metaItems') }}{{ cart.cartQuantity === 1 ? '' : 's' }} &bull; {{ cart.items.length }} {{ lang.$t('co.metaFoods') }}{{ cart.items.length === 1 ? '' : 's' }}</div>
         </div>
         <div class="co-form">
           <h4 v-html="lang.$t('co.cust')"></h4>
@@ -231,6 +261,7 @@ function handleOverlayClick(e) {
           </form>
         </div>
       </div>
+      </template>
     </div>
   </div>
 </template>

@@ -6,20 +6,14 @@ import { useMenuStore } from '../stores/menu';
 const lang = useLangStore();
 const menu = useMenuStore();
 
-const emit = defineEmits(['open-food']);
+const emit = defineEmits(['open-food', 'add-to-cart']);
 
 const filters = ['all', 'breakfast', 'lunch', 'dinner', 'drinks'];
 </script>
 
 <template>
   <section class="section" id="menu">
-    <div class="section-head">
-      <span class="dot"></span>
-      <span>{{ lang.$t('sec.menu') }}</span>
-      <span class="line"></span>
-    </div>
-    <h2>{{ lang.$t('menu.title') }}</h2>
-    <p class="sub">{{ lang.$t('menu.sub') }}</p>
+
     <div class="toolbar">
       <div class="search-box">
         <svg class="sico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -52,6 +46,7 @@ const filters = ['all', 'breakfast', 'lunch', 'dinner', 'drinks'];
         :key="food.id"
         :food="food"
         @open-detail="emit('open-food', $event)"
+        @add-to-cart="(id, qty) => emit('add-to-cart', id, qty)"
       />
     </div>
   </section>
