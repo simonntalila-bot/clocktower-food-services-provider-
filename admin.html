@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClockTower Admin — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#10b981;--accent2:#059669;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--overlay:rgba(4,7,12,0.72);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);--sidebar-bg:#0d1219;--sidebar-w:260px;}
+html[data-theme="light"]{--bg:#f4f6f9;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.92);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(16,185,129,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(5,150,105,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+
+/* LOGIN */
+.login-wrap{
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;
+  background:url('https://simonntalila-bot.github.io/clocktower-food-services-provider-/1.jpg') center/cover no-repeat fixed;
+  position:relative;
+}
+.login-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(11,15,20,0.45);backdrop-filter:blur(2px);
+}
+.login-card{background:rgba(22,29,38,0.65);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:40px;width:100%;max-width:420px;text-align:center;box-shadow:var(--shadow);position:relative;z-index:1;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+.login-card .logo{font-size:48px;margin-bottom:12px;}
+.login-card h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px;}
+.login-card p{color:var(--muted);font-size:13px;margin-bottom:24px;}
+.login-card .field{position:relative;margin-bottom:14px;text-align:left;}
+.login-card label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.08em;}
+.login-card input[type="text"],.login-card input[type="password"],.login-card input[type="email"]{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:14px;outline:none;transition:border .2s;}
+.login-card input:focus{border-color:var(--accent);}
+.toggle-pw{position:absolute;right:12px;top:34px;background:none;border:none;color:var(--muted);font-size:15px;}
+.login-btn{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:15px;font-weight:600;margin-top:6px;transition:opacity .2s;}
+.login-btn:hover{opacity:0.9;}
+.login-err{color:var(--danger);font-size:12px;margin-top:10px;display:none;}
+.login-links{margin-top:16px;display:flex;justify-content:space-between;font-size:12px;}
+.login-links a{color:var(--accent);font-weight:500;}
+.login-links a:hover{text-decoration:underline;}
+
+/* FORGOT PASSWORD MODAL */
+.forgot-card{display:none;}
+.forgot-card.show{display:block;}
+.login-card-main{display:block;}
+.login-card-main.hide{display:none;}
+.forgot-back{margin-top:14px;font-size:12px;color:var(--muted);}
+.forgot-back a{color:var(--accent);cursor:pointer;}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-overlay .modal{background:var(--card);border:1px solid var(--border);border-radius:18px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);}
+.modal-header h3{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin:0;}
+.modal-close{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:8px;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.modal-close:hover{color:var(--danger);border-color:var(--danger);}
+.modal-body{padding:20px 22px;}
+.modal-footer{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid var(--border);}
+
+/* APP */
+.app{display:none;min-height:100vh;}
+.app.show{display:flex;}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50;transition:transform .3s ease;}
+.sidebar .brand-area{padding:18px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sidebar .brand-area .logo{font-size:26px;}
+.sidebar .brand-area h2{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;line-height:1.15;}
+.sidebar .brand-area h2 em{font-style:normal;color:var(--accent);}
+.sidebar .brand-area small{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;}
+.sidebar nav{flex:1;padding:10px;overflow-y:auto;}
+.sidebar nav .nav-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:12px 14px 4px;font-weight:600;}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);transition:all .15s;margin-bottom:1px;position:relative;}
+.sidebar nav a:hover{color:var(--text);background:var(--card);}
+.sidebar nav a.active{color:var(--accent);background:rgba(16,185,129,0.10);}
+.sidebar nav a i{width:18px;text-align:center;font-size:14px;}
+.sidebar nav .badge-dot{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--danger);display:none;}
+.sidebar nav .badge-dot.show{display:block;}
+.sidebar .sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);text-align:center;}
+.sidebar .sidebar-footer a{color:var(--accent);}
+
+/* MAIN */
+.main{flex:1;margin-left:var(--sidebar-w);padding:0;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.topbar .left{display:flex;align-items:center;gap:12px;}
+.topbar h1{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;}
+.topbar .right{display:flex;align-items:center;gap:8px;}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:20px;padding:6px;}
+.topbar .pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(16,185,129,0.12);color:var(--accent);}
+.notif-btn{position:relative;background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.notif-btn:hover{border-color:var(--accent);color:var(--accent);}
+.notif-btn .notif-count{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;}
+.notif-btn .notif-count.show{display:flex;}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent);}
+.logout-btn{background:none;border:1px solid var(--danger);color:var(--danger);padding:7px 14px;border-radius:10px;font-size:12px;font-weight:600;transition:all .15s;}
+.logout-btn:hover{background:var(--danger);color:#fff;}
+.content{padding:24px;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;transition:transform .2s;}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-card .icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.stat-card .info h3{font-size:22px;font-weight:700;line-height:1;}
+.stat-card .info p{font-size:11px;color:var(--muted);margin-top:3px;}
+.stat-card.orange .icon{background:rgba(16,185,129,0.12);color:var(--accent);}
+.stat-card.green .icon{background:rgba(52,211,153,0.12);color:var(--green);}
+.stat-card.purple .icon{background:rgba(167,139,250,0.12);color:var(--purple);}
+.stat-card.blue .icon{background:rgba(56,189,248,0.12);color:#38bdf8;}
+.stat-card.red .icon{background:rgba(255,107,107,0.12);color:var(--danger);}
+
+/* SECTIONS */
+.section{display:none;}
+.section.active{display:block;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.section-header h2{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;transition:all .2s;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-primary:hover{opacity:0.88;}
+.btn-success{background:var(--green);color:#fff;}
+.btn-success:hover{opacity:0.88;}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-danger:hover{opacity:0.88;}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-sm{padding:6px 12px;font-size:11px;border-radius:8px;}
+.btn-xs{padding:4px 8px;font-size:10px;border-radius:6px;}
+
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.table-wrap table{width:100%;border-collapse:collapse;}
+.table-wrap th,.table-wrap td{padding:12px 14px;text-align:left;font-size:12px;}
+.table-wrap th{background:var(--bg2);color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border);}
+.table-wrap td{border-bottom:1px solid var(--border);vertical-align:middle;}
+.table-wrap tr:last-child td{border-bottom:none;}
+.table-wrap tr:hover td{background:rgba(255,255,255,0.02);}
+.table-food{display:flex;align-items:center;gap:8px;}
+.table-food img{width:38px;height:38px;border-radius:8px;object-fit:cover;}
+.table-food .tf-name{font-weight:600;font-size:12px;}
+.table-food .tf-cat{font-size:10px;color:var(--muted);}
+.cat-badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;}
+.cat-badge.breakfast{background:rgba(16,185,129,0.15);color:#10b981;}
+.cat-badge.lunch{background:rgba(52,211,153,0.15);color:#34d399;}
+.cat-badge.dinner{background:rgba(167,139,250,0.15);color:#a78bfa;}
+.cat-badge.drinks{background:rgba(56,189,248,0.15);color:#38bdf8;}
+.price-cell{font-weight:600;color:var(--accent);}
+.actions-cell{display:flex;gap:4px;}
+.actions-cell button{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:none;color:var(--muted);font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.actions-cell button:hover{border-color:var(--accent);color:var(--accent);}
+.actions-cell button.del:hover{border-color:var(--danger);color:var(--danger);}
+
+/* STATUS BADGES */
+.status-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+.status-badge.paid{background:rgba(52,211,153,0.15);color:var(--green);}
+.status-badge.unpaid{background:rgba(255,107,107,0.15);color:var(--danger);}
+.status-badge.pending{background:rgba(16,185,129,0.15);color:var(--accent);}
+.status-badge.confirmed{background:rgba(52,211,153,0.15);color:var(--green);}
+.status-badge.new{background:rgba(56,189,248,0.15);color:#38bdf8;}
+
+/* ROLE BADGES */
+.role-badge{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;}
+.role-badge.admin{background:rgba(16,185,129,0.15);color:var(--accent);}
+.role-badge.accountant{background:rgba(167,139,250,0.15);color:var(--purple);}
+.role-badge.staff{background:rgba(52,211,153,0.15);color:var(--green);}
+.role-badge.receptionist{background:rgba(56,189,248,0.15);color:#38bdf8;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{margin-bottom:0;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em;}
+.form-group label .req{color:var(--danger);}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border .2s;resize:vertical;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aa7b5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;}
+.form-group textarea{min-height:70px;}
+
+/* IMAGE UPLOAD */
+.img-upload-area{border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;overflow:hidden;}
+.img-upload-area:hover{border-color:var(--accent);background:rgba(255,184,77,0.03);}
+.img-upload-area.has-img{border-style:solid;padding:0;}
+.img-upload-area .upload-placeholder{color:var(--muted);}
+.img-upload-area .upload-placeholder i{font-size:32px;margin-bottom:6px;color:var(--accent);display:block;}
+.img-upload-area .upload-placeholder p{font-size:12px;margin:0;}
+.img-upload-area .upload-placeholder small{font-size:10px;opacity:0.7;}
+.img-upload-area img{width:100%;height:180px;object-fit:cover;border-radius:10px;display:none;}
+.img-upload-area.has-img img{display:block;}
+.img-upload-area.has-img .upload-placeholder{display:none;}
+.upload-options{display:flex;gap:6px;justify-content:center;margin-top:8px;}
+.upload-options .btn{font-size:10px;padding:5px 10px;border-radius:6px;}
+
+/* SEARCH */
+.search-box{position:relative;max-width:280px;}
+.search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
+.search-box input{width:100%;padding:9px 12px 9px 34px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:12px;outline:none;}
+.search-box input:focus{border-color:var(--accent);}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:4px;flex-wrap:wrap;}
+.filter-tab{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);font-size:11px;font-weight:500;transition:all .15s;}
+.filter-tab:hover{border-color:var(--accent);color:var(--accent);}
+.filter-tab.active{background:rgba(16,185,129,0.12);border-color:var(--accent);color:var(--accent);}
+
+/* TOAST */
+.toast-container{position:fixed;top:16px;right:16px;z-index:200;display:flex;flex-direction:column;gap:6px;}
+.toast{padding:12px 16px;border-radius:10px;font-size:12px;font-weight:500;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;animation:toastIn .3s ease;min-width:240px;}
+.toast.success{border-left:4px solid var(--green);}
+.toast.error{border-left:4px solid var(--danger);}
+.toast.info{border-left:4px solid var(--accent);}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+
+/* CONFIRM DIALOG */
+.confirm-overlay{position:fixed;inset:0;z-index:150;background:var(--overlay);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
+.confirm-overlay.show{display:flex;}
+.confirm-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;max-width:360px;width:100%;box-shadow:var(--shadow);}
+.confirm-box .icon{font-size:36px;margin-bottom:10px;}
+.confirm-box h3{font-size:16px;font-weight:700;margin-bottom:5px;}
+.confirm-box p{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.confirm-box .btns{display:flex;gap:8px;justify-content:center;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:50px 16px;color:var(--muted);}
+.empty-state i{font-size:40px;margin-bottom:10px;opacity:0.3;}
+.empty-state h3{font-size:14px;color:var(--text);margin-bottom:4px;}
+.empty-state p{font-size:12px;}
+
+/* NOTIF DROPDOWN */
+.notif-dropdown{position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:12px;width:340px;max-height:400px;overflow-y:auto;box-shadow:var(--shadow);display:none;z-index:60;}
+.notif-dropdown.show{display:block;}
+.notif-dropdown .notif-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.notif-dropdown .notif-header h4{font-size:13px;font-weight:700;}
+.notif-dropdown .notif-item{padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;display:flex;gap:10px;cursor:pointer;transition:background .15s;}
+.notif-dropdown .notif-item:hover{background:var(--bg2);}
+.notif-dropdown .notif-item.unread{background:rgba(16,185,129,0.04);}
+.notif-dropdown .notif-item .notif-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
+.notif-dropdown .notif-item .notif-text{flex:1;}
+.notif-dropdown .notif-item .notif-text strong{display:block;font-size:12px;}
+.notif-dropdown .notif-item .notif-text span{color:var(--muted);font-size:11px;}
+.notif-dropdown .notif-empty{padding:30px;text-align:center;color:var(--muted);font-size:12px;}
+
+/* ACTIVITY LOG */
+.log-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.log-item:last-child{border-bottom:none;}
+.log-item .log-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;background:var(--bg2);}
+.log-item .log-text{flex:1;}
+.log-item .log-text span{color:var(--muted);font-size:10px;display:block;margin-top:2px;}
+
+/* PROFILE */
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;}
+.profile-avatar{width:80px;height:80px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff;font-weight:700;flex-shrink:0;}
+.profile-info{flex:1;}
+.profile-info h3{font-size:18px;font-weight:700;margin-bottom:4px;}
+.profile-info p{font-size:12px;color:var(--muted);}
+.profile-info .role-tag{display:inline-block;margin-top:6px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0;}
+.tab-btn{padding:8px 16px;border:none;background:none;color:var(--muted);font-size:12px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* LANG SWITCH */
+.lang-switch{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.lang-btn{background:var(--card);border:none;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;padding:8px 11px;transition:background .15s,color .15s;}
+.lang-btn:first-child{border-right:1px solid var(--border);}
+.lang-btn.active{background:rgba(255,184,77,0.16);color:var(--accent);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .hamburger{display:block;}
+  .topbar{padding:10px 14px;}
+  .content{padding:14px;}
+  .form-grid{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .notif-dropdown{width:300px;right:-40px;}
+}
+@media(max-width:500px){
+  .stats-grid{grid-template-columns:1fr;}
+  .table-wrap{overflow-x:auto;}
+  .topbar h1{font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== LOGIN ==================== -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <!-- MAIN LOGIN -->
+    <div class="login-card-main" id="loginMain">
+      <div class="logo">🔒</div>
+      <h1 data-i18n="login.title">ClockTower Admin</h1>
+      <p data-i18n="login.sub">Ingia ili kudhibiti menyu na huduma</p>
+      <div class="field">
+        <label data-i18n="login.username">Username / Jina la Mtumiaji</label>
+        <input type="text" id="loginUser" placeholder="Weka username" autocomplete="off">
+      </div>
+      <div class="field">
+        <label data-i18n="login.password">Password / Neno la Siri</label>
+        <input type="password" id="loginPw" placeholder="Weka password" autocomplete="off">
+        <button class="toggle-pw" type="button" onclick="togglePw('loginPw',this)"><i class="fas fa-eye"></i></button>
+      </div>
+      <button class="login-btn" onclick="doLogin()"><span data-i18n="login.btn">INGIA (LOG IN)</span></button>
+      <div class="login-err" id="loginErr"><span data-i18n="login.err">Username au password si sahihi. Tafadhali jaribu tena.</span></div>
+      <div class="login-links">
+        <a onclick="showForgot()"><span data-i18n="login.forgot">Umesahau password?</span></a>
+      </div>
+      <div class="login-footer"><span data-i18n="login.footer">Default: admin / clocktower2026</span></div>
+    </div>
+    <!-- FORGOT PASSWORD -->
+    <div class="forgot-card" id="forgotCard">
+      <div class="logo">🔑</div>
+      <h1 data-i18n="forgot.title">Sahau Password?</h1>
+      <p data-i18n="forgot.sub">Weka username yako na jibu swali la usalama</p>
+      <div class="field">
+        <label data-i18n="forgot.username">Username</label>
+        <input type="text" id="fpUser" placeholder="Weka username yako">
+      </div>
+      <div class="field">
+        <label data-i18n="forgot.question">Swali la Usalama: Jina la mkewe mwanasayansi Newton?</label>
+        <input type="text" id="fpAnswer" placeholder="Jibu swali hili">
+      </div>
+      <button class="login-btn" onclick="doForgot()"><span data-i18n="forgot.btn">PATA PASSWORD MPYA</span></button>
+      <div class="login-err" id="fpErr"><span data-i18n="forgot.err">Jibu si sahihi au username haipatikani.</span></div>
+      <div class="login-links"><a onclick="hideForgot()"><span data-i18n="forgot.back">← Rudi kwenye Login</span></a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== APP ==================== -->
+<div class="app" id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-area">
+      <div class="logo">🍕</div>
+      <div>
+        <h2>Clock<em>Tower</em></h2>
+        <small id="sidebarRole" data-i18n="sidebar.role">Admin Panel</small>
+      </div>
+    </div>
+    <nav id="sidebarNav">
+      <a href="#" class="active" data-page="dashboard" onclick="goPage('dashboard',this)"><i class="fas fa-th-large"></i> <span data-i18n="nav.dashboard">Dashboard</span></a>
+      <div class="nav-label" data-i18n="nav.business">Biashara</div>
+      <a href="#" data-page="orders" onclick="goPage('orders',this)"><i class="fas fa-receipt"></i> <span data-i18n="nav.orders">Maagizo / Orders</span><span class="badge-dot" id="orderBadge"></span></a>
+      <a href="#" data-page="customers" onclick="goPage('customers',this)"><i class="fas fa-users"></i> <span data-i18n="nav.customers">Wateja / Customers</span></a>
+      <a href="#" data-page="comments" onclick="goPage('comments',this)"><i class="fas fa-comments"></i> <span data-i18n="nav.comments">Maoni / Comments</span></a>
+      <div class="nav-label" data-i18n="nav.menu">Menyu</div>
+      <a href="#" data-page="foods" onclick="goPage('foods',this)"><i class="fas fa-utensils"></i> <span data-i18n="nav.foods">Menyu / Foods</span></a>
+      <a href="#" data-page="addfood" onclick="goPage('addfood',this)"><i class="fas fa-plus-circle"></i> <span data-i18n="nav.addfood">Ongeza Chakula</span></a>
+      <div class="nav-label" data-perm="admin" data-i18n="nav.mgmt">Usimamizi</div>
+      <a href="#" data-page="users" onclick="goPage('users',this)" data-perm="admin"><i class="fas fa-user-shield"></i> <span data-i18n="nav.users">Watumiaji / Users</span></a>
+      <a href="#" data-page="activity" onclick="goPage('activity',this)" data-perm="admin"><i class="fas fa-history"></i> <span data-i18n="nav.activity">Activity Log</span></a>
+      <div class="nav-label" data-i18n="nav.system">Mifumo</div>
+      <a href="#" data-page="profile" onclick="goPage('profile',this)"><i class="fas fa-user-circle"></i> <span data-i18n="nav.profile">Profaili / Profile</span></a>
+      <a href="#" data-page="settings" onclick="goPage('settings',this)"><i class="fas fa-cog"></i> <span data-i18n="nav.settings">Settings</span></a>
+    </nav>
+    <div class="sidebar-footer"><a href="index.html"><span data-i18n="sidebar.back">← Rudi kwenye tovuti</span></a></div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="left">
+        <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="right">
+        <span class="pill" id="adminBadge">Admin</span>
+        <div style="position:relative;">
+          <button class="notif-btn" onclick="toggleNotifDrop()" title="Notifikasheni">
+            <i class="fas fa-bell"></i>
+            <span class="notif-count" id="notifCount">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header"><h4>Notifikasheni</h4><button class="btn btn-xs btn-outline" onclick="clearNotifs()">Woteimesoma</button></div>
+            <div id="notifList"><div class="notif-empty">Hakuna notifikasheni mpya.</div></div>
+          </div>
+        </div>
+        <div class="lang-switch">
+          <button class="lang-btn" type="button" data-lang="en" onclick="setAdminLang('en')">EN</button>
+          <button class="lang-btn active" type="button" data-lang="sw" onclick="setAdminLang('sw')">SW</button>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" title="Badilisha Mandhari"><i class="fas fa-moon" id="themeIcon"></i></button>
+        <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="topbar.logout">Ondoka</span></button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="section active" id="sec-dashboard">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+          <div>
+            <div class="section-header"><h2 data-i18n="dash.recent">Maagizo ya Hivi Karibuni</h2></div>
+            <div id="recentOrdersDash"></div>
+          </div>
+          <div>
+            <div class="section-header"><h2 data-i18n="dash.today">Wateja wa Leo</h2></div>
+            <div id="todayCustomersDash"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ORDERS ===== -->
+      <div class="section" id="sec-orders">
+        <div class="section-header">
+          <h2 data-i18n="orders.title">Maagizo / Orders</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="orderSearch" placeholder="Tafuta..." oninput="renderOrders()" data-i18n-placeholder="orders.search_ph"></div>
+            <div class="filter-tabs" id="orderFilter">
+              <button class="filter-tab active" data-f="all" onclick="filterOrders('all',this)" data-i18n="orders.filter_all">Zote</button>
+              <button class="filter-tab" data-f="new" onclick="filterOrders('new',this)" data-i18n="orders.filter_new">🆕 Mpya</button>
+              <button class="filter-tab" data-f="confirmed" onclick="filterOrders('confirmed',this)" data-i18n="orders.filter_confirmed">✅ Imethibitishwa</button>
+              <button class="filter-tab" data-f="paid" onclick="filterOrders('paid',this)" data-i18n="orders.filter_paid">💰 Imelipwa</button>
+              <button class="filter-tab" data-f="unpaid" onclick="filterOrders('unpaid',this)" data-i18n="orders.filter_unpaid">❌ haijalipwa</button>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="clearOrders()"><i class="fas fa-trash"></i> <span data-i18n="orders.delete">Futa</span></button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr>
+            <th data-i18n="orders.th_number">Nambari</th><th data-i18n="orders.th_customer">Mteja</th><th data-i18n="orders.th_phone">Simu</th><th data-i18n="orders.th_food">Chakula</th><th data-i18n="orders.th_total">Jumla</th><th data-i18n="orders.th_status">Hali</th><th data-i18n="orders.th_time">Muda</th><th style="text-align:right;" data-i18n="orders.th_actions">Vitendo</th>
+          </tr></thead><tbody id="ordersTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="ordersEmpty" style="display:none;"><i class="fas fa-receipt"></i><h3 data-i18n="orders.empty">Hakuna maagizo</h3></div>
+      </div>
+
+      <!-- ===== CUSTOMERS ===== -->
+      <div class="section" id="sec-customers">
+        <div class="section-header">
+          <h2 data-i18n="customers.title">Wateja / Customers</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="custSearch" placeholder="Tafuta mteja..." oninput="renderCustomers()" data-i18n-placeholder="customers.search_ph"></div>
+            <div class="filter-tabs" id="custFilter">
+              <button class="filter-tab active" data-f="all" onclick="filterCust('all',this)" data-i18n="customers.filter_all">Wote</button>
+              <button class="filter-tab" data-f="today" onclick="filterCust('today',this)" data-i18n="customers.filter_today">Leo</button>
+              <button class="filter-tab" data-f="paid" onclick="filterCust('paid',this)" data-i18n="customers.filter_paid">💰 Wamelipa</button>
+              <button class="filter-tab" data-f="unpaid" onclick="filterCust('unpaid',this)" data-i18n="customers.filter_unpaid">❌ Hawajalipa</button>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr>
+            <th data-i18n="customers.th_name">Jina</th><th data-i18n="customers.th_phone">Simu</th><th data-i18n="customers.th_email">Email</th><th data-i18n="customers.th_table">Meza/Mahali</th><th data-i18n="customers.th_order">Agizo</th><th data-i18n="customers.th_total">Jumla</th><th data-i18n="customers.th_payment">Hali ya Malipo</th><th data-i18n="customers.th_time">Muda</th><th style="text-align:right;" data-i18n="customers.th_actions">Vitendo</th>
+          </tr></thead><tbody id="custTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="custEmpty" style="display:none;"><i class="fas fa-users"></i><h3 data-i18n="customers.empty">Hakuna wateja bado</h3></div>
+      </div>
+
+      <!-- ===== FOODS LIST ===== -->
+      <div class="section" id="sec-foods">
+        <div class="section-header">
+          <h2 data-i18n="foods.title">Menyu ya Chakula</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="foodSearch" placeholder="Tafuta chakula..." oninput="renderFoodsList()" data-i18n-placeholder="foods.search_ph"></div>
+            <div class="filter-tabs" id="catFilter">
+              <button class="filter-tab active" data-cat="all" onclick="filterCat('all',this)" data-i18n="foods.filter_all">Zote</button>
+              <button class="filter-tab" data-cat="breakfast" onclick="filterCat('breakfast',this)">🍳 Breakfast</button>
+              <button class="filter-tab" data-cat="lunch" onclick="filterCat('lunch',this)">🍛 Lunch</button>
+              <button class="filter-tab" data-cat="dinner" onclick="filterCat('dinner',this)">🍽️ Dinner</button>
+              <button class="filter-tab" data-cat="drinks" onclick="filterCat('drinks',this)">🥤 Drinks</button>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="goPage('addfood',document.querySelector('[data-page=addfood]'))"><i class="fas fa-plus"></i> <span data-i18n="foods.add_btn">Ongeza</span></button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr>
+            <th data-i18n="foods.th_food">Chakula</th><th data-i18n="foods.th_category">Kategoria</th><th data-i18n="foods.th_price">Bei</th><th data-i18n="foods.th_rating">Rating</th><th data-i18n="foods.th_status">Hali</th><th style="text-align:right;" data-i18n="foods.th_actions">Vitendo</th>
+          </tr></thead><tbody id="foodsTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="foodsEmpty" style="display:none;"><i class="fas fa-utensils"></i><h3 data-i18n="foods.empty">Hakuna chakula bado</h3></div>      </div>
+
+      <!-- ===== ADD / EDIT FOOD ===== -->
+      <div class="section" id="sec-addfood">
+        <div class="section-header">
+          <h2 id="formTitle" data-i18n="addfood.title_new">Ongeza Chakula Kipya</h2>
+          <button class="btn btn-outline btn-sm" onclick="goPage('foods',document.querySelector('[data-page=foods]'))"><i class="fas fa-arrow-left"></i> <span data-i18n="addfood.back">Rudi</span></button>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;">
+          <div class="form-grid">
+            <div class="form-group"><label data-i18n="addfood.name_en">Jina (English) <span class="req">*</span></label><input type="text" id="fName" placeholder="e.g. Chapati"></div>
+            <div class="form-group"><label data-i18n="addfood.name_sw">Jina (Swahili)</label><input type="text" id="fNameSw" placeholder="e.g. Chapati"></div>
+            <div class="form-group"><label data-i18n="addfood.category">Kategoria <span class="req">*</span></label>
+              <select id="fCategory"><option value="">— Chagua —</option><option value="breakfast">🍳 Breakfast</option><option value="lunch">🍛 Lunch</option><option value="dinner">🍽️ Dinner</option><option value="drinks">🥤 Drinks</option></select>
+            </div>
+            <div class="form-group"><label data-i18n="addfood.price">Bei (TSh) <span class="req">*</span></label><input type="number" id="fPrice" placeholder="e.g. 5000" min="0" step="100"></div>
+            <div class="form-group"><label data-i18n="addfood.emoji">Emoji</label><input type="text" id="fIcon" placeholder="e.g. 🍕" maxlength="4"></div>
+            <div class="form-group"><label data-i18n="addfood.rating">Rating (1-5)</label><input type="number" id="fRating" placeholder="e.g. 4.5" min="1" max="5" step="0.1"></div>
+            <div class="form-group full"><label data-i18n="addfood.desc_en">Maelezo (EN)</label><textarea id="fDesc" placeholder="Describe..."></textarea></div>
+            <div class="form-group full"><label data-i18n="addfood.desc_sw">Maelezo (SW)</label><textarea id="fDescSw" placeholder="Eleza..."></textarea></div>
+            <div class="form-group"><label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="fPopular" style="width:auto;"> <span data-i18n="addfood.popular">Maarufu / Popular</span></label></div>
+            <div class="form-group full">
+              <label data-i18n="addfood.image">Picha <span class="req">*</span></label>
+              <div class="img-upload-area" id="imgUploadArea" onclick="triggerUpload()">
+                <div class="upload-placeholder"><i class="fas fa-cloud-upload-alt"></i><p data-i18n="addfood.image_hint">Bonyeza kuweka picha</p><small data-i18n="addfood.image_specs">JPG, PNG — max 2MB</small></div>
+                <img id="imgPreview" alt="Preview">
+              </div>
+              <div class="upload-options">
+                <button class="btn btn-outline" onclick="event.stopPropagation();document.getElementById('fileInput').click()"><i class="fas fa-image"></i> <span data-i18n="addfood.gallery">Gallery</span></button>
+                <button class="btn btn-outline" onclick="event.stopPropagation();document.getElementById('cameraInput').click()"><i class="fas fa-camera"></i> <span data-i18n="addfood.camera">Camera</span></button>
+                <button class="btn btn-outline" onclick="event.stopPropagation();pasteUrl()"><i class="fas fa-link"></i> <span data-i18n="addfood.url">URL</span></button>
+              </div>
+              <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)">
+              <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleFileSelect(event)">
+            </div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;">
+            <button class="btn btn-outline" onclick="clearForm()"><span data-i18n="addfood.clear">Futa</span></button>
+            <button class="btn btn-primary" onclick="saveFood()"><i class="fas fa-save"></i> <span data-i18n="addfood.save">Hifadhi</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== COMMENTS ===== -->
+      <div class="section" id="sec-comments">
+        <div class="section-header">
+          <h2 data-i18n="comments.title">Maoni / Comments</h2>
+          <button class="btn btn-danger btn-sm" onclick="clearComments()"><i class="fas fa-trash"></i> <span data-i18n="comments.delete_all">Futa Yote</span></button>
+        </div>
+        <div id="commentsList"></div>
+        <div class="empty-state" id="commentsEmpty" style="display:none;"><i class="fas fa-comments"></i><h3 data-i18n="comments.empty">Hakuna maoni bado</h3></div>
+      </div>
+
+      <!-- ===== USERS (ADMIN ONLY) ===== -->
+      <div class="section" id="sec-users">
+        <div class="section-header">
+          <h2 data-i18n="users.title">Watumiaji / Users</h2>
+          <button class="btn btn-primary btn-sm" onclick="showAddUserModal()"><i class="fas fa-plus"></i> <span data-i18n="users.add_btn">Ongeza Mtumiaji</span></button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr>
+            <th data-i18n="users.th_name">Jina</th><th data-i18n="users.th_username">Username</th><th data-i18n="users.th_role">Role</th><th data-i18n="users.th_phone">Simu</th><th data-i18n="users.th_status">Status</th><th style="text-align:right;" data-i18n="users.th_actions">Vitendo</th>
+          </tr></thead><tbody id="usersTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="usersEmpty" style="display:none;"><i class="fas fa-user-shield"></i><h3 data-i18n="users.empty">Hakuna watumiaji</h3></div>
+      </div>
+
+      <!-- ===== ACTIVITY LOG (ADMIN ONLY) ===== -->
+      <div class="section" id="sec-activity">
+        <div class="section-header">
+          <h2 data-i18n="activity.title">Activity Log</h2>
+          <button class="btn btn-danger btn-sm" onclick="clearActivity()"><i class="fas fa-trash"></i> <span data-i18n="activity.delete">Futa</span></button>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;" id="activityLog"></div>
+        <div class="empty-state" id="activityEmpty" style="display:none;"><i class="fas fa-history"></i><h3 data-i18n="activity.empty">Hakuna shughuli bado</h3></div>
+      </div>
+
+      <!-- ===== PROFILE ===== -->
+      <div class="section" id="sec-profile">
+        <div class="section-header"><h2 data-i18n="profile.title">Profaili Yako</h2></div>
+        <div class="profile-card" id="profileCard"></div>
+        <div style="margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:450px;">
+          <h3 style="font-size:15px;margin-bottom:14px;" data-i18n="profile.change_pw">Badilisha Password</h3>
+          <div class="form-group" style="margin-bottom:12px;"><label data-i18n="profile.old_pw">Password ya Zamani</label><input type="password" id="profOldPw" placeholder="Weka password ya zamani" data-i18n-placeholder="profile.old_pw_ph"></div>
+          <div class="form-group" style="margin-bottom:12px;"><label data-i18n="profile.new_pw">Password Mpya</label><input type="password" id="profNewPw" placeholder="Weka password mpya" data-i18n-placeholder="profile.new_pw_ph"></div>
+          <div class="form-group" style="margin-bottom:12px;"><label data-i18n="profile.confirm_pw">Thibitisha Password</label><input type="password" id="profConfirmPw" placeholder="Rudisha password mpya" data-i18n-placeholder="profile.confirm_pw_ph"></div>
+          <button class="btn btn-primary" onclick="changeMyPassword()"><i class="fas fa-save"></i> <span data-i18n="profile.save_pw">Badilisha Password</span></button>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS ===== -->
+      <div class="section" id="sec-settings">
+        <div class="section-header"><h2 data-i18n="settings.title">Settings</h2></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:480px;">
+          <div class="form-group" style="margin-bottom:14px;"><label data-i18n="settings.whatsapp">WhatsApp Namba</label><input type="text" id="whatsappNum" placeholder="255XXXXXXXXX"></div>
+          <button class="btn btn-primary" onclick="saveWhatsapp()"><i class="fas fa-save"></i> <span data-i18n="settings.save_whatsapp">Hifadhi WhatsApp</span></button>
+          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+            <button class="btn btn-outline" onclick="exportData()"><i class="fas fa-download"></i> <span data-i18n="settings.export">Export Data</span></button>
+            <button class="btn btn-outline" onclick="document.getElementById('importFile').click()"><i class="fas fa-upload"></i> <span data-i18n="settings.import">Import Data</span></button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+          </div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+          <h3 style="font-size:14px;margin-bottom:6px;color:var(--green);" data-i18n="settings.publish_title">Publish Online</h3>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;" data-i18n="settings.publish_desc">Pakua faili ya data.json na uiweke kwenye repo ya GitHub ili wateja wote waone menu mpya.</p>
+          <button class="btn btn-success" onclick="publishOnline()"><i class="fas fa-globe"></i> <span data-i18n="settings.publish_btn">Publish data.json</span></button>
+          <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+          <h3 style="font-size:14px;margin-bottom:10px;color:var(--danger);" data-i18n="settings.danger_zone">Danger Zone</h3>
+          <button class="btn btn-danger" onclick="resetAll()"><i class="fas fa-exclamation-triangle"></i> <span data-i18n="settings.reset_all">Futa Data Zote</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- CONFIRM -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="icon">⚠️</div>
+    <h3 id="confirmTitle" data-i18n="modal.confirm_title">Una uhakika?</h3>
+    <p id="confirmMsg" data-i18n="modal.confirm_msg">Kitu hiki kitaondolewa.</p>
+    <div class="btns">
+      <button class="btn btn-outline" onclick="closeConfirm()"><span data-i18n="modal.confirm_cancel">Ghairi</span></button>
+      <button class="btn btn-danger" id="confirmBtn"><span data-i18n="modal.confirm_delete">Futa</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT USER MODAL -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header"><h3 id="userModalTitle" data-i18n="modal.user_title_new">Ongeza Mtumiaji</h3><button class="modal-close" onclick="closeUserModal()">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:12px;"><label data-i18n="modal.user_name">Jina Kamili <span class="req">*</span></label><input type="text" id="uName" placeholder="e.g. Amina Juma"></div>
+      <div class="form-group" style="margin-bottom:12px;"><label data-i18n="modal.user_username">Username <span class="req">*</span></label><input type="text" id="uUsername" placeholder="e.g. amina"></div>
+      <div class="form-group" style="margin-bottom:12px;"><label data-i18n="modal.user_password">Password <span class="req">*</span></label><input type="password" id="uPassword" placeholder="Weka password" data-i18n-placeholder="modal.user_password_ph"></div>
+      <div class="form-group" style="margin-bottom:12px;"><label data-i18n="modal.user_phone">Simu</label><input type="text" id="uPhone" placeholder="e.g. 0712345678"></div>
+      <div class="form-group" style="margin-bottom:12px;"><label data-i18n="modal.user_role">Role <span class="req">*</span></label>
+        <select id="uRole"><option value="">— Chagua Role —</option><option value="admin">Admin</option><option value="accountant">Accountant / Mhasibu</option><option value="staff">Staff / Mfanyakazi</option><option value="receptionist">Receptionist / Msaidizi</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeUserModal()"><span data-i18n="modal.user_cancel">Ghairi</span></button>
+      <button class="btn btn-primary" onclick="saveUser()"><i class="fas fa-save"></i> <span data-i18n="modal.user_save">Hifadhi</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-overlay" id="orderDetailModal">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header"><h3 data-i18n="modal.order_detail">Maelezo ya Agizo</h3><button class="modal-close" onclick="closeOrderDetail()">&times;</button></div>
+    <div class="modal-body" id="orderDetailBody"></div>
+    <div class="modal-footer" id="orderDetailFooter"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ===== LANGUAGE ===== */
+  var LANG_KEY_ADMIN='ctfAdminLang';
+  var adminLang=localStorage.getItem(LANG_KEY_ADMIN)||'sw';
+  var ADMIN_LANG={
+    en:{
+      'login.title':'ClockTower Admin','login.sub':'Log in to manage menu and services',
+      'login.username':'Username','login.username_ph':'Enter username',
+      'login.password':'Password','login.password_ph':'Enter password',
+      'login.btn':'LOG IN','login.err':'Invalid username or password. Please try again.',
+      'login.forgot':'Forgot password?','login.footer':'Default: admin / clocktower2026',
+      'forgot.title':'Forgot Password?','forgot.sub':'Enter your username and answer the security question',
+      'forgot.username':'Username','forgot.username_ph':'Enter your username',
+      'forgot.question':'Security Question: What was Newton\'s wife\'s name?',
+      'forgot.answer_ph':'Answer this question','forgot.btn':'GET NEW PASSWORD',
+      'forgot.err':'Wrong answer or username not found.','forgot.back':'← Back to Login',
+      'sidebar.role':'Admin Panel',
+      'nav.dashboard':'Dashboard','nav.orders':'Orders','nav.customers':'Customers',
+      'nav.comments':'Comments','nav.foods':'Menu / Foods','nav.addfood':'Add Food',
+      'nav.users':'Users','nav.activity':'Activity Log','nav.profile':'Profile','nav.settings':'Settings',
+      'nav.business':'Business','nav.menu':'Menu','nav.mgmt':'Management','nav.system':'System',
+      'sidebar.back':'← Back to website','topbar.logout':'Logout',
+      'dash.recent':'Recent Orders','dash.today':'Today\'s Customers',
+      'orders.title':'Orders','orders.search_ph':'Search...','orders.filter_all':'All','orders.filter_new':'🆕 New',
+      'orders.filter_confirmed':'✅ Confirmed','orders.filter_paid':'💰 Paid','orders.filter_unpaid':'❌ Unpaid',
+      'orders.delete':'Delete','orders.th_number':'Number','orders.th_customer':'Customer',
+      'orders.th_phone':'Phone','orders.th_food':'Food','orders.th_total':'Total',
+      'orders.th_status':'Status','orders.th_time':'Time','orders.th_actions':'Actions',
+      'orders.empty':'No orders',
+      'customers.title':'Customers','customers.search_ph':'Search customer...','customers.filter_all':'All',
+      'customers.filter_today':'Today','customers.filter_paid':'💰 Paid','customers.filter_unpaid':'❌ Unpaid',
+      'customers.th_name':'Name','customers.th_phone':'Phone','customers.th_email':'Email',
+      'customers.th_table':'Table/Location','customers.th_order':'Order','customers.th_total':'Total',
+      'customers.th_payment':'Payment Status','customers.th_time':'Time','customers.th_actions':'Actions',
+      'customers.empty':'No customers yet',
+      'foods.title':'Food Menu','foods.search_ph':'Search food...','foods.filter_all':'All',
+      'foods.add_btn':'Add','foods.th_food':'Food','foods.th_category':'Category',
+      'foods.th_price':'Price','foods.th_rating':'Rating','foods.th_status':'Status',
+      'foods.th_actions':'Actions','foods.empty':'No food yet',
+      'addfood.title_new':'Add New Food','addfood.back':'Back',
+      'addfood.name_en':'Name (English) *','addfood.name_sw':'Name (Swahili)',
+      'addfood.category':'Category *','addfood.price':'Price (TSh) *','addfood.emoji':'Emoji',
+      'addfood.rating':'Rating (1-5)','addfood.desc_en':'Description (EN)','addfood.desc_sw':'Description (SW)',
+      'addfood.popular':'Popular','addfood.image':'Image *','addfood.image_hint':'Click to upload image',
+      'addfood.image_specs':'JPG, PNG — max 2MB','addfood.gallery':'Gallery','addfood.camera':'Camera','addfood.url':'URL',
+      'addfood.clear':'Clear','addfood.save':'Save',
+      'comments.title':'Comments','comments.delete_all':'Delete All','comments.empty':'No comments yet',
+      'users.title':'Users','users.add_btn':'Add User','users.th_name':'Name','users.th_username':'Username',
+      'users.th_role':'Role','users.th_phone':'Phone','users.th_status':'Status',
+      'users.th_actions':'Actions','users.empty':'No users',
+      'activity.title':'Activity Log','activity.delete':'Delete','activity.empty':'No activity yet',
+      'profile.title':'Your Profile','profile.change_pw':'Change Password',
+      'profile.old_pw':'Old Password','profile.old_pw_ph':'Enter old password',
+      'profile.new_pw':'New Password','profile.new_pw_ph':'Enter new password',
+      'profile.confirm_pw':'Confirm Password','profile.confirm_pw_ph':'Re-enter new password',
+      'profile.save_pw':'Change Password',
+      'settings.title':'Settings','settings.whatsapp':'WhatsApp Number','settings.save_whatsapp':'Save WhatsApp',
+      'settings.export':'Export Data','settings.import':'Import Data',
+      'settings.publish_title':'Publish Online','settings.publish_desc':'Download data.json and upload it to your GitHub repo so all users see the new menu.',
+      'settings.publish_btn':'Publish data.json','settings.danger_zone':'Danger Zone','settings.reset_all':'Delete All Data',
+      'modal.confirm_title':'Are you sure?','modal.confirm_msg':'This item will be removed.',
+      'modal.confirm_cancel':'Cancel','modal.confirm_delete':'Delete',
+      'modal.user_title_new':'Add User','modal.user_name':'Full Name *','modal.user_username':'Username *',
+      'modal.user_password':'Password *','modal.user_password_ph':'Enter password','modal.user_phone':'Phone',
+      'modal.user_role':'Role *','modal.user_cancel':'Cancel','modal.user_save':'Save',
+      'modal.order_detail':'Order Details'
+    },
+    sw:{
+      'login.title':'ClockTower Admin','login.sub':'Ingia ili kudhibiti menyu na huduma',
+      'login.username':'Username / Jina la Mtumiaji','login.username_ph':'Weka username',
+      'login.password':'Password / Neno la Siri','login.password_ph':'Weka password',
+      'login.btn':'INGIA (LOG IN)','login.err':'Username au password si sahihi. Tafadhali jaribu tena.',
+      'login.forgot':'Umesahau password?','login.footer':'Default: admin / clocktower2026',
+      'forgot.title':'Sahau Password?','forgot.sub':'Weka username yako na jibu swali la usalama',
+      'forgot.username':'Username','forgot.username_ph':'Weka username yako',
+      'forgot.question':'Swali la Usalama: Jina la mkewe mwanasayansi Newton?',
+      'forgot.answer_ph':'Jibu swali hili','forgot.btn':'PATA PASSWORD MPYA',
+      'forgot.err':'Jibu si sahihi au username haipatikani.','forgot.back':'← Rudi kwenye Login',
+      'sidebar.role':'Admin Panel',
+      'nav.dashboard':'Dashboard','nav.orders':'Maagizo / Orders','nav.customers':'Wateja / Customers',
+      'nav.comments':'Maoni / Comments','nav.foods':'Menyu / Foods','nav.addfood':'Ongeza Chakula',
+      'nav.users':'Watumiaji / Users','nav.activity':'Activity Log','nav.profile':'Profaili / Profile','nav.settings':'Settings',
+      'nav.business':'Biashara','nav.menu':'Menyu','nav.mgmt':'Usimamizi','nav.system':'Mifumo',
+      'sidebar.back':'← Rudi kwenye tovuti','topbar.logout':'Ondoka',
+      'dash.recent':'Maagizo ya Hivi Karibuni','dash.today':'Wateja wa Leo',
+      'orders.title':'Maagizo / Orders','orders.search_ph':'Tafuta...','orders.filter_all':'Zote','orders.filter_new':'🆕 Mpya',
+      'orders.filter_confirmed':'✅ Imethibitishwa','orders.filter_paid':'💰 Imelipwa','orders.filter_unpaid':'❌ haijalipwa',
+      'orders.delete':'Futa','orders.th_number':'Nambari','orders.th_customer':'Mteja',
+      'orders.th_phone':'Simu','orders.th_food':'Chakula','orders.th_total':'Jumla',
+      'orders.th_status':'Hali','orders.th_time':'Muda','orders.th_actions':'Vitendo',
+      'orders.empty':'Hakuna maagizo',
+      'customers.title':'Wateja / Customers','customers.search_ph':'Tafuta mteja...','customers.filter_all':'Wote',
+      'customers.filter_today':'Leo','customers.filter_paid':'💰 Wamelipa','customers.filter_unpaid':'❌ Hawajalipa',
+      'customers.th_name':'Jina','customers.th_phone':'Simu','customers.th_email':'Email',
+      'customers.th_table':'Meza/Mahali','customers.th_order':'Agizo','customers.th_total':'Jumla',
+      'customers.th_payment':'Hali ya Malipo','customers.th_time':'Muda','customers.th_actions':'Vitendo',
+      'customers.empty':'Hakuna wateja bado',
+      'foods.title':'Menyu ya Chakula','foods.search_ph':'Tafuta chakula...','foods.filter_all':'Zote',
+      'foods.add_btn':'Ongeza','foods.th_food':'Chakula','foods.th_category':'Kategoria',
+      'foods.th_price':'Bei','foods.th_rating':'Rating','foods.th_status':'Hali',
+      'foods.th_actions':'Vitendo','foods.empty':'Hakuna chakula bado',
+      'addfood.title_new':'Ongeza Chakula Kipya','addfood.back':'Rudi',
+      'addfood.name_en':'Jina (English) *','addfood.name_sw':'Jina (Swahili)',
+      'addfood.category':'Kategoria *','addfood.price':'Bei (TSh) *','addfood.emoji':'Emoji',
+      'addfood.rating':'Rating (1-5)','addfood.desc_en':'Maelezo (EN)','addfood.desc_sw':'Maelezo (SW)',
+      'addfood.popular':'Maarufu / Popular','addfood.image':'Picha *','addfood.image_hint':'Bonyeza kuweka picha',
+      'addfood.image_specs':'JPG, PNG — max 2MB','addfood.gallery':'Gallery','addfood.camera':'Camera','addfood.url':'URL',
+      'addfood.clear':'Futa','addfood.save':'Hifadhi',
+      'comments.title':'Maoni / Comments','comments.delete_all':'Futa Yote','comments.empty':'Hakuna maoni bado',
+      'users.title':'Watumiaji / Users','users.add_btn':'Ongeza Mtumiaji','users.th_name':'Jina','users.th_username':'Username',
+      'users.th_role':'Role','users.th_phone':'Simu','users.th_status':'Status',
+      'users.th_actions':'Vitendo','users.empty':'Hakuna watumiaji',
+      'activity.title':'Activity Log','activity.delete':'Futa','activity.empty':'Hakuna shughuli bado',
+      'profile.title':'Profaili Yako','profile.change_pw':'Badilisha Password',
+      'profile.old_pw':'Password ya Zamani','profile.old_pw_ph':'Weka password ya zamani',
+      'profile.new_pw':'Password Mpya','profile.new_pw_ph':'Weka password mpya',
+      'profile.confirm_pw':'Thibitisha Password','profile.confirm_pw_ph':'Rudisha password mpya',
+      'profile.save_pw':'Badilisha Password',
+      'settings.title':'Settings','settings.whatsapp':'WhatsApp Namba','settings.save_whatsapp':'Hifadhi WhatsApp',
+      'settings.export':'Export Data','settings.import':'Import Data',
+      'settings.publish_title':'Publish Online','settings.publish_desc':'Pakua faili ya data.json na uiweke kwenye repo ya GitHub ili wateja wote waone menu mpya.',
+      'settings.publish_btn':'Publish data.json','settings.danger_zone':'Danger Zone','settings.reset_all':'Futa Data Zote',
+      'modal.confirm_title':'Una uhakika?','modal.confirm_msg':'Kitu hiki kitaondolewa.',
+      'modal.confirm_cancel':'Ghairi','modal.confirm_delete':'Futa',
+      'modal.user_title_new':'Ongeza Mtumiaji','modal.user_name':'Jina Kamili *','modal.user_username':'Username *',
+      'modal.user_password':'Password *','modal.user_password_ph':'Weka password','modal.user_phone':'Simu',
+      'modal.user_role':'Role *','modal.user_cancel':'Ghairi','modal.user_save':'Hifadhi',
+      'modal.order_detail':'Maelezo ya Agizo'
+    }
+  };
+  function at(key){return (ADMIN_LANG[adminLang]&&ADMIN_LANG[adminLang][key]!==undefined)?ADMIN_LANG[adminLang][key]:key;}
+  function setAdminLang(l){adminLang=l;localStorage.setItem(LANG_KEY_ADMIN,l);applyAdminLang();}
+  window.setAdminLang=setAdminLang;
+  function applyAdminLang(){
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key=el.getAttribute('data-i18n');
+      if(ADMIN_LANG[adminLang][key]!==undefined) el.innerHTML=ADMIN_LANG[adminLang][key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+      var key=el.getAttribute('data-i18n-placeholder');
+      if(ADMIN_LANG[adminLang][key]!==undefined) el.placeholder=ADMIN_LANG[adminLang][key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.classList.toggle('active',b.getAttribute('data-lang')===adminLang);
+    });
+  }
+  window.applyAdminLang=applyAdminLang;
+
+  /* ===== KEYS ===== */
+  var USERS_KEY='ctfAdminUsers', ORDERS_KEY='ctfOrders', CUSTOM_FOODS_KEY='ctfCustomFoods',
+      THEME_KEY='ctfAdminTheme', WHATSAPP_KEY='ctfWhatsapp', NOTIF_KEY='ctfNotifications',
+      ACTIVITY_KEY='ctfActivityLog', COMMENTS_KEY='ctfComments', CURR_USER_KEY='ctfCurrUser';
+  var DEFAULT_ADMIN_PW='clocktower2026';
+  var CATEGORY_META={breakfast:{emoji:'🍳',label:'Breakfast',color:'#10b981'},lunch:{emoji:'🍛',label:'Lunch',color:'#34d399'},dinner:{emoji:'🍽️',label:'Dinner',color:'#a78bfa'},drinks:{emoji:'🥤',label:'Drinks',color:'#38bdf8'}};
+  var ROLE_PERMS={admin:['all'],accountant:['orders','customers','dashboard','profile','settings'],staff:['orders','customers','foods','addfood','dashboard','profile'],receptionist:['orders','customers','dashboard','profile']};
+  var ROLE_LABELS={admin:'Admin',accountant:'Accountant / Mhasibu',staff:'Staff / Mfanyakazi',receptionist:'Receptionist / Msaidizi'};
+
+  var editingId=null, currentFilter='all', currentOrderFilter='all', currentCustFilter='all', pendingImgData=null, editingUserId=null;
+
+  /* ===== DATA HELPERS ===== */
+  function getUsers(){ try{return JSON.parse(localStorage.getItem(USERS_KEY)||'[]')||[];}catch(e){return [];} }
+  function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u));}
+  function getOrders(){ try{return JSON.parse(localStorage.getItem(ORDERS_KEY)||'[]')||[];}catch(e){return [];} }
+  function saveOrders(o){localStorage.setItem(ORDERS_KEY,JSON.stringify(o));}
+  function getCustomFoods(){ try{return JSON.parse(localStorage.getItem(CUSTOM_FOODS_KEY)||'[]')||[];}catch(e){return [];} }
+  function saveCustomFoods(f){localStorage.setItem(CUSTOM_FOODS_KEY,JSON.stringify(f));}
+  function getNotifs(){ try{return JSON.parse(localStorage.getItem(NOTIF_KEY)||'[]')||[];}catch(e){return [];} }
+  function saveNotifs(n){localStorage.setItem(NOTIF_KEY,JSON.stringify(n));}
+  function getActivity(){ try{return JSON.parse(localStorage.getItem(ACTIVITY_KEY)||'[]')||[];}catch(e){return [];} }
+  function saveActivity(a){localStorage.setItem(ACTIVITY_KEY,JSON.stringify(a));}
+  function getComments(){ try{return JSON.parse(localStorage.getItem(COMMENTS_KEY)||'[]')||[];}catch(e){return [];} }
+  function saveComments(c){localStorage.setItem(COMMENTS_KEY,JSON.stringify(c));}
+  function getCurrUser(){ try{return JSON.parse(localStorage.getItem(CURR_USER_KEY)||'null');}catch(e){return null;} }
+  function setCurrUser(u){localStorage.setItem(CURR_USER_KEY,JSON.stringify(u));}
+  function nextId(){var f=getCustomFoods(),mx=100;f.forEach(function(x){if(x.id>mx)mx=x.id;});return mx+1;}
+  function nextUserId(){var u=getUsers(),mx=0;u.forEach(function(x){if(x.id>mx)mx=x.id;});return mx+1;}
+  function todayStr(){return new Date().toISOString().slice(0,10);}
+
+  function addActivity(action, detail){
+    var a=getActivity();a.unshift({action:action,detail:detail||'',user:getCurrUser()?getCurrUser().name:'System',time:new Date().toLocaleString('sw-TZ')});if(a.length>100)a=a.slice(0,100);saveActivity(a);
+  }
+
+  /* ===== INIT DEFAULT ADMIN ===== */
+  function initUsers(){
+    var u=getUsers();
+    var hasAdmin=u.find(function(x){return x.username==='admin';});
+    if(!hasAdmin){
+      u.unshift({id:1,name:'Admin',username:'admin',password:DEFAULT_ADMIN_PW,role:'admin',phone:'0700000000',active:true,createdAt:Date.now()});
+      saveUsers(u);
+    }
+  }
+
+  /* ===== AUTH ===== */
+  window.doLogin=function(){
+    var un=document.getElementById('loginUser').value.trim().toLowerCase();
+    var pw=document.getElementById('loginPw').value;
+    if(!un||!pw){showLoginErr('loginErr','Weka username na password');return;}
+    initUsers();
+    var users=getUsers();
+    var u=users.find(function(x){return x.username===un&&x.password===pw&&x.active;});
+    if(u){
+      setCurrUser(u);
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('app').classList.add('show');
+      document.getElementById('loginErr').style.display='none';
+      addActivity('Ameingia',''+u.name+' ameingia kama '+ROLE_LABELS[u.role]);
+      initApp();
+    } else {
+      showLoginErr('loginErr','Username au password si sahihi.');
+      document.getElementById('loginPw').value='';document.getElementById('loginPw').focus();
+    }
+  };
+  document.getElementById('loginPw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  document.getElementById('loginUser').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('loginPw').focus();});
+  function showLoginErr(id,msg){var el=document.getElementById(id);el.textContent=msg;el.style.display='block';}
+  window.togglePw=function(id,btn){var inp=document.getElementById(id),icon=btn.querySelector('i');if(inp.type==='password'){inp.type='text';icon.className='fas fa-eye-slash';}else{inp.type='password';icon.className='fas fa-eye';}};
+  window.doLogout=function(){addActivity('Ameondoka',getCurrUser()?getCurrUser().name+' ameondoka':'');setCurrUser(null);document.getElementById('app').classList.remove('show');document.getElementById('loginWrap').style.display='flex';document.getElementById('loginPw').value='';document.getElementById('loginUser').value='';};
+  window.showForgot=function(){document.getElementById('loginMain').classList.add('hide');document.getElementById('forgotCard').classList.add('show');};
+  window.hideForgot=function(){document.getElementById('loginMain').classList.remove('hide');document.getElementById('forgotCard').classList.remove('show');};
+  window.doForgot=function(){
+    var un=document.getElementById('fpUser').value.trim();
+    var ans=document.getElementById('fpAnswer').value.trim().toLowerCase();
+    var users=getUsers();
+    var u=users.find(function(x){return x.username===un;});
+    if(u&&ans==='helen'){
+      var np=prompt('Jina la mtumiaji: '+un+'\nWeka password mpya:');
+      if(np&&np.length>=6){
+        u.password=np;saveUsers(users);
+        addActivity('Password imebadilishwa (forgot)','Admin: '+un);
+        toast('Password mpya imewekwa! Ingia sasa.','success');
+        hideForgot();
+      } else if(np){toast('Password lazima iwe na herufi 6+.','error');}
+    } else {
+      showLoginErr('fpErr','Jibu si sahihi au username haipatikani. (Hint: jina la mkewe Newton = Helen)');
+    }
+  };
+
+  /* ===== THEME ===== */
+  function loadTheme(){var th=localStorage.getItem(THEME_KEY)||'dark';document.documentElement.setAttribute('data-theme',th);updateThemeIcon(th);}
+  function updateThemeIcon(th){document.getElementById('themeIcon').className=th==='dark'?'fas fa-moon':'fas fa-sun';}
+  window.toggleTheme=function(){var cur=document.documentElement.getAttribute('data-theme'),next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem(THEME_KEY,next);updateThemeIcon(next);};
+
+  /* ===== PERMISSIONS ===== */
+  function currRole(){var u=getCurrUser();return u?u.role:'admin';}
+  function hasPerm(page){var r=currRole();if(r==='admin')return true;var p=ROLE_PERMS[r]||[];return p.indexOf('all')>=0||p.indexOf(page)>=0;}
+  function applyPerms(){
+    document.querySelectorAll('[data-perm]').forEach(function(el){
+      var needed=el.getAttribute('data-perm');
+      if(needed&&currRole()!=='admin')el.style.display='none';else el.style.display='';
+    });
+  }
+
+  /* ===== NAVIGATION ===== */
+  window.goPage=function(page,el){
+    if(!hasPerm(page)){toast('Huna ruhusa ya kufungua ukurasa huu.','error');return;}
+    document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+    var sec=document.getElementById('sec-'+page);
+    if(sec)sec.classList.add('active');
+    document.querySelectorAll('.sidebar nav a').forEach(function(a){a.classList.remove('active');});
+    if(el)el.classList.add('active');
+    var titles={dashboard:at('nav.dashboard'),foods:at('nav.foods'),addfood:at('nav.addfood'),orders:at('orders.title'),customers:at('customers.title'),comments:at('comments.title'),users:at('users.title'),activity:at('activity.title'),profile:at('profile.title'),settings:at('settings.title')};
+    document.getElementById('pageTitle').textContent=titles[page]||page;
+    if(page==='foods')renderFoodsList();
+    if(page==='orders')renderOrders();
+    if(page==='customers')renderCustomers();
+    if(page==='dashboard')renderDashboard();
+    if(page==='users')renderUsers();
+    if(page==='activity')renderActivity();
+    if(page==='profile')renderProfile();
+    if(page==='comments')renderComments();
+    if(page==='addfood'&&!editingId)clearForm();
+    document.getElementById('sidebar').classList.remove('open');
+  };
+  window.toggleSidebar=function(){document.getElementById('sidebar').classList.toggle('open');};
+
+  /* ===== NOTIFICATIONS ===== */
+  window.toggleNotifDrop=function(){document.getElementById('notifDropdown').classList.toggle('show');};
+  document.addEventListener('click',function(e){if(!e.target.closest('.notif-btn')&&!e.target.closest('.notif-dropdown'))document.getElementById('notifDropdown').classList.remove('show');});
+  function renderNotifs(){
+    var n=getNotifs(),unread=n.filter(function(x){return !x.read;}).length;
+    var el=document.getElementById('notifCount');
+    if(unread>0){el.textContent=unread;el.classList.add('show');}else{el.classList.remove('show');}
+    document.getElementById('orderBadge').classList.toggle('show',unread>0);
+    var list=document.getElementById('notifList');
+    if(n.length===0){list.innerHTML='<div class="notif-empty">'+(adminLang==='sw'?'Hakuna notifikasheni mpya.':'No new notifications.')+'</div>';return;}
+    list.innerHTML=n.slice(0,20).map(function(nt){
+      return '<div class="notif-item'+(nt.read?'':' unread')+'" onclick="markNotifRead(\''+nt.id+'\')">'+
+        '<div class="notif-icon" style="background:rgba(16,185,129,0.12);color:var(--accent);">🛒</div>'+
+        '<div class="notif-text"><strong>'+nt.title+'</strong><span>'+nt.detail+'</span><br><span>'+nt.time+'</span></div></div>';
+    }).join('');
+  }
+  window.markNotifRead=function(id){var n=getNotifs();n.forEach(function(x){if(x.id===id)x.read=true;});saveNotifs(n);renderNotifs();};
+  window.clearNotifs=function(){var n=getNotifs();n.forEach(function(x){x.read=true;});saveNotifs(n);renderNotifs();};
+  function pushNotif(title,detail){var n=getNotifs();n.unshift({id:Date.now()+'',title:title,detail:detail,time:new Date().toLocaleString('sw-TZ'),read:false});if(n.length>50)n=n.slice(0,50);saveNotifs(n);renderNotifs();}
+
+  /* ===== STATS ===== */
+  function statCard(icon,value,label,color){return '<div class="stat-card '+color+'"><div class="icon"><i class="'+icon+'"></i></div><div class="info"><h3>'+value+'</h3><p>'+label+'</p></div></div>';}
+
+  /* ===== DASHBOARD ===== */
+  window.renderDashboard=function(){
+    var foods=getCustomFoods(),orders=getOrders();
+    var cats={breakfast:0,lunch:0,dinner:0,drinks:0};
+    foods.forEach(function(f){if(cats[f.category]!==undefined)cats[f.category]++;});
+    var today=todayStr();
+    var todayOrders=orders.filter(function(o){return o.date===today;});
+    var totalRev=orders.reduce(function(s,o){return s+(o.total||0);},0);
+    var todayRev=todayOrders.reduce(function(s,o){return s+(o.total||0);},0);
+    var unpaid=orders.filter(function(o){return o.paymentStatus==='unpaid';}).length;
+    document.getElementById('statsGrid').innerHTML=
+      statCard('fas fa-utensils',foods.length,adminLang==='sw'?'Chakula Jumla':'Total Foods','orange')+
+      statCard('fas fa-receipt',orders.length,adminLang==='sw'?'Maagizo Yote':'Total Orders','green')+
+      statCard('fas fa-calendar-day',todayOrders.length,adminLang==='sw'?'Maagizo ya Leo':"Today's Orders",'blue')+
+      statCard('fas fa-money-bill','TSh '+Number(totalRev).toLocaleString(),adminLang==='sw'?'Mapato Jumla':'Total Revenue','purple')+
+      statCard('fas fa-coins','TSh '+Number(todayRev).toLocaleString(),adminLang==='sw'?'Mapato ya Leo':"Today's Revenue",'green')+
+      statCard('fas fa-exclamation-circle',unpaid,adminLang==='sw'?'Haijalipwa':'Unpaid','red');
+
+    var ro=getOrders().slice(0,5);
+    var el=document.getElementById('recentOrdersDash');
+    if(ro.length===0){el.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:16px;">'+(adminLang==='sw'?'Hakuna maagizo bado.':'No orders yet.')+'</div>';}
+    else{el.innerHTML=ro.map(function(o){var st=o.paymentStatus==='paid'?'paid':o.status==='confirmed'?'confirmed':'new';return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="font-weight:600;">#'+o.orderNum+'</span><span style="flex:1;">'+o.name+'</span><span class="status-badge '+st+'">'+(o.paymentStatus==='paid'?(adminLang==='sw'?'💰 Lipa':'💰 Paid'):o.status==='confirmed'?(adminLang==='sw'?'✅ Thibitishwa':'✅ Confirmed'):(adminLang==='sw'?'🆕 Mpya':'🆕 New'))+'</span><span style="color:var(--accent);font-weight:600;">TSh '+Number(o.total).toLocaleString()+'</span></div>';}).join('');}
+
+    var tc=getOrders().filter(function(o){return o.date===today;}).slice(0,5);
+    var cel=document.getElementById('todayCustomersDash');
+    if(tc.length===0){cel.innerHTML='<div style="color:var(--muted);font-size:12px;text-align:center;padding:16px;">'+(adminLang==='sw'?'Hakuna wateja leo bado.':'No customers today yet.')+'</div>';}
+    else{cel.innerHTML=tc.map(function(o){return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><div style="width:30px;height:30px;border-radius:8px;background:rgba(16,185,129,0.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">'+o.name.charAt(0).toUpperCase()+'</div><div style="flex:1;"><strong>'+o.name+'</strong><br><span style="color:var(--muted);">'+o.phone+'</span></div><span class="status-badge '+(o.paymentStatus==='paid'?'paid':'unpaid')+'">'+(o.paymentStatus==='paid'?(adminLang==='sw'?'💰 Lipa':'💰 Paid'):'❌')+'</span></div>';}).join('');}
+  };
+
+  /* ===== ORDERS ===== */
+  window.filterOrders=function(f,el){currentOrderFilter=f;document.querySelectorAll('#orderFilter .filter-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');renderOrders();};
+  window.renderOrders=function(){
+    var orders=getOrders(),search=(document.getElementById('orderSearch').value||'').toLowerCase();
+    var filtered=orders.filter(function(o){
+      if(currentOrderFilter!=='all'){
+        if(currentOrderFilter==='new'&&o.status!=='new')return false;
+        if(currentOrderFilter==='confirmed'&&o.status!=='confirmed')return false;
+        if(currentOrderFilter==='paid'&&o.paymentStatus!=='paid')return false;
+        if(currentOrderFilter==='unpaid'&&o.paymentStatus!=='paid')return false;
+      }
+      if(search&&o.name.toLowerCase().indexOf(search)===-1&&(''+o.orderNum).indexOf(search)===-1&&(o.phone||'').indexOf(search)===-1)return false;
+      return true;
+    });
+    var tbody=document.getElementById('ordersTableBody'),empty=document.getElementById('ordersEmpty');
+    if(filtered.length===0){tbody.innerHTML='';empty.style.display='block';document.querySelector('#sec-orders .table-wrap').style.display='none';return;}
+    empty.style.display='none';document.querySelector('#sec-orders .table-wrap').style.display='block';
+    tbody.innerHTML=filtered.map(function(o){
+      var st=o.status==='confirmed'?'confirmed':o.paymentStatus==='paid'?'paid':'new';
+      var stLabel=o.paymentStatus==='paid'?(adminLang==='sw'?'💰 Imelipwa':'💰 Paid'):o.status==='confirmed'?(adminLang==='sw'?'✅ Imethibitishwa':'✅ Confirmed'):(adminLang==='sw'?'🆕 Mpya':'🆕 New');
+      return '<tr>'+
+        '<td style="font-weight:600;">#'+o.orderNum+'</td>'+
+        '<td>'+o.name+'</td><td>'+(o.phone||'-')+'</td>'+
+        '<td style="font-size:11px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(o.itemsText||'')+'</td>'+
+        '<td class="price-cell">TSh '+Number(o.total).toLocaleString()+'</td>'+
+        '<td><span class="status-badge '+st+'">'+stLabel+'</span></td>'+
+        '<td style="font-size:11px;color:var(--muted);">'+o.time+'</td>'+
+        '<td><div class="actions-cell" style="justify-content:flex-end;">'+
+          '<button title="Tazama" onclick="viewOrder('+o.id+')"><i class="fas fa-eye"></i></button>'+
+          (o.status!=='confirmed'?'<button title="Thibitisha" onclick="confirmOrder('+o.id+')" style="color:var(--green);border-color:var(--green);"><i class="fas fa-check"></i></button>':'')+
+          (o.paymentStatus!=='paid'?'<button title="Lipisha" onclick="markPaid('+o.id+')" style="color:#38bdf8;border-color:#38bdf8;"><i class="fas fa-coins"></i></button>':'')+
+          '<button class="del" title="Futa" onclick="deleteOrder('+o.id+')"><i class="fas fa-trash"></i></button>'+
+        '</div></td></tr>';
+    }).join('');
+  };
+  window.confirmOrder=function(id){var o=getOrders().find(function(x){return x.id===id;});if(o){o.status='confirmed';saveOrders(getOrders().map(function(x){return x.id===id?o:x;}));addActivity('Agizo limethibitishwa','#'+o.orderNum+' '+o.name);renderOrders();toast('Agizo #'+o.orderNum+' limethibitishwa! ✓','success');}};
+  window.markPaid=function(id){var o=getOrders().find(function(x){return x.id===id;});if(o){o.paymentStatus='paid';saveOrders(getOrders().map(function(x){return x.id===id?o:x;}));addActivity('Malipo yamerekodiwa','#'+o.orderNum+' TSh '+Number(o.total).toLocaleString());renderOrders();renderCustomers();toast('Malipo yamerekodiwa! ✓','success');}};
+  window.viewOrder=function(id){
+    var o=getOrders().find(function(x){return x.id===id;});if(!o)return;
+    document.getElementById('orderDetailBody').innerHTML=
+      '<div style="font-size:13px;">'+
+      '<p><strong>'+(adminLang==='sw'?'Nambari':'Number')+':</strong> #'+o.orderNum+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Mteja':'Customer')+':</strong> '+o.name+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Simu':'Phone')+':</strong> '+(o.phone||'-')+'</p>'+
+      '<p><strong>Email:</strong> '+(o.email||'-')+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Meza/Mahali':'Table/Location')+':</strong> '+(o.table||'-')+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Malipo':'Payment')+':</strong> '+(o.payment||'-')+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Chakula':'Food')+':</strong> '+(o.itemsText||'-')+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Jumla':'Total')+':</strong> <span style="color:var(--accent);font-weight:700;">TSh '+Number(o.total).toLocaleString()+'</span></p>'+
+      '<p><strong>'+(adminLang==='sw'?'Maelezo':'Notes')+':</strong> '+(o.notes||'-')+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Maoni':'Comments')+':</strong> '+(o.comments||'-')+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Muda':'Time')+':</strong> '+o.time+'</p>'+
+      '<p><strong>'+(adminLang==='sw'?'Hali':'Status')+':</strong> <span class="status-badge '+(o.paymentStatus==='paid'?'paid':'unpaid')+'">'+(o.paymentStatus==='paid'?(adminLang==='sw'?'💰 Imelipwa':'💰 Paid'):(adminLang==='sw'?'❌ Haijalipwa':'❌ Unpaid'))+'</span> <span class="status-badge '+(o.status==='confirmed'?'confirmed':'new')+'">'+(o.status==='confirmed'?(adminLang==='sw'?'✅ Imethibitishwa':'✅ Confirmed'):(adminLang==='sw'?'🆕 Mpya':'🆕 New'))+'</span></p>'+
+      '</div>';
+    document.getElementById('orderDetailFooter').innerHTML=
+      (o.status!=='confirmed'?'<button class="btn btn-success" onclick="confirmOrder('+o.id+');closeOrderDetail();"><i class="fas fa-check"></i> '+(adminLang==='sw'?'Thibitisha':'Confirm')+'</button>':'')+
+      (o.paymentStatus!=='paid'?'<button class="btn btn-primary" onclick="markPaid('+o.id+');closeOrderDetail();"><i class="fas fa-coins"></i> '+(adminLang==='sw'?'Lipisha':'Mark Paid')+'</button>':'')+
+      '<button class="btn btn-outline" onclick="closeOrderDetail()">'+(adminLang==='sw'?'Funga':'Close')+'</button>';
+    document.getElementById('orderDetailModal').classList.add('show');
+  };
+  window.closeOrderDetail=function(){document.getElementById('orderDetailModal').classList.remove('show');};
+  window.deleteOrder=function(id){showConfirm('Futa Agizo?','Agizo hili kitaondolewa.',function(){var o=getOrders().find(function(x){return x.id===id;});addActivity('Agizo limefutwa',o?'#'+o.orderNum:'');saveOrders(getOrders().filter(function(x){return x.id!==id;}));renderOrders();renderCustomers();toast('Agizo limefutwa ✓','success');});};
+  window.clearOrders=function(){showConfirm('Futa Maagizo Yote?','Yote yataondolewa.',function(){localStorage.removeItem(ORDERS_KEY);renderOrders();renderCustomers();renderDashboard();toast('Maagizo yamefutwa ✓','success');});};
+
+  /* ===== CUSTOMERS ===== */
+  window.filterCust=function(f,el){currentCustFilter=f;document.querySelectorAll('#custFilter .filter-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');renderCustomers();};
+  window.renderCustomers=function(){
+    var orders=getOrders(),search=(document.getElementById('custSearch').value||'').toLowerCase();
+    var filtered=orders.filter(function(o){
+      if(currentCustFilter==='today'&&o.date!==todayStr())return false;
+      if(currentCustFilter==='paid'&&o.paymentStatus!=='paid')return false;
+      if(currentCustFilter==='unpaid'&&o.paymentStatus==='paid')return false;
+      if(search&&o.name.toLowerCase().indexOf(search)===-1&&(o.phone||'').indexOf(search)===-1&&(o.email||'').toLowerCase().indexOf(search)===-1)return false;
+      return true;
+    });
+    var tbody=document.getElementById('custTableBody'),empty=document.getElementById('custEmpty');
+    if(filtered.length===0){tbody.innerHTML='';empty.style.display='block';document.querySelector('#sec-customers .table-wrap').style.display='none';return;}
+    empty.style.display='none';document.querySelector('#sec-customers .table-wrap').style.display='block';
+    tbody.innerHTML=filtered.map(function(o){
+      return '<tr>'+
+        '<td><strong>'+o.name+'</strong></td><td>'+(o.phone||'-')+'</td><td>'+(o.email||'-')+'</td><td>'+(o.table||'-')+'</td>'+
+        '<td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">#'+o.orderNum+'</td>'+
+        '<td class="price-cell">TSh '+Number(o.total).toLocaleString()+'</td>'+
+        '<td><span class="status-badge '+(o.paymentStatus==='paid'?'paid':'unpaid')+'">'+(o.paymentStatus==='paid'?(adminLang==='sw'?'💰 Lipa':'💰 Paid'):'❌')+'</span></td>'+
+        '<td style="font-size:11px;color:var(--muted);">'+o.time+'</td>'+
+        '<td><div class="actions-cell" style="justify-content:flex-end;">'+
+          (o.paymentStatus!=='paid'?'<button title="Lipisha" onclick="markPaid('+o.id+');renderCustomers();" style="color:#38bdf8;border-color:#38bdf8;"><i class="fas fa-coins"></i></button>':'')+
+          '<button title="Tazama" onclick="viewOrder('+o.id+')"><i class="fas fa-eye"></i></button>'+
+        '</div></td></tr>';
+    }).join('');
+  };
+
+  /* ===== FOODS ===== */
+  window.triggerUpload=function(){document.getElementById('fileInput').click();};
+  window.handleFileSelect=function(e){var file=e.target.files[0];if(!file)return;if(file.size>2*1024*1024){toast('Picha kubwa sana (max 2MB)','error');return;}var reader=new FileReader();reader.onload=function(ev){pendingImgData=ev.target.result;document.getElementById('imgPreview').src=pendingImgData;document.getElementById('imgUploadArea').classList.add('has-img');};reader.readAsDataURL(file);e.target.value='';};
+  window.pasteUrl=function(){var url=prompt('Weka URL ya picha:');if(url&&url.trim()){pendingImgData=url.trim();document.getElementById('imgPreview').src=pendingImgData;document.getElementById('imgUploadArea').classList.add('has-img');}};
+  window.saveFood=function(){
+    var name=document.getElementById('fName').value.trim(),nameSw=document.getElementById('fNameSw').value.trim(),cat=document.getElementById('fCategory').value,price=parseInt(document.getElementById('fPrice').value,10),icon=document.getElementById('fIcon').value.trim()||'🍽️',rating=parseFloat(document.getElementById('fRating').value)||4.5,desc=document.getElementById('fDesc').value.trim(),descSw=document.getElementById('fDescSw').value.trim(),popular=document.getElementById('fPopular').checked;
+    if(!name){toast('Weka jina la chakula','error');return;}
+    if(!cat){toast('Chagua kategoria','error');return;}
+    if(!price||price<=0){toast('Weka bei sahihi','error');return;}
+    if(!pendingImgData){toast('Weka picha','error');return;}
+    var foods=getCustomFoods();
+    if(editingId){var idx=foods.findIndex(function(f){return f.id===editingId;});if(idx>=0){foods[idx].name=name;foods[idx].nameSw=nameSw||name;foods[idx].category=cat;foods[idx].price=price;foods[idx].icon=icon;foods[idx].rating=rating;foods[idx].desc=desc||name;foods[idx].descSw=descSw||nameSw||name;foods[idx].popular=popular;foods[idx].img=pendingImgData;foods[idx].updatedAt=Date.now();}saveCustomFoods(foods);editingId=null;addActivity('Chakula kimebadilishwa',name);toast('Chakula kimebadilishwa! ✓','success');}
+    else{var f={id:nextId(),name:name,nameSw:nameSw||name,category:cat,price:price,icon:icon,rating:rating,popular:popular,desc:desc||name,descSw:descSw||nameSw||name,img:pendingImgData,isCustom:true,createdAt:Date.now()};foods.push(f);saveCustomFoods(foods);addActivity('Chakula kipya',name+' - TSh '+price.toLocaleString());toast('Chakula kipya kimeongezwa! ✓','success');}
+    clearForm();goPage('foods',document.querySelector('[data-page=foods]'));
+  };
+  window.clearForm=function(){editingId=null;pendingImgData=null;document.getElementById('formTitle').textContent=at('addfood.title_new');['fName','fNameSw','fCategory','fPrice','fIcon','fRating','fDesc','fDescSw'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('fPopular').checked=false;document.getElementById('imgPreview').src='';document.getElementById('imgUploadArea').classList.remove('has-img');};
+  window.filterCat=function(cat,el){currentFilter=cat;document.querySelectorAll('#catFilter .filter-tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');renderFoodsList();};
+  window.renderFoodsList=function(){
+    var foods=getCustomFoods(),search=(document.getElementById('foodSearch').value||'').toLowerCase();
+    var filtered=foods.filter(function(f){if(currentFilter!=='all'&&f.category!==currentFilter)return false;if(search&&f.name.toLowerCase().indexOf(search)===-1&&(f.nameSw||'').toLowerCase().indexOf(search)===-1)return false;return true;});
+    var tbody=document.getElementById('foodsTableBody'),empty=document.getElementById('foodsEmpty');
+    if(filtered.length===0){tbody.innerHTML='';empty.style.display='block';document.querySelector('#sec-foods .table-wrap').style.display='none';return;}
+    empty.style.display='none';document.querySelector('#sec-foods .table-wrap').style.display='block';
+    tbody.innerHTML=filtered.map(function(f){var cat=CATEGORY_META[f.category]||CATEGORY_META.lunch;return '<tr><td><div class="table-food"><img src="'+(f.img||'')+'" alt="'+f.name+'" onerror="this.style.display=\'none\'"><div><div class="tf-name">'+f.icon+' '+f.name+'</div><div class="tf-cat">'+(f.nameSw||'')+'</div></div></div></td><td><span class="cat-badge '+f.category+'">'+cat.emoji+' '+cat.label+'</span></td><td class="price-cell">TSh '+Number(f.price).toLocaleString()+'</td><td>★ '+Number(f.rating).toFixed(1)+'</td><td>'+(f.popular?'<span style="color:var(--accent);font-size:11px;font-weight:600;">⭐ '+(adminLang==='sw'?'Maarufu':'Popular')+'</span>':'<span style="color:var(--muted);font-size:11px;">Normal</span>')+'</td><td><div class="actions-cell" style="justify-content:flex-end;"><button title="Hariri" onclick="editFood('+f.id+')"><i class="fas fa-pen"></i></button><button class="del" title="Futa" onclick="deleteFood('+f.id+')"><i class="fas fa-trash"></i></button></div></td></tr>';}).join('');
+  };
+  window.editFood=function(id){var foods=getCustomFoods(),f=foods.find(function(x){return x.id===id;});if(!f)return;editingId=id;document.getElementById('formTitle').textContent=at('addfood.title_new')+': '+f.name;document.getElementById('fName').value=f.name;document.getElementById('fNameSw').value=f.nameSw||'';document.getElementById('fCategory').value=f.category;document.getElementById('fPrice').value=f.price;document.getElementById('fIcon').value=f.icon||'';document.getElementById('fRating').value=f.rating||'';document.getElementById('fDesc').value=f.desc||'';document.getElementById('fDescSw').value=f.descSw||'';document.getElementById('fPopular').checked=f.popular||false;if(f.img){pendingImgData=f.img;document.getElementById('imgPreview').src=f.img;document.getElementById('imgUploadArea').classList.add('has-img');}goPage('addfood',document.querySelector('[data-page=addfood]'));};
+  window.deleteFood=function(id){showConfirm('Futa Chakula?','Kitu hiki kitaondolewa.',function(){var f=getCustomFoods().find(function(x){return x.id===id;});addActivity('Chakula kimefutwa',f?f.name:'');saveCustomFoods(getCustomFoods().filter(function(x){return x.id!==id;}));renderFoodsList();toast('Chakula kimefutwa ✓','success');});};
+
+  /* ===== USERS ===== */
+  window.renderUsers=function(){
+    var users=getUsers(),tbody=document.getElementById('usersTableBody'),empty=document.getElementById('usersEmpty');
+    if(users.length===0){tbody.innerHTML='';empty.style.display='block';document.querySelector('#sec-users .table-wrap').style.display='none';return;}
+    empty.style.display='none';document.querySelector('#sec-users .table-wrap').style.display='block';
+    tbody.innerHTML=users.map(function(u){
+      return '<tr><td><strong>'+u.name+'</strong></td><td>'+u.username+'</td><td><span class="role-badge '+u.role+'">'+ROLE_LABELS[u.role]+'</span></td><td>'+(u.phone||'-')+'</td><td>'+(u.active?'<span style="color:var(--green);">✅ Active</span>':'<span style="color:var(--danger);">❌ Inactive</span>')+'</td><td><div class="actions-cell" style="justify-content:flex-end;"><button title="Hariri" onclick="editUser('+u.id+')"><i class="fas fa-pen"></i></button>'+(u.username!=='admin'?'<button class="del" title="Futa" onclick="deleteUser('+u.id+')"><i class="fas fa-trash"></i></button>':'')+'</div></td></tr>';
+    }).join('');
+  };
+  window.showAddUserModal=function(){editingUserId=null;document.getElementById('userModalTitle').textContent=at('modal.user_title_new');['uName','uUsername','uPassword','uPhone'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('uRole').value='';document.getElementById('userModal').classList.add('show');};
+  window.editUser=function(id){var u=getUsers().find(function(x){return x.id===id;});if(!u)return;editingUserId=id;document.getElementById('userModalTitle').textContent=at('modal.user_title_new')+': '+u.name;document.getElementById('uName').value=u.name;document.getElementById('uUsername').value=u.username;document.getElementById('uPassword').value=u.password;document.getElementById('uPhone').value=u.phone||'';document.getElementById('uRole').value=u.role;document.getElementById('userModal').classList.add('show');};
+  window.closeUserModal=function(){document.getElementById('userModal').classList.remove('show');};
+  window.saveUser=function(){
+    var name=document.getElementById('uName').value.trim(),username=document.getElementById('uUsername').value.trim(),password=document.getElementById('uPassword').value,phone=document.getElementById('uPhone').value.trim(),role=document.getElementById('uRole').value;
+    if(!name||!username||!password||!role){toast('Jaza sehemu zote muhimu','error');return;}
+    var users=getUsers();
+    if(editingUserId){var idx=users.findIndex(function(x){return x.id===editingUserId;});if(idx>=0){users[idx].name=name;users[idx].username=username;users[idx].password=password;users[idx].phone=phone;users[idx].role=role;}addActivity('Mtumiaji kimebadilishwa',name+' ('+role+')');}
+    else{if(users.find(function(x){return x.username===username;})){toast('Username tayari ipo!','error');return;}users.push({id:nextUserId(),name:name,username:username,password:password,role:role,phone:phone,active:true,createdAt:Date.now()});addActivity('Mtumiaji kipya',name+' ('+role+')');}
+    saveUsers(users);closeUserModal();renderUsers();toast('Mtumiaji amehifadhiwa! ✓','success');};
+  window.deleteUser=function(id){showConfirm('Futa Mtumiaji?','Mtumiaji huyu atafutwa.',function(){var u=getUsers().find(function(x){return x.id===id;});addActivity('Mtumiaji umefutwa',u?u.name:'');saveUsers(getUsers().filter(function(x){return x.id!==id;}));renderUsers();toast('Mtumiaji umefutwa ✓','success');});};
+
+  /* ===== ACTIVITY ===== */
+  window.renderActivity=function(){
+    var logs=getActivity(),el=document.getElementById('activityLog'),empty=document.getElementById('activityEmpty');
+    if(logs.length===0){el.innerHTML='';empty.style.display='block';el.style.display='none';return;}
+    empty.style.display='none';el.style.display='block';
+    el.innerHTML=logs.slice(0,50).map(function(l){
+      return '<div class="log-item"><div class="log-icon">📋</div><div class="log-text"><strong>'+l.action+'</strong> — '+l.detail+'<span>'+l.user+' • '+l.time+'</span></div></div>';
+    }).join('');
+  };
+  window.clearActivity=function(){showConfirm('Futa Activity Log?','',function(){localStorage.removeItem(ACTIVITY_KEY);renderActivity();toast('Activity log imefutwa ✓','success');});};
+
+  /* ===== COMMENTS ===== */
+  window.renderComments=function(){
+    var comments=getComments(),el=document.getElementById('commentsList'),empty=document.getElementById('commentsEmpty');
+    // Also pull comments from orders
+    var orderComments=getOrders().filter(function(o){return o.comments&&o.comments.trim();}).map(function(o){return {name:o.name,text:o.comments,time:o.time,source:'order-'+o.orderNum};});
+    var all=comments.concat(orderComments).reverse();
+    if(all.length===0){el.innerHTML='';empty.style.display='block';return;}
+    empty.style.display='none';
+    el.innerHTML=all.map(function(c){
+      return '<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">'+
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">'+
+          '<div style="width:32px;height:32px;border-radius:8px;background:rgba(16,185,129,0.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;">'+(c.name||'?').charAt(0).toUpperCase()+'</div>'+
+          '<div><strong style="font-size:13px;">'+(c.name||'Mteja')+'</strong><br><span style="font-size:10px;color:var(--muted);">'+c.time+(c.source?' • '+c.source:'')+'</span></div>'+
+        '</div>'+
+        '<p style="font-size:12px;line-height:1.5;color:var(--muted);">'+c.text+'</p></div>';
+    }).join('');
+  };
+  window.clearComments=function(){showConfirm('Futa Maoni Yote?','',function(){localStorage.removeItem(COMMENTS_KEY);renderComments();toast('Maoni yamefutwa ✓','success');});};
+
+  /* ===== PROFILE ===== */
+  window.renderProfile=function(){
+    var u=getCurrUser();if(!u)return;
+    var ini=u.name.charAt(0).toUpperCase();
+    var roleClass=u.role||'admin';
+    document.getElementById('profileCard').innerHTML=
+      '<div class="profile-avatar">'+ini+'</div>'+
+      '<div class="profile-info"><h3>'+u.name+'</h3><p>@'+u.username+' • '+(u.phone||'Hakuna simu')+'</p>'+
+      '<span class="role-badge '+roleClass+'" style="font-size:12px;">'+ROLE_LABELS[u.role]+'</span></div>';
+  };
+  window.changeMyPassword=function(){
+    var old=document.getElementById('profOldPw').value,np=document.getElementById('profNewPw').value,cp=document.getElementById('profConfirmPw').value;
+    var u=getCurrUser();if(!u)return;
+    if(old!==u.password){toast('Password ya zamani si sahihi','error');return;}
+    if(!np||np.length<6){toast('Password mpya lazima iwe na herufi 6+','error');return;}
+    if(np!==cp){toast('Password hazifanani','error');return;}
+    var users=getUsers();var idx=users.findIndex(function(x){return x.id===u.id;});if(idx>=0){users[idx].password=np;saveUsers(users);setCurrUser(users[idx]);}
+    addActivity('Password imebadilishwa',u.name);
+    document.getElementById('profOldPw').value='';document.getElementById('profNewPw').value='';document.getElementById('profConfirmPw').value='';
+    toast('Password imebadilishwa! ✓','success');
+  };
+
+  /* ===== SETTINGS ===== */
+  window.saveWhatsapp=function(){var num=document.getElementById('whatsappNum').value.trim();if(!num){toast('Weka namba','error');return;}localStorage.setItem(WHATSAPP_KEY,num);toast('WhatsApp imehifadhiwa! ✓','success');};
+  window.resetAll=function(){showConfirm('Futa Data Zote?','Haitatenduliwa.',function(){localStorage.removeItem(CUSTOM_FOODS_KEY);localStorage.removeItem(ORDERS_KEY);localStorage.removeItem(NOTIF_KEY);localStorage.removeItem(ACTIVITY_KEY);localStorage.removeItem(COMMENTS_KEY);localStorage.removeItem(WHATSAPP_KEY);toast('Data zote zimefutwa.','success');renderDashboard();});};
+  window.exportData=function(){var data={foods:getCustomFoods(),orders:getOrders(),users:getUsers(),whatsapp:localStorage.getItem(WHATSAPP_KEY)||'',exportedAt:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='clocktower-backup-'+todayStr()+'.json';a.click();toast('Data imepakwa! ✓','success');};
+  window.importData=function(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){try{var data=JSON.parse(ev.target.result);if(data.foods)saveCustomFoods(data.foods);if(data.orders)saveOrders(data.orders);if(data.users)saveUsers(data.users);if(data.whatsapp)localStorage.setItem(WHATSAPP_KEY,data.whatsapp);toast('Data imeingizwa! ✓','success');renderDashboard();}catch(err){toast('Faili si sahihi.','error');}};reader.readAsText(file);e.target.value='';};
+  window.publishOnline=function(){var foods=getCustomFoods();if(foods.length===0){toast('Hakuna chakula cha ku-publish! Ongeza chakula kwanza.','error');return;}var blob=new Blob([JSON.stringify(foods,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},2000);toast('data.json imepakwa! Weka faili hili kwenye repo ya GitHub.','success');};
+
+  /* ===== TOAST ===== */
+  function toast(msg,type){var c=document.getElementById('toastContainer'),t=document.createElement('div');t.className='toast '+(type||'info');var icons={success:'fa-check-circle',error:'fa-exclamation-circle',info:'fa-info-circle'};t.innerHTML='<i class="fas '+(icons[type]||icons.info)+'"></i> '+msg;c.appendChild(t);setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(40px)';setTimeout(function(){t.remove();},300);},3500);}
+  /* ===== CONFIRM ===== */
+  function showConfirm(title,msg,onConfirm){document.getElementById('confirmTitle').textContent=title;document.getElementById('confirmMsg').textContent=msg;document.getElementById('confirmOverlay').classList.add('show');document.getElementById('confirmBtn').onclick=function(){closeConfirm();onConfirm();};}
+  window.closeConfirm=function(){document.getElementById('confirmOverlay').classList.remove('show');};
+
+  /* ===== INIT ===== */
+  function initApp(){
+    loadTheme();
+    applyAdminLang();
+    var u=getCurrUser();
+    if(u){
+      document.getElementById('adminBadge').textContent=ROLE_LABELS[u.role]||u.role;
+      document.getElementById('sidebarRole').textContent=ROLE_LABELS[u.role]||'Admin Panel';
+    }
+    applyPerms();
+    renderDashboard();
+    renderNotifs();
+    var wn=localStorage.getItem(WHATSAPP_KEY);if(wn)document.getElementById('whatsappNum').value=wn;
+    // Listen for new orders (check every 5s)
+    var lastOrderCount=getOrders().length;
+    setInterval(function(){
+      var curr=getOrders().length;
+      if(curr>lastOrderCount){
+        var newest=getOrders()[0];
+        if(newest){pushNotif('Agizo Jipya! #'+newest.orderNum,newest.name+' — TSh '+Number(newest.total).toLocaleString());}
+      }
+      lastOrderCount=curr;
+    },5000);
+  }
+
+  initUsers();
+  // Check if user already logged in
+  var cu=getCurrUser();
+  if(cu){
+    var users=getUsers();
+    var still=users.find(function(x){return x.id===cu.id&&x.active;});
+    if(still){
+      setCurrUser(still);
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('app').classList.add('show');
+      initApp();
+    }
+  }
+  loadTheme();
+  applyAdminLang();
+  document.getElementById('loginUser').focus();
+})();
+</script>
+</body>
+</html>

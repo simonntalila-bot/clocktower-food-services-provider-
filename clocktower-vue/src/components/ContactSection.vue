@@ -1,22 +1,30 @@
 <script setup>
 import { useLangStore } from '../stores/lang';
+import LineIcon from './LineIcon.vue';
 const lang = useLangStore();
 </script>
 
 <template>
   <div class="contact-grid">
-    <a class="contact-card" href="https://wa.me/255629290952" target="_blank" rel="noopener">
-      <span class="em"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
+    <a class="contact-card" href="https://wa.me/255677220022" target="_blank" rel="noopener">
+      <span class="em"><LineIcon name="whatsapp" size="18" color="#25D366" /></span>
       <span>
-        <span class="nm">0629 290 952</span>
+        <span class="nm">0677 220 022</span>
         <span class="tg" style="display:block;" v-html="lang.$t('contact.chat')"></span>
       </span>
     </a>
-    <a class="contact-card" href="https://wa.me/255759597199" target="_blank" rel="noopener">
-      <span class="em"><i class="fas fa-phone" aria-hidden="true"></i></span>
+    <a class="contact-card" href="tel:+255677220022">
+      <span class="em"><LineIcon name="phone" size="18" color="#0A9A4A" /></span>
       <span>
-        <span class="nm">0759 597 199</span>
+        <span class="nm">0677 220 022</span>
         <span class="tg" style="display:block;" v-html="lang.$t('contact.call')"></span>
+      </span>
+    </a>
+    <a class="contact-card" href="mailto:clocktowercafetz2020@gmail.com">
+      <span class="em"><LineIcon name="envelope" size="18" color="#ffb84d" /></span>
+      <span>
+        <span class="nm">clocktowercafetz2020@gmail.com</span>
+        <span class="tg" style="display:block;">Email us</span>
       </span>
     </a>
   </div>

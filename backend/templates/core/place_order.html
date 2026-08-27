@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClockTower - Weka Agizo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(255,184,77,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(255,122,69,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+
+.nav{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+.nav .brand{display:flex;align-items:center;gap:10px;}
+.nav .brand span.logo{font-size:28px;}
+.nav .brand h2{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+.nav .brand h2 em{font-style:normal;color:var(--accent);}
+.nav .back-link{padding:8px 18px;border-radius:10px;border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;transition:all .2s;}
+.nav .back-link:hover{border-color:var(--accent);color:var(--accent);}
+
+.page-header{text-align:center;padding:40px 24px 10px;}
+.page-header h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,4vw,34px);font-weight:700;margin-bottom:8px;}
+.page-header h1 em{font-style:normal;color:var(--accent);}
+.page-header p{color:var(--muted);font-size:14px;}
+
+.error-msg{max-width:680px;margin:16px auto 0;padding:12px 18px;border-radius:10px;background:rgba(255,107,107,0.12);color:var(--danger);border-left:3px solid var(--danger);font-size:13px;display:flex;align-items:center;gap:8px;}
+
+.order-form{max-width:680px;margin:20px auto;padding:0 24px 60px;}
+.form-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;}
+.form-section h3{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.form-section h3 i{color:var(--accent);font-size:16px;}
+
+.form-row{margin-bottom:14px;}
+.form-row label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;}
+.form-row label .req{color:var(--danger);}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;transition:border-color .2s;}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--accent);}
+.form-row input::placeholder,.form-row textarea::placeholder{color:var(--muted);}
+.form-row textarea{resize:vertical;min-height:80px;}
+.form-row select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aa7b5' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+.form-row select option{background:var(--card);color:var(--text);}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.food-list{display:flex;flex-direction:column;gap:10px;}
+.food-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);transition:border-color .2s;}
+.food-item:hover{border-color:rgba(255,184,77,0.25);}
+.food-item .food-thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--card);}
+.food-item .food-thumb-placeholder{width:42px;height:42px;border-radius:8px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.food-item .food-details{flex:1;min-width:0;}
+.food-item .food-details .fname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.food-item .food-details .fprice{font-size:11px;color:var(--accent);font-weight:600;}
+.food-item .qty-input{width:60px;padding:7px 8px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:600;text-align:center;}
+.food-item .qty-input:focus{outline:none;border-color:var(--accent);}
+
+.submit-btn{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.submit-btn:hover{opacity:.88;}
+
+.share-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;margin-top:10px;}
+.share-toggle:hover{border-color:rgba(255,184,77,0.3);}
+.share-toggle input[type="checkbox"]{display:none;}
+.share-toggle .toggle-track{width:38px;height:20px;border-radius:10px;background:var(--card);border:1px solid var(--border);position:relative;transition:all .2s;flex-shrink:0;}
+.share-toggle input:checked + .toggle-track{background:var(--accent);border-color:var(--accent);}
+.share-toggle .toggle-track::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s;}
+.share-toggle input:checked + .toggle-track::after{transform:translateX(18px);}
+.share-toggle .toggle-label{font-size:13px;font-weight:600;color:var(--text);}
+.share-toggle .toggle-desc{font-size:11px;color:var(--muted);}
+
+.share-bill-section{display:none;margin-top:14px;padding:14px;border-radius:10px;background:rgba(255,184,77,0.06);border:1px dashed rgba(255,184,77,0.3);}
+.share-bill-section.active{display:block;}
+.share-bill-section h4{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.share-bill-section h4 i{font-size:14px;}
+
+
+
+.footer{text-align:center;padding:28px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
+.footer .brand-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--text);margin-bottom:4px;}
+.footer .brand-text em{font-style:normal;color:var(--accent);}
+
+@media(max-width:600px){
+  .nav{padding:10px 14px;}
+  .form-grid{grid-template-columns:1fr;}
+  .order-form{padding:0 16px 40px;}
+  .food-item{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="brand">
+    <span class="logo">&#127829;</span>
+    <h2>Clock<em>Tower</em></h2>
+  </div>
+  <a href="{% url 'menu' %}" class="back-link"><i class="fas fa-arrow-left"></i> Menyu</a>
+</nav>
+
+<div class="page-header">
+  <h1>Weka <em>Agizo</em> Lako</h1>
+  <p>Jaza fomu hii ili tuweze kukuletea chakula chako</p>
+</div>
+
+{% if error %}
+<div class="error-msg"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+{% endif %}
+
+<form method="post" action="{% url 'place_order' %}" class="order-form">
+  {% csrf_token %}
+
+  <div class="form-section">
+    <h3><i class="fas fa-user"></i> Taarifa za Mteja</h3>
+    <div class="form-row">
+      <label>Full Name <span class="req">*</span></label>
+      <input type="text" name="name" required placeholder="Jina lako kamili" value="{{ request.POST.name }}">
+    </div>
+    <div class="form-row">
+      <label>Payment Method <span class="req">*</span></label>
+      <select name="payment_method" id="paymentMethod">
+        <option value="">-- Chagua hiari --</option>
+        <option value="mpesa">M-Pesa</option>
+        <option value="tigo">Tigo Pesa</option>
+        <option value="airtel">Airtel Money</option>
+        <option value="halo">Halopesa</option>
+        <option value="bank">Bank Transfer</option>
+        <option value="cash">Cash (Utalipa Ukifika)</option>
+        <option value="other">Nyingine</option>
+      </select>
+    </div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>Payment Number <span class="req">*</span></label>
+        <input type="tel" name="phone" required placeholder="07XX XXX XXX" value="{{ request.POST.phone }}">
+      </div>
+      <div class="form-row">
+        <label>Table Number / Delivery Location <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label>
+        <input type="text" name="table_location" placeholder="Meza #5, nk." value="{{ request.POST.table_location }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3><i class="fas fa-utensils"></i> Chagua Chakula</h3>
+    <div class="food-list">
+      {% for food in foods %}
+      <div class="food-item">
+        {% if food.image %}
+        <img src="{{ food.image.url }}" class="food-thumb" alt="{{ food.name }}">
+        {% else %}
+        <div class="food-thumb-placeholder">{{ food.icon|default:"🍽️" }}</div>
+        {% endif %}
+        <div class="food-details">
+          <div class="fname">{{ food.name }}{% if food.name_sw %} <span style="color:var(--muted);font-weight:400">/ {{ food.name_sw }}</span>{% endif %}</div>
+          <div class="fprice">TSh {{ food.price|floatformat:0 }}</div>
+        </div>
+        <input type="number" name="food_{{ food.pk }}" class="qty-input" min="0" max="99" value="0" placeholder="0">
+      </div>
+      {% empty %}
+      <div style="text-align:center;color:var(--muted);padding:20px;">Hakuna chakula kwenye menyu kwa sasa.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3><i class="fas fa-users"></i> Share Bill / Malipo ya Pili</h3>
+    <label class="share-toggle">
+      <input type="checkbox" id="shareBillToggle" name="share_bill">
+      <span class="toggle-track"></span>
+      <span>
+        <span class="toggle-label">Share Bill</span>
+        <span class="toggle-desc">Gawana bili na mtu mwingine</span>
+      </span>
+    </label>
+
+    <div class="share-bill-section" id="shareBillSection">
+      <div class="form-row">
+        <label>Payment Method ya Pili</label>
+        <select name="share_payment_method" id="sharePaymentMethod">
+          <option value="">-- Chagua --</option>
+          <option value="mpesa">M-Pesa</option>
+          <option value="tigo">Tigo Pesa</option>
+          <option value="airtel">Airtel Money</option>
+          <option value="halo">Halopesa</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="cash">Cash</option>
+          <option value="other">Nyingine</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Namba ya Malipo ya Pili</label>
+        <input type="tel" name="share_payment_phone" placeholder="Namba ya malipo ya pili">
+      </div>
+    </div>
+
+    <div class="form-row" style="margin-top:14px;">
+      <label>Special Instructions <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label>
+      <textarea name="notes" placeholder="Namba ya mpesa, namba ya akaunti, nk."></textarea>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3><i class="fas fa-comment"></i> Maoni / Comments</h3>
+    <div class="form-row">
+      <label>Comments <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label>
+      <textarea name="comments" placeholder="Maagizo maalum, alerji za chakula, upendeleo, nk."></textarea>
+    </div>
+  </div>
+
+  <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Weka Agizo</button>
+</form>
+
+<script>
+const shareBillToggle = document.getElementById('shareBillToggle');
+const shareBillSection = document.getElementById('shareBillSection');
+
+shareBillToggle.addEventListener('change', function() {
+  if (this.checked) {
+    shareBillSection.classList.add('active');
+  } else {
+    shareBillSection.classList.remove('active');
+  }
+});
+</script>
+
+<footer class="footer">
+  <div class="brand-text">Clock<em>Tower</em> Food Service</div>
+  <p>&copy; {{ current_year|default:"2026" }} ClockTower. Haki zote zimehifadhiwa.</p>
+</footer>
+
+</body>
+</html>

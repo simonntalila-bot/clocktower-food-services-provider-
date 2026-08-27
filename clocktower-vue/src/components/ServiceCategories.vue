@@ -2,12 +2,13 @@
 import { useLangStore } from '../stores/lang';
 import { useMenuStore } from '../stores/menu';
 import { CATEGORY_META } from '../foods';
+import LineIcon from './LineIcon.vue';
 
 const lang = useLangStore();
 const menu = useMenuStore();
 const emit = defineEmits(['set-filter']);
 
-const cats = ['breakfast', 'lunch', 'dinner', 'drinks'];
+const cats = ['breakfast', 'visinia', 'drinks', 'lunch', 'dinner'];
 </script>
 
 <template>
@@ -27,7 +28,7 @@ const cats = ['breakfast', 'lunch', 'dinner', 'drinks'];
         </div>
         <h3>{{ lang.$t('cat.' + cat) }}</h3>
         <p>{{ CATEGORY_META[cat].tag[lang.lang] || CATEGORY_META[cat].tag.en }}</p>
-        <span class="view">{{ lang.$t('cats.view') }} <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+        <span class="view">{{ lang.$t('cats.view') }} <LineIcon name="arrowright" size="13" color="#ffb84d" style="vertical-align:-2px" /></span>
       </a>
     </div>
   </section>

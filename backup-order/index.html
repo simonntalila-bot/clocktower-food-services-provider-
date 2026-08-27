@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock Tower Cafe — Order (Offline Backup)</title>
+<style>
+  :root{
+    --bg:#141210;
+    --panel:#1e1a15;
+    --panel-2:#26211a;
+    --line:#3a3226;
+    --cream:#f3ecdd;
+    --muted:#a99d87;
+    --gold:#e2a13c;
+    --gold-deep:#b8791f;
+    --chili:#c8442b;
+    --chili-deep:#8f2f1e;
+    --radius:14px;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--cream);
+    font-family:Georgia, 'Times New Roman', serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:90px;
+  }
+  .sans{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+
+  /* ---- status banner ---- */
+  #netStatus{
+    text-align:center;
+    font-size:.78rem;
+    letter-spacing:.06em;
+    padding:6px 10px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+  }
+  #netStatus.online{background:#2c3b23;color:#bfe3a4;}
+  #netStatus.offline{background:var(--chili-deep);color:#ffd9cf;}
+
+  /* ---- header ---- */
+  header{
+    padding:22px 16px 16px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse at top, rgba(226,161,60,.08), transparent 60%),
+      var(--bg);
+  }
+  .brand-eyebrow{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.68rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  h1{
+    margin:0;
+    font-size:2.1rem;
+    letter-spacing:.02em;
+    font-weight:700;
+  }
+  h1 .chili{color:var(--chili);}
+  .tagline{
+    color:var(--muted);
+    font-size:.92rem;
+    margin-top:6px;
+    max-width:480px;
+    margin-left:auto;
+    margin-right:auto;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .backup-note{
+    margin-top:12px;
+    display:inline-block;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.72rem;
+    color:var(--gold);
+    border:1px dashed var(--gold-deep);
+    padding:5px 12px;
+    border-radius:999px;
+    letter-spacing:.03em;
+  }
+
+  /* ---- search + tabs ---- */
+  .toolbar{
+    position:sticky; top:0; z-index:20;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding:10px 12px;
+  }
+  #search{
+    width:100%;
+    padding:11px 14px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--cream);
+    font-size:.95rem;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  #search::placeholder{color:var(--muted);}
+  .tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin-top:10px;
+    padding-bottom:2px;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.8rem;
+    padding:7px 14px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--muted);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .tab.active{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#1a1508;
+    font-weight:700;
+  }
+
+  /* ---- menu ---- */
+  main{padding:14px 12px 8px;}
+  .category-block{margin-bottom:28px;}
+  .category-title{
+    display:flex; align-items:baseline; gap:10px;
+    margin:0 0 4px;
+    font-size:1.3rem;
+  }
+  .category-title .count{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.72rem; color:var(--muted);
+  }
+  .category-note{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.75rem;
+    color:var(--gold);
+    margin:0 0 12px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .card::before{
+    /* ticket-perforation signature detail */
+    content:"";
+    position:absolute; left:0; right:0; top:96px;
+    height:0;
+    border-top:1.5px dashed var(--line);
+    z-index:2;
+  }
+  .card.no-photo::before{display:none;}
+  .card-photo{
+    width:100%; height:120px;
+    object-fit:cover;
+    background:var(--panel-2);
+    display:block;
+  }
+  .card-photo-empty{
+    width:100%; height:0;
+  }
+  .card-body{
+    padding:12px 13px 13px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex:1;
+  }
+  .card-name{
+    font-size:1rem;
+    font-weight:700;
+    line-height:1.25;
+  }
+  .card-desc{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.72rem;
+    color:var(--muted);
+    line-height:1.4;
+  }
+  .card-unit{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.68rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .card-footer{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding-top:8px;
+  }
+  .price{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-weight:700;
+    color:var(--gold);
+    font-size:.95rem;
+  }
+  .price small{color:var(--muted); font-weight:400; font-size:.65rem;}
+
+  .qty-controls{
+    display:flex; align-items:center; gap:8px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .qty-btn{
+    width:28px; height:28px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    color:var(--cream);
+    font-size:1rem;
+    line-height:1;
+    cursor:pointer;
+  }
+  .qty-num{min-width:16px; text-align:center; font-size:.9rem;}
+  .add-btn{
+    border:none;
+    background:#0F532A;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:9px;
+    font-weight:700;
+    font-size:.8rem;
+    cursor:pointer;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .add-btn:active{background:#0A3D1F;}
+
+  .dual-price{
+    display:flex; flex-direction:column; gap:2px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    font-size:.72rem;
+  }
+  .dual-price .opt{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:6px 8px;
+  }
+  .dual-price .opt b{color:var(--gold);}
+  .dual-price button{
+    border:none; background:var(--chili); color:#fff;
+    padding:5px 10px; border-radius:7px; font-size:.7rem; font-weight:700; cursor:pointer;
+  }
+
+  .empty-state{
+    text-align:center;
+    color:var(--muted);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    padding:60px 20px;
+    font-size:.9rem;
+  }
+
+  /* ---- floating cart bar ---- */
+  #cartBar{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    background:var(--gold);
+    color:#1a1508;
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    padding:13px 18px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    box-shadow:0 -6px 18px rgba(0,0,0,.35);
+    cursor:pointer;
+  }
+  #cartBar.show{display:flex;}
+  #cartBar .cb-left{font-weight:700; font-size:.9rem;}
+  #cartBar .cb-right{font-weight:800; font-size:1rem;}
+
+  /* ---- cart drawer ---- */
+  #overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; display:none;
+  }
+  #overlay.show{display:block;}
+  #drawer{
+    position:fixed; right:0; top:0; bottom:0; width:min(420px,100%);
+    background:var(--panel); z-index:41;
+    transform:translateX(100%);
+    transition:transform .25s ease;
+    display:flex; flex-direction:column;
+    border-left:1px solid var(--line);
+  }
+  #drawer.show{transform:translateX(0);}
+  .drawer-head{
+    padding:16px; border-bottom:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .drawer-head h2{margin:0; font-size:1.2rem;}
+  .close-btn{
+    background:none; border:none; color:var(--muted); font-size:1.4rem; cursor:pointer;
+  }
+  .drawer-body{flex:1; overflow-y:auto; padding:10px 16px;}
+  .cart-row{
+    display:flex; gap:10px; padding:12px 0; border-bottom:1px solid var(--line);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .cart-row img{width:52px; height:52px; object-fit:cover; border-radius:8px; background:var(--panel-2);}
+  .cart-row .cr-info{flex:1;}
+  .cart-row .cr-name{font-weight:700; font-size:.88rem;}
+  .cart-row .cr-price{color:var(--gold); font-size:.8rem; margin-top:2px;}
+  .cart-row .cr-qty{display:flex; align-items:center; gap:6px; margin-top:6px;}
+  .cart-row .remove{color:var(--chili); font-size:.72rem; cursor:pointer; margin-left:8px;}
+
+  .drawer-foot{
+    border-top:1px solid var(--line);
+    padding:14px 16px 18px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .total-row{display:flex; justify-content:space-between; font-weight:800; font-size:1.1rem; margin-bottom:12px;}
+  .total-row span:last-child{color:var(--gold);}
+  .field{margin-bottom:10px;}
+  .field label{display:block; font-size:.72rem; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em;}
+  .field input, .field textarea{
+    width:100%; padding:10px; border-radius:8px; border:1px solid var(--line);
+    background:var(--panel-2); color:var(--cream); font-size:.88rem;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  .whatsapp-btn{
+    width:100%; border:none; background:#25D366; color:#06210f;
+    padding:13px; border-radius:10px; font-weight:800; font-size:.95rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-top:6px;
+  }
+  .whatsapp-btn:disabled{opacity:.5; cursor:not-allowed;}
+  .send-hint{
+    font-size:.68rem; color:var(--muted); margin-top:8px; line-height:1.5; text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div id="netStatus" class="sans">Inaangalia mtandao…</div>
+
+<header>
+  <div class="brand-eyebrow">Clock Tower BBQ &amp; Indian Food</div>
+  <h1>Clock Tower <span class="chili">Cafe</span></h1>
+  <p class="tagline">Fresh food, fair prices. Search the menu, pick your favourites and add them straight to your cart.</p>
+  <div class="backup-note">🧾 Mfumo wa akiba — unafanya kazi hata bila intaneti</div>
+</header>
+
+<div class="toolbar">
+  <input id="search" class="sans" type="text" placeholder="Tafuta chakula… (mf. pizza, chips, biryani)">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<main id="menuRoot"></main>
+
+<div id="cartBar" onclick="openDrawer()">
+  <div class="cb-left" id="cartBarLeft">0 vitu kwenye Cart</div>
+  <div class="cb-right" id="cartBarRight">Angalia Cart →</div>
+</div>
+
+<div id="overlay" onclick="closeDrawer()"></div>
+<div id="drawer">
+  <div class="drawer-head">
+    <h2>Cart yako</h2>
+    <button class="close-btn" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="total-row"><span>Jumla</span><span id="cartTotal">TZS 0</span></div>
+    <div class="field">
+      <label>Jina lako</label>
+      <input id="custName" type="text" placeholder="Jina">
+    </div>
+    <div class="field">
+      <label>Namba ya simu</label>
+      <input id="custPhone" type="text" placeholder="07xx xxx xxx">
+    </div>
+    <div class="field">
+      <label>Mahali (meza / take away / delivery)</label>
+      <input id="custLocation" type="text" placeholder="Mf. Meza 5, au Take away">
+    </div>
+    <div class="field">
+      <label>Maelezo ya ziada (si lazima)</label>
+      <textarea id="custNote" rows="2" placeholder="Mf. bila pilipili..."></textarea>
+    </div>
+    <button class="whatsapp-btn sans" id="sendBtn" onclick="sendOrder()">
+      📲 Tuma Order kwa WhatsApp
+    </button>
+    <div class="send-hint">Order itafunguliwa WhatsApp kwenda kwa Reception/Admin. Inahitaji intaneti muda huo tu wa kutuma — unaweza kuchagua chakula chote ukiwa OFFLINE.</div>
+  </div>
+</div>
+
+<script>
+/* ============ CONFIG ============ */
+// Weka namba halisi ya WhatsApp ya Reception/Admin hapa (na msimbo wa nchi, bila +)
+const RECEPTION_WHATSAPP_NUMBER = "255629290952";
+
+/* ============ MENU DATA (embedded — works fully offline, no fetch needed) ============ */
+const MENU = {"restaurant": {"name": "Clock Tower Cafe", "tagline": "Fresh food, fair prices. Search the menu, pick your favourites and add them straight to your cart.", "currency": "TZS"}, "categories": [{"category": "Vegetable Bites", "items": [{"id": "veg-chapati", "name": "Chapati", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-andazi", "name": "Andazi", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-donut", "name": "Donut", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-mofa", "name": "Mofa", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-kachori", "name": "Kachori", "unit": "2pc", "price": 500, "image": null}, {"id": "veg-viazi", "name": "Viazi", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-bagia-kubwa", "name": "Bagia kubwa", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-bagia-ndogo", "name": "Bagia ndogo", "unit": "2pc", "price": 500, "image": null}, {"id": "veg-mihogo", "name": "Mihogo", "unit": "1pc", "price": 500, "image": null}, {"id": "veg-mihogo-kaanga", "name": "Mihogo ya kukaanga", "unit": "1pc", "price": 1500, "image": null}, {"id": "veg-samosa", "name": "Veg Samosa", "unit": "1pc", "price": 1000, "image": null}, {"id": "veg-naan", "name": "Naan Bread", "unit": "1pc", "price": 1000, "image": null}, {"id": "veg-kalmati", "name": "Kalmati", "unit": "5pcs", "price": 1000, "image": null}, {"id": "veg-chapati-roll-cheese", "name": "Veg Chapati roll with cheese", "unit": "1pc", "price": 8000, "image": null}], "meal_time": "breakfast_or_snack"}, {"category": "Chips Menu", "items": [{"id": "chips-plain", "name": "Chips plain", "price": 2000, "image": null}, {"id": "chips-yai-kisasa", "name": "Chips yai kisasa", "price": 3000, "image": "photos/chips-yai-kisasa.jpg"}, {"id": "chips-yai-kienyeji", "name": "Chips yai kienyeji", "price": 8000, "image": null}, {"id": "chips-vuruga-plain", "name": "Vuruga plain", "price": 5000, "image": null}, {"id": "chips-vuruga-nyama", "name": "Vuruga nyama", "price": 8000, "image": "photos/chips-vuruga-nyama.jpg"}, {"id": "chips-vuruga-sausage", "name": "Vuruga sausage", "price": 8000, "image": null}, {"id": "chips-vuruga-maini", "name": "Vuruga maini choma", "price": 8000, "image": null}, {"id": "chips-vuruga-kuku-quarter", "name": "Vuruga kuku 1/4", "price": 10000, "image": null}, {"id": "chips-vuruga-kuku-half", "name": "Vuruga kuku 1/2", "price": 15000, "image": null}, {"id": "chips-masala-dry", "name": "Dry masala", "price": 4000, "image": null}, {"id": "chips-masala-sossy", "name": "Sossy masala", "price": 6000, "image": "photos/chips-masala.jpg"}], "meal_time": "lunch_dinner"}, {"category": "Breakfast", "items": [{"id": "bf-kalmati-chai", "name": "Kalmati 2pcs & Chai Maziwa", "price": 1500, "image": null}, {"id": "bf-chapati-maharage", "name": "Chapati & Maharage", "price": 1500, "image": null}, {"id": "bf-fried-eggs-chapati", "name": "Fried Eggs & Chapati", "price": 2500, "image": null}, {"id": "bf-scrambled-egg-chapati", "name": "Scrambled Egg & Chapati", "price": 3500, "image": null}, {"id": "bf-roast-maini-chapati", "name": "Roast Maini & Chapati", "price": 3500, "image": null}, {"id": "bf-beef-stew-chapati", "name": "Beef Stew & Chapati", "price": 3500, "image": null}, {"id": "bf-eggchop-sausage-kachori", "name": "Eggchop, Sausage & Kachori", "price": 4000, "image": null}, {"id": "bf-beef-soup-chapati", "name": "Beef Soup & Chapati", "price": 5000, "image": null}, {"id": "bf-chicken-soup-chapati", "name": "Chicken Soup & Chapati", "price": 8000, "image": null}, {"id": "bf-english-breakfast", "name": "English Breakfast", "price": 10000, "image": null}], "meal_time": "breakfast"}, {"category": "Non Veg Bites", "items": [{"id": "nv-chapati-maji", "name": "Chapati Maji", "unit": "1pc", "price": 500, "image": null}, {"id": "nv-andazi-kuoka", "name": "Andazi la kuoka", "unit": "1pc", "price": 500, "image": null}, {"id": "nv-kabab", "name": "Kabab", "unit": "1pc", "price": 1000, "image": null}, {"id": "nv-beef-samosa", "name": "Beef Samosa", "unit": "1pc", "price": 1000, "image": null}, {"id": "nv-beef-bread", "name": "Beef Bread", "unit": "1pc", "price": 1000, "image": null}, {"id": "nv-shawarma-bread", "name": "Shawarma Bread", "unit": "1pc", "price": 1000, "image": null}, {"id": "nv-sausage", "name": "Sausage", "unit": "1pc", "price": 1000, "image": null}, {"id": "nv-french-toast", "name": "French toast", "unit": "2pc", "price": 1000, "image": null}, {"id": "nv-vegetable-omelet", "name": "Vegetable Omelet", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-shariphe", "name": "Shariphe", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-meat-pie", "name": "Meat Pie", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-meat-chop", "name": "Meat Chop", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-egg-chop", "name": "Egg Chop", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-beef-potato-chop", "name": "Beef Potato Chop", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-sausage-roll", "name": "Sausage roll", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-mtabaq", "name": "Mtabaq", "unit": "1pc", "price": 2000, "image": null}, {"id": "nv-beef-spring-roll", "name": "Beef Spring roll", "unit": "1pc", "price": 8000, "image": null}, {"id": "nv-sweet-sour-wings", "name": "Sweet & Sour Chicken Wings", "unit": "4pcs", "price": 10000, "image": null}], "meal_time": "breakfast_or_snack"}, {"category": "Salads", "items": [{"id": "salad-vegetable", "name": "Vegetable salad", "price": 6000, "image": null}, {"id": "salad-fruits", "name": "Fruits salad", "price": 8000, "image": null}, {"id": "salad-chicken", "name": "Chicken Salad", "price": 10000, "image": "photos/salad-chicken.jpg"}, {"id": "salad-tuna", "name": "Tuna salad", "price": 10000, "image": null}], "meal_time": "lunch_dinner"}, {"category": "Burgers & Sandwiches", "items": [{"id": "burger-smash-beef", "name": "Smash beef Burger", "price": 7000, "image": null}, {"id": "burger-vegetable", "name": "Vegetable Burger", "price": 9000, "image": null}, {"id": "burger-beef", "name": "Beef Burger", "price": 9000, "image": null}, {"id": "burger-sausage", "name": "Sausage Burger", "price": 9000, "image": null}, {"id": "burger-chicken", "name": "Chicken Burger", "price": 9000, "image": null}, {"id": "sandwich-chicken-cheese", "name": "Chicken Cheese Sandwich", "price": 9000, "image": null}, {"id": "sandwich-tuna", "name": "Tuna Sandwich", "price": 9000, "image": null}, {"id": "burger-big-mac", "name": "Big Mac Burger", "price": 11000, "image": null}, {"id": "roll-chicken-cheese-chapati", "name": "Chicken Cheese Chapati roll", "price": 12000, "image": null}], "meal_time": "lunch_dinner"}, {"category": "Pizza - Medium", "items": [{"id": "pizza-m-chicken", "name": "Chicken pizza", "size": "medium", "price": 12000, "image": null}, {"id": "pizza-m-beef", "name": "Beef pizza", "size": "medium", "price": 12000, "image": null}, {"id": "pizza-m-sausage", "name": "Sausage pizza", "size": "medium", "price": 12000, "image": null}, {"id": "pizza-m-margherita", "name": "Margherita pizza", "size": "medium", "price": 12000, "image": null}, {"id": "pizza-m-combo", "name": "Combo pizza", "size": "medium", "price": 20000, "image": "photos/pizza-medium-combo.jpg"}], "meal_time": "lunch_dinner"}, {"category": "Pizza - Large", "items": [{"id": "pizza-l-chicken", "name": "Chicken pizza", "size": "large", "price": 20000, "image": null}, {"id": "pizza-l-beef", "name": "Beef pizza", "size": "large", "price": 20000, "image": null}, {"id": "pizza-l-sausage", "name": "Sausage pizza", "size": "large", "price": 20000, "image": null}, {"id": "pizza-l-margherita", "name": "Margherita pizza", "size": "large", "price": 20000, "image": null}, {"id": "pizza-l-combo", "name": "Combo pizza", "size": "large", "price": 28000, "image": "photos/pizza-large-combo.jpg"}], "note": "Take away adds 2,000 per order", "meal_time": "lunch_dinner"}, {"category": "Tikisa Menu", "items": [{"id": "tikisa-chips", "name": "Chips Tikisa", "description": "Chips + choice of 2: Sausage choma, Mshikaki wa ng'ombe, Nyama ya kuku ya kuchoma, Maini choma, Firigisi choma", "price": 7000, "image": "photos/tikisa-chips-closeup.jpg"}, {"id": "tikisa-special", "name": "Special Chips Tikisa", "description": "Chips + Kuku 1/4 + Sausage choma + Mshikaki wa ng'ombe", "price": 12000, "image": "photos/tikisa-special-bowls.jpg"}], "meal_time": "lunch_dinner"}, {"category": "Visinia Menu (Group Platters)", "items": [{"id": "visinia-1", "name": "Mtu Mmoja (1 person)", "description": "Kuku 1/4, Mishkaki 3, Sausage choma 1, Chips yai 1, Wali au pilau 1/2 portion", "price_eat_in": 15000, "price_takeaway": 17000, "image": "photos/visinia-1-person.jpg"}, {"id": "visinia-2", "name": "Watu Wawili (2 people)", "description": "Kuku 1/2, Mishkaki 5, Sausage choma 2, Chips yai 2, Juice 2, Wali au pilau", "price_eat_in": 30000, "price_takeaway": 32000, "image": "photos/visinia-2-people.jpg"}, {"id": "visinia-3", "name": "Watu Watatu (3 people)", "description": "Kuku 3/4, Mishkaki 9, Sausage choma 3, Chips yai 3, Juice 3, Wali au pilau", "price_eat_in": 45000, "price_takeaway": 47000, "image": "photos/visinia-3-people.jpg"}, {"id": "visinia-4", "name": "Watu Wanne (4 people)", "description": "Kuku mzima, Mishkaki 10, Sausage choma 4, Chips yai 4, Juice 4, Wali au pilau", "price_eat_in": 60000, "price_takeaway": 62000, "image": "photos/visinia-4-people.jpg"}], "meal_time": "lunch_dinner"}, {"category": "Non-Vegetable Dishes", "items": [{"id": "nvd-mshkaki-bbq", "name": "Mshkaki BBQ", "price": 1000, "image": null}, {"id": "nvd-chicken-skewers", "name": "Chicken Skewers (mishkaki)", "price": 1500, "image": null}, {"id": "nvd-sausage-choma-kubwa", "name": "Sausage chill choma (kubwa)", "price": 3000, "image": null}, {"id": "nvd-sausage-choma-ndogo", "name": "Sausage chill choma (ndogo)", "price": 1500, "image": null}, {"id": "nvd-chips-vuruga-plain", "name": "Chips Vuruga plain", "price": 5000, "image": null}, {"id": "nvd-chips-mayai", "name": "Chips Mayai", "price": 3000, "image": null}, {"id": "nvd-chips-mayai-organic", "name": "Chips Mayai Organic", "price": 8000, "image": null}, {"id": "nvd-chips-quarter-tandoori", "name": "Chips with 1/4 Tandoori Chicken", "price": 7000, "image": null}, {"id": "nvd-chips-half-tandoori", "name": "Chips with 1/2 Tandoori Chicken", "price": 10000, "image": null}, {"id": "nvd-chips-fried-beef", "name": "Chips with Fried beef", "price": 9000, "image": null}, {"id": "nvd-ugali-nyama", "name": "Ugali nyama", "price": 7000, "image": null}, {"id": "nvd-ugali-dagaa", "name": "Ugali/wali dagaa", "price": 9000, "image": null}, {"id": "nvd-rice-fried-beef-vegies", "name": "Rice with Fried beef & Vegies", "price": 10000, "image": null}, {"id": "nvd-rice-beef-stew", "name": "Rice with Beef Stew / Wali nyama", "price": 7000, "image": null}, {"id": "nvd-rice-firigisi", "name": "Rice with firigisi", "price": 9000, "image": null}, {"id": "nvd-rice-liver", "name": "Rice served with cooked liver", "price": 9000, "image": null}, {"id": "nvd-rice-fish-coconut", "name": "Rice with fish coconut Stew", "price": 10000, "image": null}, {"id": "nvd-rice-makange", "name": "Rice with Makange", "price": 12000, "image": null}, {"id": "nvd-pilau-nyama", "name": "Pilau nyama", "price": 8000, "image": null}, {"id": "nvd-pilau-chicken", "name": "Pilau Chicken (free soda)", "price": 10000, "image": null}, {"id": "nvd-pilau-mutton", "name": "Pilau Mutton/Mbuzi (free soda)", "price": 12000, "image": null}, {"id": "nvd-pilau-samaki", "name": "Pilau Samaki (free soda)", "price": 10000, "image": null}, {"id": "nvd-pilau-prawns", "name": "Pilau Prawns (free soda)", "price": 15000, "image": null}, {"id": "nvd-biryani-beef", "name": "Biryani Beef (free soda)", "price": 10000, "image": null}, {"id": "nvd-biryani-chicken", "name": "Biryani Chicken (free soda)", "price": 10000, "image": null}, {"id": "nvd-biryani-mutton", "name": "Biryani Mutton/Mbuzi (free soda)", "price": 12000, "image": null}, {"id": "nvd-kapsa-samaki", "name": "Kapsa Samaki (free soda)", "price": 10000, "image": null}, {"id": "nvd-fried-rice-beef", "name": "Fried Rice & Fried Beef (free soda)", "price": 10000, "image": null}, {"id": "nvd-fried-rice-chicken", "name": "Fried Rice Chicken (free soda)", "price": 10000, "image": null}, {"id": "nvd-fried-rice-beef-stew", "name": "Fried Rice with beef stew", "price": 8000, "image": null}, {"id": "nvd-mandi-mutton", "name": "Mandi Mutton/Mbuzi (free soda)", "price": 12000, "image": null}, {"id": "nvd-mandi-chicken", "name": "Mandi Chicken (free soda)", "price": 10000, "image": null}, {"id": "nvd-prawns-fried-rice", "name": "Prawns Fried Rice (free soda)", "price": 15000, "image": null}, {"id": "nvd-beef-spaghetti", "name": "Beef Spaghetti", "price": 8000, "image": null}, {"id": "nvd-tuna-spaghetti", "name": "Tuna Spaghetti", "price": 10000, "image": null}, {"id": "nvd-chicken-mac-cheese", "name": "Chicken Macaroni & Cheese", "price": 10000, "image": null}, {"id": "nvd-beef-stir-fry", "name": "Beef stir-fry", "price": 5000, "image": null}, {"id": "nvd-shawarma-chips", "name": "Shawarma with chips", "price": 9000, "image": null}, {"id": "nvd-manchurian", "name": "Manchurian", "price": 7000, "image": null}, {"id": "nvd-crispy-chicken", "name": "Crispy chicken", "price": 7000, "image": null}, {"id": "nvd-fried-rice-chicken-plain", "name": "Fried rice chicken Plain", "price": 7000, "image": null}, {"id": "nvd-organic-chicken-quarter", "name": "Organic (Local) chicken 1/4", "price": 7000, "image": null}, {"id": "nvd-organic-chicken-half", "name": "Organic (Local) chicken 1/2", "price": 12000, "image": null}, {"id": "nvd-cottage-pie", "name": "Cottage pie", "price": 14000, "image": null}, {"id": "nvd-loaded-fries", "name": "Loaded Fries", "price": 20000, "image": null}, {"id": "nvd-broast-chicken", "name": "Broast chicken (KFC) 4pcs", "price": 25000, "image": null}], "meal_time": "lunch_dinner"}, {"category": "Soup", "items": [{"id": "soup-vegetable", "name": "Vegetable Soup", "price": 3000, "image": null}, {"id": "soup-beef", "name": "Beef Soup", "price": 5000, "image": "photos/beef-soup.jpg"}, {"id": "soup-fish", "name": "Fish Soup", "price": 7000, "image": null}, {"id": "soup-mutton", "name": "Mutton/Mbuzi Soup", "price": 5000, "image": null}, {"id": "soup-organic-chicken-medium", "name": "Organic Chicken soup medium", "price": 8000, "image": null}, {"id": "soup-organic-chicken-large", "name": "Organic Chicken soup large", "price": 10000, "image": null}, {"id": "soup-ndizi-utumbo", "name": "Beef stripe banana stew (ndizi utumbo)", "price": 5000, "image": null}, {"id": "soup-ndizi-nyama", "name": "Green banana beef stew (ndizi nyama)", "price": 5000, "image": null}], "meal_time": "lunch_dinner"}, {"category": "Vegetable Dishes", "items": [{"id": "vd-beans", "name": "Beans", "price": 1000, "image": null}, {"id": "vd-green-vegies", "name": "Green Vegies", "price": 1000, "image": "photos/vegetables-ugali-plate.jpg"}, {"id": "vd-plain-chips", "name": "Plain Chips", "price": 2000, "image": null}, {"id": "vd-plain-rice", "name": "Plain Rice", "price": 3000, "image": null}, {"id": "vd-coconut-banana-mtori", "name": "Coconut Banana / Curry Mtori", "price": 5000, "image": null}, {"id": "vd-chips-masala-dry", "name": "Chips masala dry", "price": 4000, "image": null}, {"id": "vd-veg-chapati-roll-cheese", "name": "Veg Chapati roll with Cheese", "price": 8000, "image": null}, {"id": "vd-vegetable-spaghetti", "name": "Vegetable Spaghetti", "price": 5000, "image": null}, {"id": "vd-ugali-dona-vegies", "name": "Ugali Dona with Vegies", "price": 6000, "image": "photos/vegetables-ugali-plate.jpg"}, {"id": "vd-ugali-sembe-vegies", "name": "Ugali Sembe with Vegies", "price": 6000, "image": null}, {"id": "vd-vegetable-stir-fry", "name": "Vegetable stir-fry", "price": 3000, "image": null}], "meal_time": "lunch_dinner"}, {"category": "Hot & Cold Drinks / Milkshakes", "items": [{"id": "dr-black-tea", "name": "Black Tea", "price": 500, "image": null}, {"id": "dr-black-coffee", "name": "Black Coffee", "price": 1000, "image": null}, {"id": "dr-hot-milk", "name": "Hot Milk", "price": 1000, "image": null}, {"id": "dr-milk-tea", "name": "Milk Tea", "price": 1000, "image": null}, {"id": "dr-milk-coffee", "name": "Milk And coffee", "price": 1500, "image": null}, {"id": "dr-ginger-shot", "name": "Ginger shot", "price": 2000, "image": null}, {"id": "dr-cappuccino", "name": "Cappuccino", "price": 3000, "image": null}, {"id": "dr-tende-shake", "name": "Tende Shake / Date milkshake", "price": 3000, "image": null}, {"id": "dr-hot-chocolate", "name": "Hot Chocolate (Galaxy, Twix, Snickers, Maltesers)", "price": 5000, "image": null}, {"id": "dr-mojito", "name": "Mojito", "price": 5000, "image": null}, {"id": "dr-fruity-slushie", "name": "Fruity slushie", "price": 5000, "image": "photos/fruity-slushie.jpg"}, {"id": "dr-vanilla-milkshake", "name": "Vanilla milkshake", "price": 8000, "image": null}, {"id": "dr-strawberry-milkshake", "name": "Strawberry milkshake", "price": 8000, "image": null}, {"id": "dr-kitkat-milkshake", "name": "Kitkat Milkshake", "price": 10000, "image": null}, {"id": "dr-snickers-milkshake", "name": "Snickers Milkshake", "price": 10000, "image": null}, {"id": "dr-oreo-milkshake", "name": "Oreo Milkshake", "price": 10000, "image": null}], "meal_time": "anytime"}, {"category": "Dessert", "items": [{"id": "ds-ice-cream-2scoops", "name": "Ice Cream 2 Scoops", "price": 4000, "image": "photos/ice-cream-dessert.jpg"}, {"id": "ds-ice-cream-oreo", "name": "Ice Cream & Oreo Biscuits", "price": 5000, "image": null}, {"id": "ds-chocolate-cake", "name": "Chocolate cake", "price": 7000, "image": null}, {"id": "ds-red-velvet-cake", "name": "Red velvet cake", "price": 7000, "image": null}, {"id": "ds-chocolate-cake-ice-cream", "name": "Chocolate Cake & Ice Cream", "price": 9000, "image": null}, {"id": "ds-black-forest-cake", "name": "Black Forest Cake", "price": 10000, "image": null}], "meal_time": "anytime"}]};
+
+/* ============ STATE ============ */
+let cart = JSON.parse(localStorage.getItem('ctc_cart') || '{}'); // {itemKey: {name, price, qty, image, variant}}
+let activeCategory = 'all';
+
+function saveCart(){ localStorage.setItem('ctc_cart', JSON.stringify(cart)); renderCartBar(); }
+
+function fmt(n){ return 'TZS ' + Number(n).toLocaleString('en-US'); }
+
+/* ============ RENDER MENU ============ */
+function renderTabs(){
+  const tabs = document.getElementById('tabs');
+  const cats = ['all', ...MENU.categories.map(c => c.category)];
+  tabs.innerHTML = cats.map(c =>
+    `<div class="tab ${c===activeCategory?'active':''}" data-cat="${c}">${c==='all'?'Zote':c}</div>`
+  ).join('');
+  tabs.querySelectorAll('.tab').forEach(t=>{
+    t.onclick = () => { activeCategory = t.dataset.cat; renderMenu(); renderTabs(); };
+  });
+}
+
+function itemCardHTML(item, categoryName){
+  const key = item.id;
+  const q = (cart[key] && cart[key].qty) || 0;
+  const hasImg = !!item.image;
+  const imgTag = hasImg ? `<img class="card-photo" src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'">` : '';
+
+  // Visinia-style dual price (eat-in / take away)
+  if (item.price_eat_in !== undefined) {
+    return `
+    <div class="card ${hasImg?'':'no-photo'}">
+      ${imgTag}
+      <div class="card-body">
+        <div class="card-name">${item.name}</div>
+        ${item.description ? `<div class="card-desc">${item.description}</div>` : ''}
+        <div class="dual-price">
+          <div class="opt"><span>Eat-in: <b>${fmt(item.price_eat_in)}</b></span>
+            <button onclick="addToCart('${key}-eatin','${item.name} (Eat-in)',${item.price_eat_in},'${item.image||''}')">Ongeza</button></div>
+          <div class="opt"><span>Take away: <b>${fmt(item.price_takeaway)}</b></span>
+            <button onclick="addToCart('${key}-takeaway','${item.name} (Take away)',${item.price_takeaway},'${item.image||''}')">Ongeza</button></div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return `
+    <div class="card ${hasImg?'':'no-photo'}">
+      ${imgTag}
+      <div class="card-body">
+        <div class="card-name">${item.name}</div>
+        ${item.description ? `<div class="card-desc">${item.description}</div>` : ''}
+        ${item.unit ? `<div class="card-unit">${item.unit}${item.size?` · ${item.size}`:''}</div>` : (item.size?`<div class="card-unit">${item.size}</div>`:'')}
+        <div class="card-footer">
+          <div class="price">${fmt(item.price)}</div>
+          ${q>0 ? `
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="changeQty('${key}',-1)">−</button>
+              <span class="qty-num">${q}</span>
+              <button class="qty-btn" onclick="changeQty('${key}',1)">+</button>
+            </div>
+          ` : `<button class="add-btn" onclick="addToCart('${key}','${item.name.replace(/'/g,"\\'")}',${item.price},'${item.image||''}')">+ Ongeza</button>`}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderMenu(){
+  const root = document.getElementById('menuRoot');
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  let cats = MENU.categories;
+  if (activeCategory !== 'all') cats = cats.filter(c => c.category === activeCategory);
+
+  let html = '';
+  let totalShown = 0;
+  cats.forEach(cat => {
+    let items = cat.items;
+    if (query) items = items.filter(i => i.name.toLowerCase().includes(query));
+    if (items.length === 0) return;
+    totalShown += items.length;
+    html += `<div class="category-block">
+      <h2 class="category-title">${cat.category} <span class="count">(${items.length})</span></h2>
+      ${cat.note ? `<p class="category-note">${cat.note}</p>` : ''}
+      <div class="grid">${items.map(i => itemCardHTML(i, cat.category)).join('')}</div>
+    </div>`;
+  });
+
+  root.innerHTML = totalShown ? html : `<div class="empty-state">Hakuna chakula kilichopatikana kwa "${query}".</div>`;
+}
+
+/* ============ CART ACTIONS ============ */
+function addToCart(key, name, price, image){
+  if (!cart[key]) cart[key] = {name, price, qty:0, image};
+  cart[key].qty += 1;
+  saveCart();
+  renderMenu();
+  renderCartDrawer();
+}
+function changeQty(key, delta){
+  if (!cart[key]) return;
+  cart[key].qty += delta;
+  if (cart[key].qty <= 0) delete cart[key];
+  saveCart();
+  renderMenu();
+  renderCartDrawer();
+}
+function removeItem(key){
+  delete cart[key];
+  saveCart();
+  renderMenu();
+  renderCartDrawer();
+}
+
+function cartTotalCount(){
+  return Object.values(cart).reduce((s,i)=>s+i.qty,0);
+}
+function cartTotalPrice(){
+  return Object.values(cart).reduce((s,i)=>s+i.qty*i.price,0);
+}
+
+function renderCartBar(){
+  const bar = document.getElementById('cartBar');
+  const count = cartTotalCount();
+  if (count > 0){
+    bar.classList.add('show');
+    document.getElementById('cartBarLeft').textContent = `${count} vitu kwenye Cart`;
+    document.getElementById('cartBarRight').textContent = fmt(cartTotalPrice()) + ' →';
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+function renderCartDrawer(){
+  const wrap = document.getElementById('cartItems');
+  const entries = Object.entries(cart);
+  if (entries.length === 0){
+    wrap.innerHTML = `<div class="empty-state">Cart yako ipo tupu. Chagua chakula kwenye menu.</div>`;
+  } else {
+    wrap.innerHTML = entries.map(([key, it]) => `
+      <div class="cart-row">
+        ${it.image ? `<img src="${it.image}" onerror="this.style.display='none'">` : ''}
+        <div class="cr-info">
+          <div class="cr-name">${it.name}</div>
+          <div class="cr-price">${fmt(it.price)} × ${it.qty} = ${fmt(it.price*it.qty)}</div>
+          <div class="cr-qty">
+            <button class="qty-btn" onclick="changeQty('${key}',-1)">−</button>
+            <span class="qty-num">${it.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${key}',1)">+</button>
+            <span class="remove" onclick="removeItem('${key}')">Ondoa</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('cartTotal').textContent = fmt(cartTotalPrice());
+}
+
+function openDrawer(){
+  renderCartDrawer();
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('drawer').classList.add('show');
+}
+function closeDrawer(){
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('drawer').classList.remove('show');
+}
+
+/* ============ SEND ORDER VIA WHATSAPP ============ */
+function sendOrder(){
+  const entries = Object.entries(cart);
+  if (entries.length === 0){ alert('Cart yako ipo tupu.'); return; }
+
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const location = document.getElementById('custLocation').value.trim();
+  const note = document.getElementById('custNote').value.trim();
+
+  if (!name || !phone){
+    alert('Tafadhali jaza jina na namba ya simu kabla ya kutuma order.');
+    return;
+  }
+
+  let msg = `*ORDER MPYA — Clock Tower Cafe*\n`;
+  msg += `Jina: ${name}\n`;
+  msg += `Simu: ${phone}\n`;
+  if (location) msg += `Mahali: ${location}\n`;
+  msg += `\n*Vitu:*\n`;
+  entries.forEach(([key, it]) => {
+    msg += `• ${it.name} x${it.qty} — ${fmt(it.price*it.qty)}\n`;
+  });
+  msg += `\n*Jumla: ${fmt(cartTotalPrice())}*\n`;
+  if (note) msg += `\nMaelezo: ${note}\n`;
+  msg += `\n_Order hii imetumwa kupitia mfumo wa akiba (offline backup) wa Clock Tower Cafe._`;
+
+  const url = `https://wa.me/${RECEPTION_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+/* ============ NETWORK STATUS ============ */
+function updateNetStatus(){
+  const el = document.getElementById('netStatus');
+  if (navigator.onLine){
+    el.textContent = '🟢 Mtandaoni — order zitatumwa mara moja';
+    el.className = 'online sans';
+  } else {
+    el.textContent = '🔴 Nje ya mtandao — bado unaweza kuchagua chakula; kutuma order kunahitaji intaneti';
+    el.className = 'offline sans';
+  }
+}
+window.addEventListener('online', updateNetStatus);
+window.addEventListener('offline', updateNetStatus);
+
+/* ============ INIT ============ */
+document.getElementById('search').addEventListener('input', renderMenu);
+updateNetStatus();
+renderTabs();
+renderMenu();
+renderCartBar();
+</script>
+</body>
+</html>

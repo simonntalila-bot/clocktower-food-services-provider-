@@ -1,0 +1,199 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Ongeza/Hariri Chakula{% endblock %}
+
+{% block content %}
+<style>
+    .form-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-header h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+    }
+    .back-btn {
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+    .form-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        max-width: 700px;
+    }
+    .form-group {
+        margin-bottom: 1.1rem;
+    }
+    .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="url"],
+    .form-group input[type="file"],
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        font-size: 0.9rem;
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+    .form-group select option { background: var(--bg2); color: var(--text); }
+
+    .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .checkbox-row input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--accent);
+    }
+    .checkbox-row label {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--text);
+        cursor: pointer;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    .submit-btn {
+        margin-top: 1rem;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .submit-btn:hover { opacity: 0.85; }
+</style>
+
+<div class="form-header">
+    <a href="{% url 'admin_foods' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    {% if food %}
+    <h2>Hariri: {{ food.name }}</h2>
+    {% else %}
+    <h2>Ongeza Chakula Kipya</h2>
+    {% endif %}
+</div>
+
+<div class="form-card">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_name">Jina (English)</label>
+            <input type="text" name="name" id="id_name" value="{{ form.name.value|default:'' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_name_sw">Jina (Swahili)</label>
+            <input type="text" name="name_sw" id="id_name_sw" value="{{ form.name_sw.value|default:'' }}">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_category">Category</label>
+                <select name="category" id="id_category" required>
+                    <option value="breakfast" {% if form.category.value == 'breakfast' %}selected{% endif %}>Breakfast</option>
+                    <option value="lunch" {% if form.category.value == 'lunch' %}selected{% endif %}>Lunch</option>
+                    <option value="dinner" {% if form.category.value == 'dinner' %}selected{% endif %}>Dinner</option>
+                    <option value="drinks" {% if form.category.value == 'drinks' %}selected{% endif %}>Drinks</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="id_price">Price (TSh)</label>
+                <input type="number" name="price" id="id_price" value="{{ form.price.value|default:'' }}" step="100" min="0" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_icon">Icon (emoji)</label>
+                <input type="text" name="icon" id="id_icon" value="{{ form.icon.value|default:'' }}" placeholder="🍽️">
+            </div>
+            <div class="form-group">
+                <label for="id_rating">Rating</label>
+                <input type="number" name="rating" id="id_rating" value="{{ form.rating.value|default:'4.5' }}" step="0.1" min="0" max="5">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="id_description">Description (English)</label>
+            <textarea name="description" id="id_description">{{ form.description.value|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="id_description_sw">Description (Swahili)</label>
+            <textarea name="description_sw" id="id_description_sw">{{ form.description_sw.value|default:'' }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_image">Image</label>
+                <input type="file" name="image" id="id_image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="id_image_url">Image URL</label>
+                <input type="url" name="image_url" id="id_image_url" value="{{ form.image_url.value|default:'' }}" placeholder="https://...">
+            </div>
+        </div>
+
+        <div style="display:flex;gap:2rem;margin-top:0.5rem;">
+            <div class="checkbox-row">
+                <input type="checkbox" name="popular" id="id_popular" value="true" {% if form.popular.value %}checked{% endif %}>
+                <label for="id_popular">Popular</label>
+            </div>
+            <div class="checkbox-row">
+                <input type="checkbox" name="is_active" id="id_is_active" value="true" {% if form.is_active.value != False %}checked{% endif %}>
+                <label for="id_is_active">Active</label>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Hifadhi Chakula</button>
+    </form>
+</div>
+{% endblock %}

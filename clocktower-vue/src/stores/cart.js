@@ -4,6 +4,7 @@ import { useMenuStore } from './menu';
 
 export const useCartStore = defineStore('cart', () => {
   const items = ref([]);
+  const showCart = ref(false);
   const CART_KEY = 'ctfCart';
   const ORDER_KEY = 'ctfOrderCounter';
   const HISTORY_KEY = 'ctfOrders';
@@ -83,5 +84,5 @@ export const useCartStore = defineStore('cart', () => {
   // Initialize
   loadCart();
 
-  return { items, cartQuantity, cartSubtotal, addToCart, changeQty, removeItem, clearCart, nextOrderNumber, loadHistory, saveOrder };
+  return { items, showCart, cartQuantity, cartSubtotal, addToCart, changeQty, removeItem, clearCart, nextOrderNumber, loadHistory, saveOrder };
 });

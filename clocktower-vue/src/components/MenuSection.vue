@@ -8,7 +8,7 @@ const menu = useMenuStore();
 
 const emit = defineEmits(['open-food', 'add-to-cart']);
 
-const filters = ['all', 'breakfast', 'lunch', 'dinner', 'drinks'];
+const filters = ['all', 'breakfast', 'visinia', 'drinks', 'lunch', 'dinner'];
 </script>
 
 <template>
@@ -26,6 +26,13 @@ const filters = ['all', 'breakfast', 'lunch', 'dinner', 'drinks'];
           @input="menu.searchTerm = $event.target.value"
           :placeholder="lang.$t('menu.search')"
         />
+        <button
+          v-if="menu.searchTerm"
+          class="search-clear"
+          type="button"
+          aria-label="Clear search"
+          @click="menu.searchTerm = ''"
+        >×</button>
       </div>
       <div class="filters">
         <button

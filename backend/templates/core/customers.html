@@ -1,0 +1,158 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Wateja / Customers{% endblock %}
+
+{% block content %}
+<style>
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+    }
+    .filter-tabs {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+    }
+    .filter-tabs a {
+        padding: 0.45rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+        background: var(--card);
+        border: 1px solid var(--border);
+        transition: all 0.2s;
+    }
+    .filter-tabs a:hover { color: var(--text); border-color: var(--accent); }
+    .filter-tabs a.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .search-box {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        font-size: 0.85rem;
+        min-width: 200px;
+    }
+    .search-box::placeholder { color: var(--muted); }
+
+    .table-wrap {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    th {
+        background: var(--bg2);
+        color: var(--muted);
+        font-weight: 600;
+        text-align: left;
+        padding: 0.75rem 0.85rem;
+        white-space: nowrap;
+    }
+    td {
+        padding: 0.7rem 0.85rem;
+        border-top: 1px solid var(--border);
+        color: var(--text);
+        vertical-align: middle;
+    }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .badge-paid { background: rgba(168,85,247,0.15); color: var(--purple); }
+    .badge-unpaid { background: rgba(239,68,68,0.15); color: var(--danger); }
+    .badge-confirmed { background: rgba(34,197,94,0.15); color: var(--green); }
+
+    .action-btns {
+        display: flex;
+        gap: 0.35rem;
+    }
+    .action-btns a, .action-btns button {
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        cursor: pointer;
+    }
+    .action-btns a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+</style>
+
+<div class="toolbar">
+    <div class="filter-tabs">
+        <a href="?filter=all" class="{% if not current_filter or current_filter == 'all' %}active{% endif %}">All</a>
+        <a href="?filter=today" class="{% if current_filter == 'today' %}active{% endif %}">Today</a>
+        <a href="?filter=paid" class="{% if current_filter == 'paid' %}active{% endif %}">Paid</a>
+        <a href="?filter=unpaid" class="{% if current_filter == 'unpaid' %}active{% endif %}">Unpaid</a>
+    </div>
+    <form method="get" style="margin:0">
+        <input type="text" name="q" class="search-box" placeholder="🔍 Tafuta wateja..." value="{{ search_query }}">
+    </form>
+</div>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Table/Location</th>
+                <th>Order#</th>
+                <th>Total</th>
+                <th>Payment Status</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cust in customers %}
+            <tr>
+                <td>{{ cust.name }}</td>
+                <td>{{ cust.phone }}</td>
+                <td>{{ cust.email|default:"-" }}</td>
+                <td>{{ cust.table_location|default:"-" }}</td>
+                <td><strong>#{{ cust.order_num }}</strong></td>
+                <td><strong>TSh {{ cust.total|floatformat:0 }}</strong></td>
+                <td><span class="status-badge badge-{{ cust.payment_status }}">{{ cust.payment_status }}</span></td>
+                <td>{{ cust.created_at|date:"M d, H:i" }}</td>
+                <td>
+                    <div class="action-btns">
+                        {% if cust.payment_status != 'paid' %}
+                        <form method="post" action="{% url 'order_pay' cust.order_pk %}" style="margin:0">
+                            {% csrf_token %}
+                            <button type="submit" style="border-color:var(--purple);color:var(--purple);">💰 Pay</button>
+                        </form>
+                        {% endif %}
+                        <a href="{% url 'order_detail' cust.order_pk %}"><i class="fas fa-eye"></i></a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" style="text-align:center;color:var(--muted);padding:2rem;">Hakuna wateja</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

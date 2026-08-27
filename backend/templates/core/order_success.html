@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClockTower - Agizo Limethibitishwa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(255,184,77,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(255,122,69,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;}
+a{color:inherit;text-decoration:none;}
+
+.success-page{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.success-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:48px 40px;text-align:center;max-width:440px;width:100%;box-shadow:var(--shadow);}
+.success-icon{width:80px;height:80px;border-radius:50%;background:rgba(52,211,153,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:38px;color:var(--green);}
+.success-card h1{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;color:var(--green);}
+.success-card .subtitle{color:var(--muted);font-size:13px;margin-bottom:28px;}
+
+.order-details{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:24px;text-align:left;}
+.order-details .detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.order-details .detail-row:last-child{border-bottom:none;}
+.order-details .detail-row .label{color:var(--muted);font-weight:500;}
+.order-details .detail-row .value{font-weight:700;color:var(--text);}
+.order-details .detail-row .value.accent{color:var(--accent);font-size:18px;}
+
+.success-msg{color:var(--muted);font-size:14px;margin-bottom:28px;line-height:1.5;}
+.success-msg i{color:var(--accent);margin-right:4px;}
+
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:14px;font-weight:700;font-family:'Space Grotesk',sans-serif;transition:opacity .2s;}
+.back-btn:hover{opacity:.88;}
+
+.footer{text-align:center;padding:28px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
+.footer .brand-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--text);margin-bottom:4px;}
+.footer .brand-text em{font-style:normal;color:var(--accent);}
+
+@media(max-width:500px){
+  .success-card{padding:32px 20px;}
+  .success-icon{width:64px;height:64px;font-size:30px;}
+  .success-card h1{font-size:18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-icon"><i class="fas fa-check"></i></div>
+    <h1>AGIZO LIMETHIBITISHWA</h1>
+    <p class="subtitle">Asante kwa kuweka agizo na ClockTower!</p>
+
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="label">Nambari ya Agizo</span>
+        <span class="value">#{{ order.order_num }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Jina</span>
+        <span class="value">{{ order.name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Jumla ya Kulipa</span>
+        <span class="value accent">TSh {{ order.total|floatformat:0 }}</span>
+      </div>
+    </div>
+
+    <p class="success-msg"><i class="fas fa-envelope"></i> Umepokea barua pepe ya uthibitisho{% if order.email %} kwa {{ order.email }}{% endif %}.</p>
+    <p class="success-msg"><i class="fas fa-motorcycle"></i> Tutakuletea chakula chako haraka!</p>
+
+    <a href="{% url 'menu' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Rudi kwenye Menyu</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="brand-text">Clock<em>Tower</em> Food Service</div>
+  <p>&copy; {{ current_year|default:"2026" }} ClockTower. Haki zote zimehifadhiwa.</p>
+</footer>
+
+</body>
+</html>

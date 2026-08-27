@@ -1,0 +1,113 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Activity Log{% endblock %}
+
+{% block content %}
+<style>
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+    .clear-btn {
+        margin-left: auto;
+        padding: 0.45rem 1rem;
+        border-radius: 8px;
+        background: var(--danger);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .activity-list {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .activity-item {
+        display: flex;
+        gap: 1rem;
+        padding: 0.9rem 1rem;
+        border-bottom: 1px solid var(--border);
+        align-items: flex-start;
+    }
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg2);
+        color: var(--accent);
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+    .activity-body { flex: 1; min-width: 0; }
+    .activity-action {
+        font-weight: 600;
+        color: var(--text);
+        font-size: 0.9rem;
+    }
+    .activity-detail {
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-top: 0.15rem;
+    }
+    .activity-meta {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.3rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+    }
+    .activity-user {
+        color: var(--accent);
+        font-weight: 500;
+    }
+
+    .empty-state {
+        text-align: center;
+        color: var(--muted);
+        padding: 3rem;
+    }
+</style>
+
+<div class="toolbar">
+    <form method="post" action="{% url 'activity_clear' %}" style="margin-left:auto" onsubmit="return confirm('Futa log zote?');">
+        {% csrf_token %}
+        <button type="submit" class="clear-btn"><i class="fas fa-trash"></i> Clear All</button>
+    </form>
+</div>
+
+<div class="activity-list">
+    {% for log in activity_logs %}
+    <div class="activity-item">
+        <div class="activity-icon">
+            <i class="fas fa-{{ log.icon|default:'clipboard' }}"></i>
+        </div>
+        <div class="activity-body">
+            <div class="activity-action">{{ log.action }}</div>
+            {% if log.detail %}
+            <div class="activity-detail">{{ log.detail }}</div>
+            {% endif %}
+            <div class="activity-meta">
+                <span class="activity-user">{{ log.user }}</span>
+                <span>{{ log.created_at|timesince }} ago</span>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <i class="fas fa-clipboard-list" style="font-size:2rem;margin-bottom:0.5rem;display:block;color:var(--muted);"></i>
+        Hakuna activity log bado
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

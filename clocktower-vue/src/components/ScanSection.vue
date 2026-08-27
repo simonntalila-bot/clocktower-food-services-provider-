@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useLangStore } from '../stores/lang';
+import LineIcon from './LineIcon.vue';
 
 const lang = useLangStore();
 const SITE_URL = 'https://simonntalila-bot.github.io/clocktower-food-services-provider-';
@@ -35,9 +36,9 @@ function downloadQr() {
     </div>
     <p class="qr-url">{{ qrUrl }}</p>
     <div class="qr-actions">
-      <button class="btn btn-ghost" type="button" @click="printQr"><i class="fas fa-print" aria-hidden="true"></i> <span v-html="lang.$t('qr.print')"></span></button>
-      <button class="btn btn-ghost" type="button" @click="downloadQr"><i class="fas fa-download" aria-hidden="true"></i> <span v-html="lang.$t('qr.download')"></span></button>
-      <button class="btn btn-ghost" type="button" @click="copyLink"><i class="fas fa-copy" aria-hidden="true"></i> <span v-html="lang.$t('qr.copy')"></span></button>
+      <button class="btn btn-ghost" type="button" @click="printQr"><LineIcon name="print" size="14" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.print')"></span></button>
+      <button class="btn btn-ghost" type="button" @click="downloadQr"><LineIcon name="download" size="14" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.download')"></span></button>
+      <button class="btn btn-ghost" type="button" @click="copyLink"><LineIcon name="copy" size="14" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.copy')"></span></button>
     </div>
   </div>
 </template>

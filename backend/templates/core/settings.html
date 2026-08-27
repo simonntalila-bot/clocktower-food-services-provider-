@@ -1,0 +1,147 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<style>
+    .settings-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-width: 600px;
+    }
+    .settings-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+    .settings-card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0 0 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        font-size: 0.9rem;
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    .save-btn {
+        padding: 0.55rem 1.2rem;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .save-btn:hover { opacity: 0.85; }
+
+    .export-btn {
+        padding: 0.55rem 1.2rem;
+        border-radius: 8px;
+        background: var(--purple);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: opacity 0.2s;
+    }
+    .export-btn:hover { opacity: 0.85; }
+
+    .danger-card {
+        background: var(--card);
+        border: 1px solid rgba(239,68,68,0.3);
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+    .danger-card h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--danger);
+        margin: 0 0 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .danger-card p {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin: 0 0 1rem 0;
+    }
+    .danger-btn {
+        padding: 0.55rem 1.2rem;
+        border-radius: 8px;
+        background: var(--danger);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .danger-btn:hover { opacity: 0.85; }
+</style>
+
+<div class="settings-grid">
+    <div class="settings-card">
+        <h3><i class="fab fa-whatsapp" style="color:var(--green);"></i> WhatsApp</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_whatsapp">Nambari ya WhatsApp</label>
+                <input type="text" name="whatsapp_number" id="id_whatsapp" value="{{ whatsapp_number|default:'' }}" placeholder="+255...">
+            </div>
+            <button type="submit" class="save-btn">Hifadhi</button>
+        </form>
+    </div>
+
+    <div class="settings-card">
+        <h3><i class="fas fa-file-export"></i> Export Data</h3>
+        <form method="post" action="{% url 'export_data' %}">
+            {% csrf_token %}
+            <button type="submit" class="export-btn"><i class="fas fa-download"></i> Export Data</button>
+        </form>
+    </div>
+
+    <div class="danger-card">
+        <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+        <p>Hii itafuta data yote kabisa. Kitendo hiki hakiwezi kutenduliwa.</p>
+        <form method="post" action="{% url 'reset_data' %}" onsubmit="return confirm('WAANGALIZO: Futa data YOTE? Hii haiwezi kutenduliwa!');">
+            {% csrf_token %}
+            <button type="submit" class="danger-btn"><i class="fas fa-trash"></i> Reset All Data</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

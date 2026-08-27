@@ -1,0 +1,648 @@
+import json
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.db.models import Sum, Count, Q
+from django.db.models.functions import TruncDate
+from django.utils import timezone
+from datetime import date, timedelta
+from .models import User, Category, Food, Order, OrderItem, Notification, Comment, ActivityLog
+from .forms import (LoginForm, ForgotPasswordForm, FoodForm, UserForm,
+                    ProfileForm, ChangePasswordForm, CommentForm, SettingsForm)
+
+
+def get_setting(key, default=''):
+    from django.conf import settings
+    return getattr(settings, key, default)
+
+
+def log_activity(user, action, detail=''):
+    ActivityLog.objects.create(user=user, action=action, detail=detail)
+
+
+def push_notification(title, detail=''):
+    Notification.objects.create(title=title, detail=detail)
+
+
+def generate_order_num():
+    last = Order.objects.order_by('-id').first()
+    num = (last.id + 1) if last else 1
+    return f"CTF-{num:06d}"
+
+
+# ========== AUTH ==========
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('admin_dashboard')
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        user = authenticate(request, username=username, password=password)
+        if user and user.is_active:
+            login(request, user)
+            log_activity(user, 'Ameingia', f'{user.get_full_name() or user.username} ameingia')
+            return redirect('admin_dashboard')
+        return render(request, 'core/login.html', {'error': 'Username au password si sahihi.'})
+
+    return render(request, 'core/login.html')
+
+
+def forgot_password_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        answer = request.POST.get('answer', '').strip().lower()
+        new_pw = request.POST.get('new_password', '')
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return render(request, 'core/forgot.html', {'error': 'Username haipatikani.'})
+
+        if answer != 'helen':
+            return render(request, 'core/forgot.html', {'error': 'Jibu si sahihi.'})
+
+        if len(new_pw) < 6:
+            return render(request, 'core/forgot.html', {'error': 'Password lazima iwe na herufi 6+.'})
+
+        user.set_password(new_pw)
+        user.save()
+        log_activity(user, 'Password imebadilishwa (forgot)', username)
+        return render(request, 'core/forgot.html', {'success': 'Password mpya imewekwa! Ingia sasa.'})
+
+    return render(request, 'core/forgot.html')
+
+
+def logout_view(request):
+    log_activity(request.user, 'Ameondoka', request.user.get_full_name() or request.user.username)
+    logout(request)
+    return redirect('login')
+
+
+@csrf_exempt
+def api_login_view(request):
+    if request.method == 'OPTIONS':
+        return JsonResponse({'ok': True})
+    if request.method != 'POST':
+        return JsonResponse({'ok': False, 'error': 'Method not allowed'}, status=405)
+
+    try:
+        data = json.loads(request.body or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'error': 'Invalid data'}, status=400)
+
+    username = (data.get('username') or '').strip()
+    password = data.get('password') or ''
+    user = authenticate(request, username=username, password=password)
+
+    if user and user.is_active:
+        login(request, user)
+        log_activity(user, 'Ameingia', f'{user.get_full_name() or user.username} ameingia (e-menu)')
+        return JsonResponse({
+            'ok': True,
+            'username': user.username,
+            'role': user.role,
+            'name': user.get_full_name() or user.username,
+        })
+
+    return JsonResponse({'ok': False, 'error': 'Username au password si sahihi.'}, status=401)
+
+
+# ========== ADMIN PANEL ==========
+
+@login_required
+def admin_dashboard(request):
+    today = date.today()
+    foods = Food.objects.filter(is_active=True)
+    orders = Order.objects.all()
+    today_orders = orders.filter(date=today)
+
+    stats = {
+        'total_foods': foods.count(),
+        'total_orders': orders.count(),
+        'today_orders': today_orders.count(),
+        'total_revenue': orders.aggregate(s=Sum('total'))['s'] or 0,
+        'today_revenue': today_orders.aggregate(s=Sum('total'))['s'] or 0,
+        'unpaid_count': orders.filter(payment_status='unpaid').count(),
+    }
+
+    recent_orders = orders[:5]
+    today_customers = today_orders[:5]
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    context = {**stats, 'recent_orders': recent_orders, 'today_customers': today_customers,
+               'notifications': notifications, 'unread_notifs': unread_notifs}
+    return render(request, 'core/dashboard.html', context)
+
+
+# ========== ORDERS ==========
+
+@login_required
+def orders_view(request):
+    orders = Order.objects.all()
+    status_filter = request.GET.get('status', 'all')
+    search = request.GET.get('q', '').strip()
+
+    if status_filter == 'new':
+        orders = orders.filter(status='new')
+    elif status_filter == 'confirmed':
+        orders = orders.filter(status='confirmed')
+    elif status_filter == 'paid':
+        orders = orders.filter(payment_status='paid')
+    elif status_filter == 'unpaid':
+        orders = orders.filter(payment_status='unpaid')
+
+    if search:
+        orders = orders.filter(
+            Q(order_num__icontains=search) | Q(name__icontains=search) | Q(phone__icontains=search)
+        )
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/orders.html', {
+        'orders': orders, 'status_filter': status_filter, 'search': search,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def order_confirm_view(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order.status = 'confirmed'
+    order.save()
+    log_activity(request.user, 'Agizo limethibitishwa', f'#{order.order_num} {order.name}')
+    return redirect('admin_orders')
+
+
+@login_required
+@require_POST
+def order_pay_view(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order.payment_status = 'paid'
+    order.save()
+    log_activity(request.user, 'Malipo yamerekodiwa', f'#{order.order_num} TSh {order.total:,}')
+    return redirect('admin_orders')
+
+
+@login_required
+@require_POST
+def order_delete_view(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    log_activity(request.user, 'Agizo limefutwa', f'#{order.order_num} {order.name}')
+    order.delete()
+    return redirect('admin_orders')
+
+
+@login_required
+def order_detail_view(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+    return render(request, 'core/order_detail.html', {
+        'order': order,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def orders_clear_view(request):
+    log_activity(request.user, 'Maagizo yote yamefutwa', '')
+    Order.objects.all().delete()
+    return redirect('admin_orders')
+
+
+# ========== CUSTOMERS ==========
+
+@login_required
+def customers_view(request):
+    orders = Order.objects.all()
+    cust_filter = request.GET.get('filter', 'all')
+    search = request.GET.get('q', '').strip()
+    today = date.today()
+
+    if cust_filter == 'today':
+        orders = orders.filter(date=today)
+    elif cust_filter == 'paid':
+        orders = orders.filter(payment_status='paid')
+    elif cust_filter == 'unpaid':
+        orders = orders.filter(payment_status='unpaid')
+
+    if search:
+        orders = orders.filter(
+            Q(name__icontains=search) | Q(phone__icontains=search) | Q(email__icontains=search)
+        )
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/customers.html', {
+        'orders': orders, 'cust_filter': cust_filter, 'search': search,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+# ========== FOODS ==========
+
+@login_required
+def foods_view(request):
+    foods = Food.objects.all()
+    cat_filter = request.GET.get('cat', 'all')
+    search = request.GET.get('q', '').strip()
+
+    if cat_filter != 'all':
+        foods = foods.filter(category__slug=cat_filter)
+    if search:
+        foods = foods.filter(Q(name__icontains=search) | Q(name_sw__icontains=search))
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/foods.html', {
+        'foods': foods, 'cat_filter': cat_filter, 'search': search,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+def food_add_view(request):
+    if request.method == 'POST':
+        form = FoodForm(request.POST, request.FILES)
+        if form.is_valid():
+            food = form.save()
+            log_activity(request.user, 'Chakula kipya', f'{food.name} - TSh {food.price:,}')
+            return redirect('admin_foods')
+    else:
+        form = FoodForm()
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/food_form.html', {
+        'form': form, 'editing': False,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+def food_edit_view(request, pk):
+    food = get_object_or_404(Food, pk=pk)
+    if request.method == 'POST':
+        form = FoodForm(request.POST, request.FILES, instance=food)
+        if form.is_valid():
+            form.save()
+            log_activity(request.user, 'Chakula kimebadilishwa', food.name)
+            return redirect('admin_foods')
+    else:
+        form = FoodForm(instance=food)
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/food_form.html', {
+        'form': form, 'editing': True, 'food': food,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def food_delete_view(request, pk):
+    food = get_object_or_404(Food, pk=pk)
+    log_activity(request.user, 'Chakula kimefutwa', food.name)
+    food.delete()
+    return redirect('admin_foods')
+
+
+# ========== USERS ==========
+
+@login_required
+def users_view(request):
+    if request.user.role != 'admin':
+        return redirect('admin_dashboard')
+
+    users = User.objects.all().order_by('-date_joined')
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/users.html', {
+        'users': users,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+def user_add_view(request):
+    if request.user.role != 'admin':
+        return redirect('admin_dashboard')
+
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            log_activity(request.user, 'Mtumiaji kipya', f'{user.username} ({user.get_role_display()})')
+            return redirect('admin_users')
+    else:
+        form = UserForm()
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/user_form.html', {
+        'form': form, 'editing': False,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+def user_edit_view(request, pk):
+    if request.user.role != 'admin':
+        return redirect('admin_dashboard')
+
+    user_obj = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user_obj)
+        if form.is_valid():
+            user = form.save(commit=False)
+            pw = form.cleaned_data.get('password')
+            if pw:
+                user.set_password(pw)
+            user.save()
+            log_activity(request.user, 'Mtumiaji kimebadilishwa', user.username)
+            return redirect('admin_users')
+    else:
+        form = UserForm(instance=user_obj)
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/user_form.html', {
+        'form': form, 'editing': True, 'user_obj': user_obj,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def user_delete_view(request, pk):
+    if request.user.role != 'admin':
+        return redirect('admin_dashboard')
+
+    user_obj = get_object_or_404(User, pk=pk)
+    if user_obj.username == 'admin':
+        return redirect('admin_users')
+
+    log_activity(request.user, 'Mtumiaji umefutwa', user_obj.username)
+    user_obj.delete()
+    return redirect('admin_users')
+
+
+# ========== PROFILE ==========
+
+@login_required
+def profile_view(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            log_activity(request.user, 'Profaili imebadilishwa', '')
+            return redirect('admin_profile')
+    else:
+        form = ProfileForm(instance=request.user)
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/profile.html', {
+        'form': form,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def change_password_view(request):
+    form = ChangePasswordForm(request.POST)
+    if form.is_valid():
+        if not request.user.check_password(form.cleaned_data['old_password']):
+            return render(request, 'core/profile.html', {
+                'form': ProfileForm(instance=request.user),
+                'pw_error': 'Password ya zamani si sahihi.',
+                'notifications': Notification.objects.all()[:20],
+                'unread_notifs': Notification.objects.filter(is_read=False).count(),
+            })
+        request.user.set_password(form.cleaned_data['new_password'])
+        request.user.save()
+        log_activity(request.user, 'Password imebadilishwa', '')
+        return redirect('admin_profile')
+
+    return redirect('admin_profile')
+
+
+# ========== ACTIVITY LOG ==========
+
+@login_required
+def activity_view(request):
+    if request.user.role != 'admin':
+        return redirect('admin_dashboard')
+
+    logs = ActivityLog.objects.all()[:100]
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/activity.html', {
+        'logs': logs,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def activity_clear_view(request):
+    if request.user.role == 'admin':
+        ActivityLog.objects.all().delete()
+    return redirect('admin_activity')
+
+
+# ========== COMMENTS ==========
+
+@login_required
+def comments_view(request):
+    comments = Comment.objects.all()
+    order_comments = Comment.objects.filter(order__isnull=False)
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/comments.html', {
+        'comments': comments,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def comments_clear_view(request):
+    Comment.objects.all().delete()
+    return redirect('admin_comments')
+
+
+# ========== SETTINGS ==========
+
+@login_required
+def settings_view(request):
+    if request.method == 'POST':
+        whatsapp = request.POST.get('whatsapp_number', '')
+        from django.conf import settings
+        settings.WHATSAPP_NUMBER = whatsapp
+        log_activity(request.user, 'Settings zimebadilishwa', f'WhatsApp: {whatsapp}')
+        return redirect('admin_settings')
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/settings.html', {
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+# ========== NOTIFICATIONS API ==========
+
+@login_required
+def notifications_api(request):
+    notifs = Notification.objects.all()[:30]
+    data = [{'id': n.id, 'title': n.title, 'detail': n.detail, 'type': '',
+             'read': n.is_read, 'time': n.created_at.strftime('%d %b %H:%M')} for n in notifs]
+    return JsonResponse({'notifications': data, 'unread': Notification.objects.filter(is_read=False).count()})
+
+
+@login_required
+@require_POST
+def notification_read_view(request, pk):
+    notif = get_object_or_404(Notification, pk=pk)
+    notif.is_read = True
+    notif.save()
+    return JsonResponse({'ok': True})
+
+
+@login_required
+@require_POST
+def notifications_clear_view(request):
+    Notification.objects.filter(is_read=False).update(is_read=True)
+    return JsonResponse({'ok': True})
+
+
+# ========== EXPORT / IMPORT ==========
+
+@login_required
+@require_POST
+def export_view(request):
+    foods = list(Food.objects.all().values())
+    orders_data = list(Order.objects.all().values())
+    data = json.dumps({'foods': foods, 'orders': orders_data}, default=str, indent=2)
+    from django.http import HttpResponse
+    response = HttpResponse(data, content_type='application/json')
+    response['Content-Disposition'] = f'attachment; filename="clocktower-backup-{date.today()}.json"'
+    return response
+
+
+@login_required
+@require_POST
+def reset_data_view(request):
+    if request.user.role != 'admin':
+        return redirect('admin_dashboard')
+    Order.objects.all().delete()
+    OrderItem.objects.all().delete()
+    Comment.objects.all().delete()
+    ActivityLog.objects.all().delete()
+    Notification.objects.all().delete()
+    log_activity(request.user, 'Data yote imefutwa', 'System reset')
+    return redirect('admin_settings')
+
+
+# ========== PUBLIC VIEWS ==========
+
+def menu_view(request):
+    categories = Category.objects.all()
+    foods = Food.objects.filter(is_active=True)
+    return render(request, 'core/menu.html', {'categories': categories, 'foods': foods})
+
+
+def place_order_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        email = request.POST.get('email', '').strip()
+        table_location = request.POST.get('table_location', '').strip()
+        payment = request.POST.get('payment_method', '').strip() or 'cash'
+        payment_phone = request.POST.get('payment_phone', '').strip()
+        share_bill = request.POST.get('share_bill') == 'on'
+        share_payment_method = request.POST.get('share_payment_method', '').strip()
+        share_payment_phone = request.POST.get('share_payment_phone', '').strip()
+        notes = request.POST.get('notes', '').strip()
+        comments_text = request.POST.get('comments', '').strip()
+
+        if not name or not phone:
+            return render(request, 'core/place_order.html', {
+                'error': 'Jina na simu ni lazima.',
+                'foods': Food.objects.filter(is_active=True),
+            })
+
+        order = Order.objects.create(
+            order_num=generate_order_num(),
+            name=name, phone=phone, email=email,
+            table_location=table_location, payment_method=payment,
+            payment_phone=payment_phone,
+            share_bill=share_bill,
+            share_payment_method=share_payment_method,
+            share_payment_phone=share_payment_phone,
+            notes=notes, comments=comments_text,
+            total=0, date=date.today(),
+        )
+
+        total = 0
+        for key, val in request.POST.items():
+            if key.startswith('food_'):
+                food_id = key.replace('food_', '')
+                qty = int(val) if val.isdigit() else 0
+                if qty > 0:
+                    try:
+                        food = Food.objects.get(pk=food_id)
+                        OrderItem.objects.create(order=order, food=food, quantity=qty, price=food.price)
+                        total += food.price * qty
+                    except Food.DoesNotExist:
+                        pass
+
+        order.total = total
+        order.save()
+
+        if comments_text:
+            Comment.objects.create(name=name, email=email, text=comments_text, order=order)
+
+        items_summary = ', '.join([
+            f"{item.food.name} x{item.quantity}" for item in order.items.select_related('food').all()
+        ])
+        payment_label = order.get_payment_status_display()
+
+        push_notification(
+            f'Agizo Jipya! #{order.order_num}',
+            f'Mteja: {name}\nBidhaa: {items_summary}\nJumla: TSh {total:,}\nMalipo: {payment_label}'
+        )
+        log_activity(None, 'Agizo kipya', f'#{order.order_num} {name} TSh {total:,}')
+
+        from .notifications import send_order_notifications
+        send_order_notifications(order)
+
+        return render(request, 'core/order_success.html', {'order': order})
+
+    foods = Food.objects.filter(is_active=True)
+    return render(request, 'core/place_order.html', {'foods': foods})

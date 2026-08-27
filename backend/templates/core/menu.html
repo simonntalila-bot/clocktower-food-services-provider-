@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClockTower - Menyu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(255,184,77,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(255,122,69,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+
+.nav{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;}
+.nav .brand{display:flex;align-items:center;gap:10px;}
+.nav .brand span.logo{font-size:28px;}
+.nav .brand h2{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;}
+.nav .brand h2 em{font-style:normal;color:var(--accent);}
+.nav .order-link{padding:8px 18px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;transition:opacity .2s;}
+.nav .order-link:hover{opacity:.88;}
+
+.hero{text-align:center;padding:60px 24px 40px;background:linear-gradient(180deg,rgba(255,184,77,0.08) 0%,transparent 100%);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,5vw,42px);font-weight:700;margin-bottom:12px;}
+.hero h1 em{font-style:normal;color:var(--accent);}
+.hero p{color:var(--muted);font-size:16px;max-width:520px;margin:0 auto;}
+
+.categories{padding:0 24px 10px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 24px;text-align:center;min-width:130px;transition:transform .2s,border-color .2s;}
+.cat-card:hover{transform:translateY(-3px);border-color:var(--accent);}
+.cat-card .emoji{font-size:28px;display:block;margin-bottom:6px;}
+.cat-card .name{font-size:13px;font-weight:600;color:var(--text);}
+
+.filter-bar{padding:20px 24px 10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.filter-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;}
+.filter-btn:hover{color:var(--text);border-color:var(--accent);}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px;padding:24px;max-width:1200px;margin:0 auto;}
+.food-card{background:var(--card);border:1px solid var(--border);border-left:3px solid #0F532A;border-radius:14px;overflow:hidden;transition:transform .2s;position:relative;}
+.food-card:hover{transform:translateY(-2px);}
+.food-card .img-wrap{width:100%;height:150px;overflow:hidden;background:var(--bg2);}
+.food-card .img-wrap img{width:100%;height:100%;object-fit:cover;}
+.food-card .img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;background:var(--bg2);}
+.food-card .info{padding:14px 16px;}
+.food-card .info .top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.food-card .info .food-name{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;}
+.food-card .info .food-name-sw{font-size:12px;color:var(--muted);margin-top:2px;}
+.food-card .info .price{font-size:16px;font-weight:700;color:var(--accent);}
+.food-card .info .bottom-row{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.food-card .info .rating{font-size:12px;color:#fbbf24;display:flex;align-items:center;gap:3px;}
+.food-card .info .cat-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;text-transform:capitalize;}
+.cat-badge.breakfast{background:rgba(251,191,36,0.15);color:#fbbf24;}
+.cat-badge.lunch{background:rgba(34,197,94,0.15);color:var(--green);}
+.cat-badge.dinner{background:rgba(168,85,247,0.15);color:var(--purple);}
+.cat-badge.drinks{background:rgba(59,130,246,0.15);color:#60a5fa;}
+.cat-badge.kisnia{background:rgba(255,107,157,0.15);color:#ff6b9d;}
+.food-card .popular-badge{position:absolute;top:12px;right:12px;background:rgba(255,184,77,0.9);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+
+.cta{text-align:center;padding:40px 24px 60px;}
+.cta a{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;transition:opacity .2s;}
+.cta a:hover{opacity:.88;}
+
+.footer{text-align:center;padding:28px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;}
+.footer .brand-text{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:var(--text);margin-bottom:4px;}
+.footer .brand-text em{font-style:normal;color:var(--accent);}
+
+.empty-msg{text-align:center;color:var(--muted);padding:60px 24px;font-size:15px;}
+
+@media(max-width:768px){
+  .nav{padding:10px 14px;}
+  .hero{padding:40px 16px 24px;}
+  .categories{padding:0 16px 6px;}
+  .cat-card{min-width:100px;padding:14px 16px;}
+  .filter-bar{padding:14px 16px 6px;}
+  .food-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:16px;}
+  .food-card .img-wrap{height:150px;}
+}
+@media(max-width:500px){
+  .food-grid{grid-template-columns:1fr;}
+  .nav .brand h2{font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="brand">
+    <span class="logo">&#127829;</span>
+    <h2>Clock<em>Tower</em></h2>
+  </div>
+  <a href="{% url 'place_order' %}" class="order-link"><i class="fas fa-shopping-cart"></i> Weka Agizo</a>
+</nav>
+
+<section class="hero">
+  <h1>Karibu <em>ClockTower</em> Food Service</h1>
+  <p>Chakula kizuri, ladha ya kweli. Angalia menyu yetu na uweke agizo lako leo!</p>
+</section>
+
+{% if categories %}
+<section class="categories">
+  {% for cat in categories %}
+  <div class="cat-card">
+    <span class="emoji">{{ cat.emoji|default:"🍽️" }}</span>
+    <span class="name">{{ cat.name }}</span>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+<section class="filter-bar">
+  <button class="filter-btn active" onclick="filterFood('all',this)">Yote</button>
+  {% for cat in categories %}
+  <button class="filter-btn" onclick="filterFood('{{ cat.slug }}',this)">{{ cat.emoji|default:"" }} {{ cat.name }}</button>
+  {% endfor %}
+</section>
+
+<section class="food-grid" id="foodGrid">
+  {% for food in foods %}
+  <div class="food-card" data-category="{{ food.category.slug }}">
+    {% if food.popular %}
+    <div class="popular-badge"><i class="fas fa-fire"></i> Maarufu</div>
+    {% endif %}
+    <div class="img-wrap">
+      {% if food.image %}
+      <img src="{{ food.image.url }}" alt="{{ food.name }}">
+      {% else %}
+      <div class="img-placeholder">{{ food.icon|default:"🍽️" }}</div>
+      {% endif %}
+    </div>
+    <div class="info">
+      <div class="top-row">
+        <div>
+          <div class="food-name">{{ food.name }}</div>
+          {% if food.name_sw %}<div class="food-name-sw">{{ food.name_sw }}</div>{% endif %}
+        </div>
+        <div class="price">TSh {{ food.price|floatformat:0 }}</div>
+      </div>
+      <div class="bottom-row">
+        <span class="rating">
+          {% for i in "12345" %}
+            {% with val=i|add:"0" %}
+              {% if val <= food.rating %}&#9733;{% else %}&#9734;{% endif %}
+            {% endwith %}
+          {% endfor %}
+          {{ food.rating|floatformat:1 }}
+        </span>
+        <span class="cat-badge {{ food.category }}">{{ food.category }}</span>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-msg">Hakuna chakula kwa sasa. Tafadhali angalia tena baadaye!</div>
+  {% endfor %}
+</section>
+
+<section class="cta">
+  <a href="{% url 'place_order' %}"><i class="fas fa-shopping-cart"></i> Weka Agizo Sasa</a>
+</section>
+
+<footer class="footer">
+  <div class="brand-text">Clock<em>Tower</em> Food Service</div>
+  <p>&copy; {{ current_year|default:"2026" }} ClockTower. Haki zote zimehifadhiwa.</p>
+</footer>
+
+<script>
+function filterFood(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.querySelectorAll('.food-card').forEach(function(card){
+    if (cat === 'all' || card.getAttribute('data-category') === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

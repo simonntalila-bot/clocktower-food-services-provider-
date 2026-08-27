@@ -1,0 +1,297 @@
+{% extends 'core/base.html' %}
+{% block title %}{% block page_title %}Admin{% endblock %} - ClockTower{% endblock %}
+{% block body %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<style>
+:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--overlay:rgba(4,7,12,0.72);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);--sidebar-bg:#0d1219;--sidebar-w:260px;}
+html[data-theme="light"]{--bg:#f4f6f9;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.92);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(255,184,77,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(255,122,69,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+.app{display:flex;min-height:100vh;}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50;transition:transform .3s ease;}
+.sidebar .brand-area{padding:18px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sidebar .brand-area .logo{font-size:26px;}
+.sidebar .brand-area .brand-text{flex:1;}
+.sidebar .brand-area h2{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;line-height:1.15;}
+.sidebar .brand-area h2 em{font-style:normal;color:var(--accent);}
+.sidebar nav{flex:1;padding:10px;overflow-y:auto;}
+.sidebar nav .nav-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:12px 14px 4px;font-weight:600;}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);transition:all .15s;margin-bottom:1px;position:relative;}
+.sidebar nav a:hover{color:var(--text);background:var(--card);}
+.sidebar nav a.active{color:var(--accent);background:rgba(255,184,77,0.10);}
+.sidebar nav a i{width:18px;text-align:center;font-size:14px;}
+.sidebar nav .badge-dot{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--danger);display:none;}
+.sidebar nav .badge-dot.show{display:block;}
+.sidebar .sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);text-align:center;}
+.sidebar .sidebar-footer a{color:var(--accent);}
+.main{flex:1;margin-left:var(--sidebar-w);padding:0;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.topbar .left{display:flex;align-items:center;gap:12px;}
+.topbar h1{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;}
+.topbar .right{display:flex;align-items:center;gap:8px;}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:20px;padding:6px;}
+.topbar .pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,184,77,0.12);color:var(--accent);}
+.notif-btn{position:relative;background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.notif-btn:hover{border-color:var(--accent);color:var(--accent);}
+.notif-btn .notif-count{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;}
+.notif-btn .notif-count.show{display:flex;}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent);}
+.logout-btn{background:none;border:1px solid var(--danger);color:var(--danger);padding:7px 14px;border-radius:10px;font-size:12px;font-weight:600;transition:all .15s;}
+.logout-btn:hover{background:var(--danger);color:#fff;}
+.content{padding:24px;}
+.notif-wrapper{position:relative;}
+.notif-dropdown{position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:12px;width:340px;max-height:400px;overflow-y:auto;box-shadow:var(--shadow);display:none;z-index:60;}
+.notif-dropdown.show{display:block;}
+.notif-dropdown .notif-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.notif-dropdown .notif-header h4{font-size:13px;font-weight:700;}
+.notif-dropdown .notif-item{padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;display:flex;gap:10px;cursor:pointer;transition:background .15s;}
+.notif-dropdown .notif-item:hover{background:var(--bg2);}
+.notif-dropdown .notif-item.unread{background:rgba(255,184,77,0.04);}
+.notif-dropdown .notif-item .notif-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
+.notif-dropdown .notif-item .notif-text{flex:1;}
+.notif-dropdown .notif-item .notif-text strong{display:block;font-size:12px;}
+.notif-dropdown .notif-item .notif-text span{color:var(--muted);font-size:11px;}
+.notif-dropdown .notif-empty{padding:30px;text-align:center;color:var(--muted);font-size:12px;}
+.confirm-overlay{position:fixed;inset:0;z-index:150;background:var(--overlay);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
+.confirm-overlay.show{display:flex;}
+.confirm-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;max-width:360px;width:100%;box-shadow:var(--shadow);}
+.confirm-box .icon{font-size:36px;margin-bottom:10px;}
+.confirm-box h3{font-size:16px;font-weight:700;margin-bottom:5px;}
+.confirm-box p{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.confirm-box .btns{display:flex;gap:8px;justify-content:center;}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;transition:all .2s;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-primary:hover{opacity:0.88;}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.messages{list-style:none;padding:0;margin:0 0 16px 0;}
+.messages li{padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:6px;}
+.messages li.success{background:rgba(52,211,153,0.12);color:var(--green);border-left:3px solid var(--green);}
+.messages li.error{background:rgba(255,107,107,0.12);color:var(--danger);border-left:3px solid var(--danger);}
+.messages li.info{background:rgba(56,189,248,0.12);color:#38bdf8;border-left:3px solid #38bdf8;}
+.messages li.warning{background:rgba(255,184,77,0.12);color:var(--accent);border-left:3px solid var(--accent);}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:var(--overlay);z-index:45;}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.show{display:block;}
+  .main{margin-left:0;}
+  .hamburger{display:block;}
+  .topbar{padding:10px 14px;}
+  .content{padding:14px;}
+  .notif-dropdown{width:300px;right:-40px;}
+}
+@media(max-width:500px){
+  .topbar h1{font-size:14px;}
+}
+</style>
+
+<div class="app">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-area">
+      <span class="logo">&#127829;</span>
+      <div class="brand-text">
+        <h2>Clock<em>Tower</em></h2>
+        <small>{{ user.get_role_display }}</small>
+      </div>
+    </div>
+    <nav>
+      <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+        <i class="fas fa-th-large"></i> Dashboard
+      </a>
+      <a href="{% url 'admin_orders' %}" class="{% if request.resolver_match.url_name == 'admin_orders' %}active{% endif %}">
+        <i class="fas fa-receipt"></i> Maagizo / Orders
+        <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="orderBadge"></span>
+      </a>
+      <a href="{% url 'admin_customers' %}" class="{% if request.resolver_match.url_name == 'admin_customers' %}active{% endif %}">
+        <i class="fas fa-users"></i> Wateja / Customers
+      </a>
+      <a href="{% url 'admin_comments' %}" class="{% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
+        <i class="fas fa-comments"></i> Maoni / Comments
+      </a>
+
+      <div class="nav-label">Menyu</div>
+      <a href="{% url 'admin_foods' %}" class="{% if request.resolver_match.url_name == 'admin_foods' %}active{% endif %}">
+        <i class="fas fa-utensils"></i> Menyu / Foods
+      </a>
+      <a href="{% url 'food_add' %}" class="{% if request.resolver_match.url_name == 'food_add' %}active{% endif %}">
+        <i class="fas fa-plus-circle"></i> Ongeza Chakula
+      </a>
+
+      {% if user.role == 'admin' %}
+      <div class="nav-label">Usimamizi</div>
+      <a href="{% url 'admin_users' %}" class="{% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+        <i class="fas fa-user-shield"></i> Watumiaji / Users
+      </a>
+      <a href="{% url 'admin_activity' %}" class="{% if request.resolver_match.url_name == 'admin_activity' %}active{% endif %}">
+        <i class="fas fa-history"></i> Activity Log
+      </a>
+      {% endif %}
+
+      <div class="nav-label">Mifumo</div>
+      <a href="{% url 'admin_profile' %}" class="{% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
+        <i class="fas fa-user-circle"></i> Profaili / Profile
+      </a>
+      <a href="{% url 'admin_settings' %}" class="{% if request.resolver_match.url_name == 'admin_settings' %}active{% endif %}">
+        <i class="fas fa-cog"></i> Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/"><i class="fas fa-arrow-left"></i> Rudi kwenye tovuti</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="left">
+        <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+        <h1>{% block topbar_title %}Dashboard{% endblock %}</h1>
+        <span class="pill">{{ user.get_role_display }}</span>
+      </div>
+      <div class="right">
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notifBtn">
+            <i class="fas fa-bell"></i>
+            <span class="notif-count{% if unread_notifs %} show{% endif %}" id="notifCount">{{ unread_notifs }}</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>Notifications</h4>
+            </div>
+            <div class="notif-list">
+            {% for notif in notifications %}
+            <div class="notif-item{% if not notif.is_read %} unread{% endif %}">
+              <div class="notif-icon" style="background:rgba(255,184,77,0.12);color:var(--accent);">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="notif-text">
+                <strong>{{ notif.title }}</strong>
+                <span>{{ notif.detail|linebreaksbr }}</span>
+              </div>
+            </div>
+            {% empty %}
+            <div class="notif-empty">Hakuna notifications</div>
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+        <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </header>
+
+    <div class="content">
+      {% if messages %}
+      <ul class="messages">
+        {% for msg in messages %}
+        <li class="{{ msg.tags }}">{{ msg }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="icon">&#9888;&#65039;</div>
+    <h3 id="confirmTitle">Confirm</h3>
+    <p id="confirmMsg">Are you sure?</p>
+    <div class="btns">
+      <button class="btn btn-outline" onclick="closeConfirm()">Ghairi</button>
+      <button class="btn btn-primary" id="confirmBtn">Ndio</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('ctfAdminTheme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+
+  document.querySelectorAll('.messages li').forEach(function(el) {
+    setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
+  });
+
+  var notifBtn = document.getElementById('notifBtn');
+  var notifDrop = document.getElementById('notifDropdown');
+  if (notifBtn && notifDrop) {
+    notifBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      notifDrop.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.notif-dropdown') && !e.target.closest('.notif-btn')) {
+        notifDrop.classList.remove('show');
+      }
+    });
+  }
+
+  var hamburger = document.getElementById('hamburgerBtn');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebarOverlay');
+  if (hamburger && sidebar) {
+    hamburger.addEventListener('click', function() {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    });
+  }
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('show');
+    });
+  }
+
+  var themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('ctfAdminTheme', next);
+      var icon = themeBtn.querySelector('i');
+      icon.className = next === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    });
+  }
+
+  window.showConfirm = function(title, msg, callback) {
+    var o = document.getElementById('confirmOverlay');
+    if (!o) return;
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMsg').textContent = msg;
+    o.classList.add('show');
+    document.getElementById('confirmBtn').onclick = function() {
+      o.classList.remove('show');
+      if (callback) callback();
+    };
+  };
+  window.closeConfirm = function() {
+    var o = document.getElementById('confirmOverlay');
+    if (o) o.classList.remove('show');
+  };
+
+  var unreadEl = document.getElementById('notifCount');
+  var badgeEl = document.getElementById('orderBadge');
+  setInterval(function() {
+    fetch('/api/notifications/')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (unreadEl) {
+          if (data.unread > 0) { unreadEl.textContent = data.unread; unreadEl.classList.add('show'); }
+          else { unreadEl.classList.remove('show'); }
+        }
+        if (badgeEl) badgeEl.classList.toggle('show', data.unread > 0);
+      })
+      .catch(function() {});
+  }, 10000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Menyu ya Chakula{% endblock %}
+
+{% block content %}
+<style>
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+    }
+    .filter-tabs {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+    }
+    .filter-tabs a {
+        padding: 0.45rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+        background: var(--card);
+        border: 1px solid var(--border);
+        transition: all 0.2s;
+    }
+    .filter-tabs a:hover { color: var(--text); border-color: var(--accent); }
+    .filter-tabs a.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .search-box {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        font-size: 0.85rem;
+        min-width: 200px;
+    }
+    .search-box::placeholder { color: var(--muted); }
+    .add-btn {
+        margin-left: auto;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        background: #0F532A;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .table-wrap {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    th {
+        background: var(--bg2);
+        color: var(--muted);
+        font-weight: 600;
+        text-align: left;
+        padding: 0.75rem 0.85rem;
+        white-space: nowrap;
+    }
+    td {
+        padding: 0.7rem 0.85rem;
+        border-top: 1px solid var(--border);
+        color: var(--text);
+        vertical-align: middle;
+    }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .food-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .food-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: var(--bg2);
+    }
+    .food-icon-placeholder {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: var(--bg2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .cat-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+    .cat-breakfast { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .cat-lunch { background: rgba(34,197,94,0.15); color: var(--green); }
+    .cat-dinner { background: rgba(168,85,247,0.15); color: var(--purple); }
+    .cat-drinks { background: rgba(59,130,246,0.15); color: #60a5fa; }
+
+    .rating { color: #fbbf24; }
+    .popular-yes { color: var(--green); }
+    .popular-no { color: var(--muted); }
+
+    .action-btns {
+        display: flex;
+        gap: 0.35rem;
+    }
+    .action-btns a, .action-btns button {
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-decoration: none;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        cursor: pointer;
+    }
+    .action-btns a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .action-btns .btn-delete { border-color: var(--danger); color: var(--danger); }
+    .action-btns .btn-delete:hover { background: var(--danger); color: #fff; }
+</style>
+
+<div class="toolbar">
+    <div class="filter-tabs">
+        <a href="?cat=all" class="{% if not current_cat or current_cat == 'all' %}active{% endif %}">All</a>
+        <a href="?cat=breakfast" class="{% if current_cat == 'breakfast' %}active{% endif %}">Breakfast</a>
+        <a href="?cat=lunch" class="{% if current_cat == 'lunch' %}active{% endif %}">Lunch</a>
+        <a href="?cat=dinner" class="{% if current_cat == 'dinner' %}active{% endif %}">Dinner</a>
+        <a href="?cat=drinks" class="{% if current_cat == 'drinks' %}active{% endif %}">Drinks</a>
+    </div>
+    <form method="get" style="margin:0">
+        <input type="text" name="q" class="search-box" placeholder="🔍 Tafuta chakula..." value="{{ search_query }}">
+    </form>
+    <a href="{% url 'food_add' %}" class="add-btn"><i class="fas fa-plus"></i> Ongeza</a>
+</div>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Food</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Rating</th>
+                <th>Popular</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for food in foods %}
+            <tr>
+                <td>
+                    <div class="food-cell">
+                        {% if food.image %}
+                        <img src="{{ food.image.url }}" class="food-img" alt="{{ food.name }}">
+                        {% else %}
+                        <div class="food-icon-placeholder">{{ food.icon|default:"🍽️" }}</div>
+                        {% endif %}
+                        <span>{{ food.name }}</span>
+                    </div>
+                </td>
+                <td><span class="cat-badge cat-{{ food.category }}">{{ food.category }}</span></td>
+                <td><strong>TSh {{ food.price|floatformat:0 }}</strong></td>
+                <td><span class="rating">⭐ {{ food.rating|floatformat:1 }}</span></td>
+                <td>
+                    {% if food.popular %}
+                    <span class="popular-yes"><i class="fas fa-fire"></i> Ndiyo</span>
+                    {% else %}
+                    <span class="popular-no">Hapana</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="action-btns">
+                        <a href="{% url 'food_edit' food.pk %}"><i class="fas fa-edit"></i> Edit</a>
+                        <form method="post" action="{% url 'food_delete' food.pk %}" style="margin:0" onsubmit="return confirm('Futa chakula hiki?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Hakuna chakula</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

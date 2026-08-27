@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref } from 'vue';
 import { useLangStore } from '../stores/lang';
 import { useCartStore } from '../stores/cart';
 import { useMenuStore } from '../stores/menu';
+import LineIcon from './LineIcon.vue';
 
 const props = defineProps({ show: Boolean });
 const emit = defineEmits(['close', 'order-placed']);
@@ -13,7 +14,7 @@ const menu = useMenuStore();
 const name = ref('');
 const phone = ref('');
 const payment = ref('M-Pesa');
-const paymentPhone = ref('');
+
 const table = ref('');
 const notes = ref('');
 const comments = ref('');
@@ -25,8 +26,6 @@ const phoneError = ref(false);
 const processing = ref(false);
 const done = ref(false);
 
-const mobilePayMethods = ['M-Pesa', 'Tigo Pesa', 'Airtel Money', 'Halopesa'];
-const showPayPhone = computed(() => mobilePayMethods.includes(payment.value));
 
 function fmt(n) { return 'TSh ' + n.toLocaleString('en'); }
 
@@ -47,8 +46,6 @@ function buildOrderMessage(orderNum) {
   lines.push('Phone: ' + (phone.value.trim() || '-'));
   lines.push('Table / Location: ' + (table.value.trim() || '-'));
   lines.push('Payment: ' + payment.value);
-  const payPhone = paymentPhone.value.trim();
-  if (payPhone) lines.push('Payment Phone: ' + payPhone);
   if (shareBill.value) {
     const sp = sharePayment.value;
     const spp = sharePhone.value.trim();
@@ -74,18 +71,25 @@ function buildOrderMessage(orderNum) {
   return lines.join('\n');
 }
 
+const ORDER_EMAIL = 'clocktowercafetz2020@gmail.com';
+const ORDER_WHATSAPP_ADMIN = '255677220022';
+const ORDER_WHATSAPP_RECEPTION = '255677220022';
+
 function sendOrderToProviders(msg) {
-  const providers = ['255629290952', '255759597199'];
-  providers.forEach(num => {
-    window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(msg), '_blank');
+  const providers = [ORDER_WHATSAPP_ADMIN, ORDER_WHATSAPP_RECEPTION];
+  providers.forEach((num, i) => {
+    setTimeout(() => {
+      window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(msg), '_blank');
+    }, i * 400);
   });
+  const subject = encodeURIComponent('NEW ORDER — ClockTower Food Service Provider');
+  window.open('mailto:' + ORDER_EMAIL + '?subject=' + subject + '&body=' + encodeURIComponent(msg), '_blank');
 }
 
 function resetForm() {
   name.value = '';
   phone.value = '';
   payment.value = 'M-Pesa';
-  paymentPhone.value = '';
   table.value = '';
   notes.value = '';
   comments.value = '';
@@ -207,10 +211,6 @@ function handleOverlayClick(e) {
                 <option value="Other" v-html="lang.$t('co.pay.other')"></option>
               </select>
             </div>
-            <div class="payment-phone-field" :class="{ active: showPayPhone }">
-              <label v-html="lang.$t('co.lbl.payphone')"></label>
-              <input type="tel" v-model="paymentPhone" :placeholder="lang.$t('co.ph.payphone')">
-            </div>
             <div class="field" :class="{ invalid: phoneError }">
               <label v-html="lang.$t('co.lbl.phone')"></label>
               <input type="tel" v-model="phone" :placeholder="lang.$t('co.ph.phone')">
@@ -230,7 +230,7 @@ function handleOverlayClick(e) {
               </span>
             </label>
             <div class="share-bill-section" :class="{ active: shareBill }">
-              <h4><i class="fas fa-users"></i> <span v-html="lang.$t('co.share.title')"></span></h4>
+              <h4><LineIcon name="users" size="16" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('co.share.title')"></span></h4>
               <div class="field">
                 <label v-html="lang.$t('co.lbl.sharepay')"></label>
                 <select v-model="sharePayment">

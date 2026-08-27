@@ -2,6 +2,7 @@
 import { useLangStore } from '../stores/lang';
 import { useCartStore } from '../stores/cart';
 import { useMenuStore } from '../stores/menu';
+import LineIcon from './LineIcon.vue';
 
 const props = defineProps({ show: Boolean });
 const emit = defineEmits(['close', 'open-checkout', 'open-history']);
@@ -22,7 +23,7 @@ function fmt(n) { return 'TSh ' + n.toLocaleString('en'); }
 
     <template v-if="cart.cartQuantity === 0">
       <div class="cart-empty">
-        <span class="em"><i class="fas fa-shopping-cart" aria-hidden="true"></i></span>
+        <span class="em"><LineIcon name="cart" size="26" color="#0A9A4A" /></span>
         <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;">{{ lang.$t('cart.empty') }}</h3>
         <p>{{ lang.$t('cart.emptySub') }}</p>
         <button class="btn btn-primary" type="button" @click="emit('close')">{{ lang.$t('cart.browse') }}</button>
@@ -50,7 +51,7 @@ function fmt(n) { return 'TSh ' + n.toLocaleString('en'); }
                 <button type="button" @click="cart.changeQty(item.foodId, 1)">+</button>
               </div>
               <button type="button" class="cart-remove" aria-label="Remove" @click="cart.removeItem(item.foodId)">
-                <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                <LineIcon name="trash" size="14" color="#e5484d" />
               </button>
             </div>
           </div>
@@ -64,7 +65,7 @@ function fmt(n) { return 'TSh ' + n.toLocaleString('en'); }
         </div>
         <button class="checkout-btn" type="button" @click="emit('open-checkout')">{{ lang.$t('cart.checkout') }}</button>
         <button class="history-btn" type="button" @click="emit('open-history')">
-          <i class="fas fa-history" aria-hidden="true"></i>
+          <LineIcon name="history" size="14" color="#0A9A4A" />
           <span>{{ lang.$t('history.btn') }}</span>
         </button>
       </div>

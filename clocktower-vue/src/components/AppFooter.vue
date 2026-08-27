@@ -1,5 +1,6 @@
 <script setup>
 import { useLangStore } from '../stores/lang';
+import LineIcon from './LineIcon.vue';
 const lang = useLangStore();
 const year = new Date().getFullYear();
 </script>
@@ -7,20 +8,20 @@ const year = new Date().getFullYear();
 <template>
   <footer>
     <div class="foot-social">
-      <a href="https://wa.me/255629290952" target="_blank" rel="noopener" aria-label="WhatsApp">
-        <i class="fab fa-whatsapp" style="font-size:18px" aria-hidden="true"></i>
+      <a href="https://wa.me/255677220022" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <LineIcon name="whatsapp" size="18" color="#25D366" />
       </a>
       <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
-        <i class="fab fa-facebook-f" style="font-size:18px" aria-hidden="true"></i>
+        <LineIcon name="facebook" size="18" color="#1877F2" />
       </a>
       <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-        <i class="fab fa-instagram" style="font-size:18px" aria-hidden="true"></i>
+        <LineIcon name="instagram" size="18" color="#E4405F" />
       </a>
       <a href="https://www.tiktok.com" target="_blank" rel="noopener" aria-label="TikTok">
-        <i class="fab fa-tiktok" style="font-size:18px" aria-hidden="true"></i>
+        <LineIcon name="tiktok" size="18" color="#25F4EE" />
       </a>
       <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
-        <i class="fab fa-youtube" style="font-size:18px" aria-hidden="true"></i>
+        <LineIcon name="youtube" size="18" color="#FF0000" />
       </a>
     </div>
     <div class="foot-note" v-html="lang.$t('foot.note')"></div>

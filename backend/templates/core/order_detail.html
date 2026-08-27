@@ -1,0 +1,123 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Order #{{ order.order_num }}{% endblock %}
+
+{% block content %}
+<style>
+    .detail-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; margin-bottom:16px; }
+    .detail-card h3 { font-size:15px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .detail-card h3 i { color:var(--accent); }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .detail-item { font-size:13px; }
+    .detail-item .label { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:3px; }
+    .detail-item .value { font-weight:600; }
+    .items-table { width:100%; border-collapse:collapse; }
+    .items-table th { text-align:left; font-size:11px; color:var(--muted); padding:8px; border-bottom:1px solid var(--border); text-transform:uppercase; letter-spacing:.04em; }
+    .items-table td { padding:8px; font-size:13px; border-bottom:1px solid var(--border); }
+    .items-table tr:last-child td { border-bottom:none; }
+    .status-badge { padding:4px 12px; border-radius:20px; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px; }
+    .badge-new { background:rgba(56,189,248,0.15); color:#38bdf8; }
+    .badge-confirmed { background:rgba(52,211,153,0.15); color:var(--green); }
+    .badge-paid { background:rgba(52,211,153,0.15); color:var(--green); }
+    .badge-unpaid { background:rgba(255,107,107,0.15); color:var(--danger); }
+    .back-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:10px; border:1px solid var(--border); color:var(--text); font-size:13px; font-weight:600; margin-bottom:16px; transition:all .2s; }
+    .back-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .action-btns { display:flex; gap:6px; margin-top:16px; flex-wrap:wrap; }
+    .action-btns form { margin:0; }
+    .btn-confirm,.btn-pay,.btn-delete { padding:7px 14px; border-radius:8px; border:none; font-size:12px; font-weight:600; cursor:pointer; }
+    .btn-confirm { background:var(--green); color:#fff; }
+    .btn-pay { background:var(--accent); color:#fff; }
+    .btn-delete { background:var(--danger); color:#fff; }
+</style>
+
+<a href="{% url 'admin_orders' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Rudi Maagizo</a>
+
+<div class="detail-card">
+    <h3><i class="fas fa-file-invoice"></i> Order #{{ order.order_num }}</h3>
+    <div class="detail-grid">
+        <div class="detail-item">
+            <div class="label">Mteja</div>
+            <div class="value">{{ order.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Simu</div>
+            <div class="value">{{ order.phone }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Barua Pepe</div>
+            <div class="value">{{ order.email|default:"-" }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Meza / Mahali</div>
+            <div class="value">{{ order.table_location|default:"-" }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Hali</div>
+            <div class="value"><span class="status-badge badge-{{ order.status }}">{{ order.status }}</span></div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Malipo</div>
+            <div class="value"><span class="status-badge badge-{{ order.payment_status }}">{{ order.payment_status }}</span></div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Njia ya Malipo</div>
+            <div class="value">{{ order.get_payment_method_display }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="label">Tarehe</div>
+            <div class="value">{{ order.created_at|date:"M d, Y H:i" }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="detail-card">
+    <h3><i class="fas fa-utensils"></i> Bidhaa</h3>
+    <table class="items-table">
+        <thead>
+            <tr><th>Chakula</th><th>Bei</th><th>Idadi</th><th>Jumla</th></tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.food.name }}</td>
+                <td>TSh {{ item.price|floatformat:0 }}</td>
+                <td>{{ item.quantity }}</td>
+                <td><strong>TSh {{ item.subtotal|floatformat:0 }}</strong></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Hakuna bidhaa</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align:right;padding-top:12px;border-top:1px solid var(--border);margin-top:8px;">
+        <strong style="font-size:16px;color:var(--accent);">Jumla: TSh {{ order.total|floatformat:0 }}</strong>
+    </div>
+</div>
+
+{% if order.notes or order.comments %}
+<div class="detail-card">
+    <h3><i class="fas fa-sticky-note"></i> Maelezo</h3>
+    {% if order.notes %}<p style="font-size:13px;margin-bottom:8px;"><strong>Malipo:</strong> {{ order.notes }}</p>{% endif %}
+    {% if order.comments %}<p style="font-size:13px;"><strong>Maoni:</strong> {{ order.comments }}</p>{% endif %}
+</div>
+{% endif %}
+
+<div class="action-btns">
+    {% if order.status == 'new' %}
+    <form method="post" action="{% url 'order_confirm' order.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-confirm"><i class="fas fa-check"></i> Thibitisha</button>
+    </form>
+    {% endif %}
+    {% if order.payment_status != 'paid' %}
+    <form method="post" action="{% url 'order_pay' order.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-pay"><i class="fas fa-money-bill"></i> Lipa</button>
+    </form>
+    {% endif %}
+    <form method="post" action="{% url 'order_delete' order.pk %}" onsubmit="return confirm('Futa order hii?');">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> Futa</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'core/base_admin.html' %}
+{% load humanize %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .stat-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-card .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text); }
+    .stat-card .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+    .stat-card.orange { border-top: 3px solid #f59e0b; }
+    .stat-card.green { border-top: 3px solid var(--green); }
+    .stat-card.purple { border-top: 3px solid var(--purple); }
+    .stat-card.red { border-top: 3px solid var(--danger); }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    .quick-actions a, .quick-actions button {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1rem;
+        color: var(--text);
+        text-decoration: none;
+        text-align: center;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .quick-actions a:hover, .quick-actions button:hover { background: var(--bg2); }
+    .quick-actions .qa-icon { font-size: 1.4rem; }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .order-list, .customer-list {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .order-item, .customer-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+    .order-item:last-child, .customer-item:last-child { border-bottom: none; }
+    .order-info, .customer-info { flex: 1; min-width: 0; }
+    .order-num { font-weight: 600; color: var(--accent); }
+    .order-name { color: var(--text); }
+    .order-total { font-weight: 600; color: var(--text); white-space: nowrap; }
+    .status-badge {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .badge-new { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .badge-confirmed { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-paid { background: rgba(168,85,247,0.15); color: var(--purple); }
+    .badge-unpaid { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+    .customer-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #fff;
+        background: var(--accent);
+        flex-shrink: 0;
+    }
+    .customer-name { font-weight: 600; color: var(--text); }
+    .customer-phone { font-size: 0.8rem; color: var(--muted); }
+
+    .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+
+<div class="stats-grid">
+    <div class="stat-card orange">
+        <div class="stat-icon">🍽️</div>
+        <div class="stat-value">{{ total_foods }}</div>
+        <div class="stat-label">Chakula Jumla</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value">{{ total_orders }}</div>
+        <div class="stat-label">Maagizo</div>
+    </div>
+    <div class="stat-card purple">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">TSh {{ total_revenue|floatformat:0|intcomma }}</div>
+        <div class="stat-label">Mapato</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-icon">❌</div>
+        <div class="stat-value">{{ unpaid_count }}</div>
+        <div class="stat-label">Haijalipwa</div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <form method="post" action="{% url 'export_data' %}" style="margin:0">
+        {% csrf_token %}
+        <button type="submit">
+            <span class="qa-icon">📊</span>
+            Export Data
+        </button>
+    </form>
+    <a href="{% url 'food_add' %}">
+        <span class="qa-icon">➕</span>
+        Ongeza Chakula
+    </a>
+    <a href="{% url 'admin_foods' %}">
+        <span class="qa-icon">🍽️</span>
+        Menyu
+    </a>
+</div>
+
+<div class="two-col">
+    <div>
+        <div class="section-title"><i class="fas fa-receipt"></i> Maagizo ya Hivi Karibuni</div>
+        <div class="order-list">
+            {% for order in recent_orders %}
+            <div class="order-item">
+                <div class="order-info">
+                    <span class="order-num">#{{ order.order_num }}</span>
+                    <span class="order-name">{{ order.name }}</span>
+                </div>
+                <span class="status-badge badge-{{ order.status }}">{{ order.status }}</span>
+                <span class="order-total">TSh {{ order.total|floatformat:0|intcomma }}</span>
+            </div>
+            {% empty %}
+            <div class="order-item" style="justify-content:center;color:var(--muted);">Hakuna maagizo bado</div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="section-title"><i class="fas fa-users"></i> Wateja wa Leo</div>
+        <div class="customer-list">
+            {% for cust in today_customers %}
+            <div class="customer-item">
+                <div class="customer-avatar">{{ cust.name.0|upper }}</div>
+                <div class="customer-info">
+                    <div class="customer-name">{{ cust.name }}</div>
+                    <div class="customer-phone">{{ cust.phone }}</div>
+                </div>
+                <span class="status-badge badge-{{ cust.payment_status }}">{{ cust.payment_status }}</span>
+            </div>
+            {% empty %}
+            <div class="customer-item" style="justify-content:center;color:var(--muted);">Hakuna wateja leo</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

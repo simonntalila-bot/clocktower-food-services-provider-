@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>CLOCKTOWER FOOD SERVICE PROVIDER — Order Food Online</title>
+<title>CLOCKTOWER FOOD SERVICE PROVIDER ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Order Food Online</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,23 +28,6 @@
     --nav-bg:rgba(11,15,20,0.88);
     --overlay:rgba(4,7,12,0.72);
     --shadow:0 18px 40px -18px rgba(0,0,0,0.65);
-  }
-  html[data-theme="light"]{
-    --bg:#f4f6f9;
-    --bg2:#ffffff;
-    --card:#ffffff;
-    --card2:#f0f3f7;
-    --border:rgba(15,23,42,0.10);
-    --text:#0f172a;
-    --muted:#5c6b7e;
-    --accent:#e08a1e;
-    --accent2:#e2601f;
-    --green:#0f9d72;
-    --purple:#7c5cf0;
-    --danger:#d94a4a;
-    --nav-bg:rgba(255,255,255,0.9);
-    --overlay:rgba(15,23,42,0.5);
-    --shadow:0 18px 40px -20px rgba(15,23,42,0.25);
   }
 
   *{box-sizing:border-box;}
@@ -82,6 +65,7 @@
     gap:14px;
   }
   .brand{display:flex;flex-direction:column;line-height:1.05;}
+  .brand-logo{height:46px;width:auto;display:block;padding:6px 10px;background:rgba(255,255,255,0.95);border-radius:12px;box-shadow:0 3px 12px rgba(30,25,15,0.16),0 0 0 1px rgba(30,25,15,0.06);margin-bottom:3px;}
   .brand .b1{
     font-family:'Space Grotesk',sans-serif;
     font-weight:700;font-size:19px;letter-spacing:-0.01em;
@@ -89,11 +73,12 @@
   .brand .b1 em{font-style:normal;color:var(--accent);}
   .brand .b2{font-size:10.5px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;}
   .nav-links{
-    display:flex;align-items:center;gap:4px;list-style:none;margin:0;padding:0;
+    display:flex;align-items:center;gap:20px;list-style:none;margin:0;padding:0;
   }
   .nav-links a, .drop-trigger{
     display:flex;align-items:center;gap:6px;
     padding:9px 13px;border-radius:10px;
+    white-space:nowrap;
     color:var(--muted);font-size:14px;font-weight:500;
     transition:color .15s ease, background .15s ease;
     border:none;background:none;
@@ -124,19 +109,40 @@
     position:relative;
     display:flex;align-items:center;gap:8px;
     padding:10px 16px;border-radius:12px;
-    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
     color:#221303;font-weight:700;font-size:14px;border:none;
-    box-shadow:0 10px 26px -10px rgba(255,184,77,0.55);
-    transition:transform .12s ease;
-    margin-left:8px;
+    box-shadow:0 4px 15px rgba(255,184,77,0.4);
+    transition:all .2s ease;
+    margin-left:-4px;
   }
-  .cart-btn:hover{transform:translateY(-1px);}
+  .cart-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,184,77,0.5);}
   .cart-btn .cnt{
-    min-width:20px;height:20px;padding:0 6px;
+    min-width:22px;height:22px;padding:0 6px;
     border-radius:100px;background:#221303;color:#ffd9a0;
-    font-size:11.5px;font-weight:700;
+    font-size:12px;font-weight:800;
     display:flex;align-items:center;justify-content:center;
+    transition:all .2s ease;
   }
+  .cart-btn.has-items .cnt{
+    background:#fff;color:var(--accent);
+    animation:cartPulse .4s ease;
+  }
+  @keyframes cartPulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.3);}
+    100%{transform:scale(1);}
+  }
+  .login-btn{
+    position:relative;
+    display:flex;align-items:center;gap:8px;
+    padding:10px 16px;border-radius:12px;
+    background:transparent;
+    color:var(--accent);font-weight:700;font-size:14px;
+    border:1.5px solid var(--accent);
+    transition:transform .12s ease, background .15s ease;
+    text-decoration:none;cursor:pointer;
+  }
+  .login-btn:hover{transform:translateY(-1px);background:rgba(255,184,77,0.1);}
   .lang-switch{
     display:flex;
     border:1px solid var(--border);
@@ -156,18 +162,13 @@
   }
   .lang-btn:first-child{border-right:1px solid var(--border);}
   .lang-btn.active{background:rgba(255,184,77,0.16);color:var(--accent);}
-  .theme-btn,.nav-toggle{
+  .nav-toggle{
     width:40px;height:40px;border:1px solid var(--border);
     background:var(--card);border-radius:11px;color:var(--muted);
-    display:flex;align-items:center;justify-content:center;flex:none;
+    display:none;flex-direction:column;align-items:center;justify-content:center;flex:none;gap:0;
     transition:color .15s ease, border-color .15s ease;
   }
-  .theme-btn:hover,.nav-toggle:hover{color:var(--accent);border-color:var(--accent);}
-  html[data-theme="dark"] .theme-btn .ico-sun{display:block;}
-  html[data-theme="dark"] .theme-btn .ico-moon{display:none;}
-  html[data-theme="light"] .theme-btn .ico-moon{display:block;}
-  html[data-theme="light"] .theme-btn .ico-sun{display:none;}
-  .nav-toggle{display:none;flex-direction:column;gap:0;}
+  .nav-toggle:hover{color:var(--accent);border-color:var(--accent);}
   .nav-toggle span{width:18px;height:2px;background:var(--accent);margin:2.5px 0;transition:transform .2s ease, opacity .2s ease;}
   .nav-toggle.active span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
   .nav-toggle.active span:nth-child(2){opacity:0;}
@@ -353,42 +354,47 @@
     display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
   }
   .food-card{
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
-    padding:14px 14px 12px;display:flex;flex-direction:column;gap:10px;
-    min-height:150px;cursor:pointer;
-    transition:border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+    background:var(--card);border:1px solid var(--border);border-left:3px solid #0F532A;border-radius:14px;
+    padding:0;display:flex;flex-direction:column;
+    cursor:pointer;overflow:hidden;
+    box-shadow:0 2px 8px rgba(35,28,15,0.05);
+    transition:box-shadow .16s ease, transform .16s ease;
   }
-  .food-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow);}
+  .food-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(15,83,42,0.20);}
+  .fc-thumb{width:100%;height:150px;overflow:hidden;background:var(--card2);display:flex;align-items:center;justify-content:center;}
+  .fc-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .fc-thumb .fc-emoji{font-size:40px;}
+  .fc-info{padding:8px 10px 0;display:flex;flex-direction:column;gap:1px;}
   .fc-top{display:flex;align-items:center;gap:7px;min-width:0;}
   .fc-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);}
   .fc-top h3{
-    margin:0;font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:700;
+    margin:0;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#DC2626;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
-  .food-price{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--accent);}
-  .food-actions{display:flex;align-items:center;gap:8px;margin-top:auto;}
+  .food-price{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:#DC2626;}
+  .food-actions{display:flex;align-items:center;justify-content:center;padding:4px 10px 8px;}
   .qty{
     display:flex;align-items:center;gap:2px;
-    background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:3px;
+    background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:2px;
   }
   .qty button{
-    width:26px;height:26px;border:none;border-radius:7px;
-    background:transparent;color:var(--muted);font-size:15px;font-weight:700;
+    width:24px;height:24px;border:none;border-radius:6px;
+    background:transparent;color:var(--muted);font-size:13px;font-weight:700;
     display:flex;align-items:center;justify-content:center;transition:all .12s ease;
   }
-  .qty button:hover{background:var(--card2);color:var(--accent);}
-  .qty .qv{min-width:22px;text-align:center;font-weight:700;font-size:13px;}
+  .qty button:hover{background:var(--card2);color:#0F532A;}
+  .qty .qv{min-width:20px;text-align:center;font-weight:700;font-size:12px;}
   .add-btn{
-    flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
-    padding:0 14px;border:none;border-radius:10px;
-    background:#087F3D;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    padding:0 14px;border:none;border-radius:8px;
+    background:#0F532A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
     transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
-    min-height:44px;cursor:pointer;white-space:nowrap;
+    height:34px;width:100px;cursor:pointer;white-space:nowrap;
   }
-  .add-btn:hover{background:#0A9A4A;transform:translateY(-1px);box-shadow:0 8px 22px -8px rgba(10,154,74,0.55);}
-  .add-btn:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+  .add-btn:hover{background:#0A3D1F;transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(15,83,42,0.50);}
+  .add-btn:focus-visible{outline:2px solid #0F532A;outline-offset:2px;}
   .add-btn.success{background:#16A34A;}
-  .food-card.added{border-color:var(--green);}
+  .food-card.added{border-color:#16A34A;}
 
   /* ---------- CART SIDEBAR ---------- */
   .overlay{
@@ -586,6 +592,22 @@
   }
   .place-btn:hover{transform:translateY(-1px);}
 
+  /* Payment phone & Share Bill */
+
+  .share-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;margin-top:10px;}
+  .share-toggle:hover{border-color:rgba(255,184,77,0.3);}
+  .share-toggle input[type="checkbox"]{display:none;}
+  .share-toggle .toggle-track{width:38px;height:20px;border-radius:10px;background:var(--card);border:1px solid var(--border);position:relative;transition:all .2s;flex-shrink:0;}
+  .share-toggle input:checked + .toggle-track{background:var(--accent);border-color:var(--accent);}
+  .share-toggle .toggle-track::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .2s;}
+  .share-toggle input:checked + .toggle-track::after{transform:translateX(18px);}
+  .share-toggle .toggle-label{font-size:13px;font-weight:600;color:var(--text);}
+  .share-toggle .toggle-desc{font-size:11px;color:var(--muted);}
+  .share-bill-section{display:none;margin-top:14px;padding:14px;border-radius:10px;background:rgba(255,184,77,0.06);border:1px dashed rgba(255,184,77,0.3);}
+  .share-bill-section.active{display:block;}
+  .share-bill-section h4{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+  .share-bill-section h4 i{font-size:14px;}
+
   /* ---------- QR SCAN ---------- */
   .qr-box{
     display:flex;flex-direction:column;align-items:center;gap:16px;
@@ -661,6 +683,9 @@
   footer b{color:var(--accent);}
 
   /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1200px){
+    .food-grid{grid-template-columns:repeat(3,1fr);}
+  }
   @media (max-width:1080px){
     .hero{padding-top:118px;}
     .hero-content h1{font-size:clamp(38px,7vw,66px);}
@@ -669,6 +694,8 @@
   @media (max-width:960px){
     .food-grid{grid-template-columns:repeat(2,1fr);}
     .hero{padding-top:112px;}
+    .about-grid{grid-template-columns:repeat(2,1fr);gap:14px;}
+    .testi-grid{grid-template-columns:1fr;}
   }
   @media (max-width:860px){
     .nav-toggle{display:flex;}
@@ -690,6 +717,9 @@
     .cat-card h3{font-size:16px;}
     .cat-card p{font-size:12px;}
     .cat-card .view{font-size:12px;}
+    .about-grid{grid-template-columns:1fr;gap:12px;}
+    .testi-grid{grid-template-columns:1fr;gap:12px;}
+    .fc-thumb{height:70px;}
   }
   @media (max-width:640px){
     .section{padding-top:62px;}
@@ -717,6 +747,7 @@
     .field input,.field textarea{font-size:16px;}
     .lang-btn{padding:9px 10px;}
     .cart-btn{padding:10px 12px;}
+    .login-btn{padding:10px 12px;}
   }
   @media (max-width:480px){
     .brand .b2{display:none;}
@@ -724,8 +755,10 @@
     .nav-inner{padding:10px 12px;gap:8px;}
     .cart-btn .lbl{display:none;}
     .cart-btn{padding:10px;margin-left:0;}
+    .login-btn .lbl{display:none;}
+    .login-btn{padding:10px;margin-left:0;}
     .lang-btn{padding:8px 9px;font-size:11.5px;}
-    .theme-btn,.nav-toggle{width:36px;height:36px;}
+    .nav-toggle{width:36px;height:36px;}
     .mobile-menu{top:60px;padding:10px 14px 16px;}
     .hero{padding-top:98px;min-height:100svh;}
     .hero-content h1{font-size:clamp(30px,10vw,40px);}
@@ -771,6 +804,19 @@
     .detail-actions .qty button{width:34px;height:34px;}
     .filters{gap:6px;}
     .filter-btn{padding:9px 13px;font-size:12.5px;}
+    .fc-thumb{height:60px;}
+    .food-card{padding:12px 12px 10px;min-height:140px;}
+    .fc-top h3{font-size:13.5px;}
+    .food-price{font-size:14px;}
+    .add-btn{font-size:13px;min-height:40px;padding:0 10px;}
+  }
+  @media (max-width:280px){
+    .food-grid{gap:8px;}
+    .food-card{padding:10px 10px 8px;min-height:130px;}
+    .fc-thumb{height:50px;}
+    .fc-top h3{font-size:12.5px;}
+    .food-price{font-size:13px;}
+    .qty button{width:28px;height:28px;}
   }
   @media (max-height:520px) and (orientation:landscape){
     .mobile-menu{max-height:calc(100vh - 60px);overflow-y:auto;}
@@ -886,7 +932,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="#home">
-      <span class="b1">CLOCKTOWER<em>.</em></span>
+      <img class="brand-logo" src="logo/clocktower-logo-trimmed.png" alt="ClockTower logo">
       <span class="b2">Food Service Provider</span>
     </a>
     <nav>
@@ -901,6 +947,7 @@
             <a href="#menu" data-cat="lunch"><span class="em" style="background:rgba(52,211,153,0.12);"><i class="fas fa-bowl-food" aria-hidden="true"></i></span> <span data-i18n="cat.lunch">Lunch</span></a>
             <a href="#menu" data-cat="dinner"><span class="em" style="background:rgba(167,139,250,0.14);"><i class="fas fa-drumstick-bite" aria-hidden="true"></i></span> <span data-i18n="cat.dinner">Dinner</span></a>
             <a href="#menu" data-cat="drinks"><span class="em" style="background:rgba(56,189,248,0.14);"><i class="fas fa-glass-water" aria-hidden="true"></i></span> <span data-i18n="cat.drinks">Drinks</span></a>
+            <a href="#menu" data-cat="desserts"><span class="em" style="background:rgba(251,191,36,0.14);"><i class="fas fa-ice-cream" aria-hidden="true"></i></span> <span data-i18n="cat.desserts">Desserts</span></a>
           </div>
         </li>
         <li><a href="#services" data-i18n="nav.services">Food Services</a></li>
@@ -914,10 +961,7 @@
         <button class="lang-btn active" type="button" data-lang="en">EN</button>
         <button class="lang-btn" type="button" data-lang="sw">SW</button>
       </div>
-      <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle theme">
-        <svg class="ico-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="ico-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+      <a href="admin.html" class="login-btn"> <span class="lbl">Login</span></a>
       <button class="cart-btn" id="cartOpen" type="button"><i class="fas fa-shopping-cart" aria-hidden="true"></i> <span class="lbl" data-i18n="nav.cart">Cart</span> <span class="cnt" id="cartCount">0</span></button>
       <button class="nav-toggle" id="navToggle" type="button" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
@@ -931,6 +975,7 @@
   <a href="#menu" data-cat="lunch"><i class="fas fa-bowl-food" aria-hidden="true"></i> <span data-i18n="cat.lunch">Lunch</span></a>
   <a href="#menu" data-cat="dinner"><i class="fas fa-drumstick-bite" aria-hidden="true"></i> <span data-i18n="cat.dinner">Dinner</span></a>
   <a href="#menu" data-cat="drinks"><i class="fas fa-glass-water" aria-hidden="true"></i> <span data-i18n="cat.drinks">Drinks</span></a>
+  <a href="#menu" data-cat="desserts"><i class="fas fa-ice-cream" aria-hidden="true"></i> <span data-i18n="cat.desserts">Desserts</span></a>
   <a href="#services" data-i18n="nav.services">Food Services</a>
   <a href="#about" data-i18n="nav.about">How It Works</a>
   <a href="#scan" data-i18n="nav.scan">Scan Order</a>
@@ -948,16 +993,16 @@
     <div class="hero-content">
       <span class="badge" data-i18n="hero.badge">WELCOME TO CLOCKTOWER</span>
       <h1 data-i18n="hero.title">DELICIOUS FOOD.<br><span>SERVING EVERY MOMENT.</span></h1>
-      <p class="lede" data-i18n="hero.lede">Fresh and delicious meals for Breakfast, Lunch and Dinner — order in seconds, served hot and made with love.</p>
+      <p class="lede" data-i18n="hero.lede">Fresh and delicious meals for Breakfast, Lunch and Dinner ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â order in seconds, served hot and made with love.</p>
       <div class="hero-btns">
         <button class="btn btn-primary" type="button" id="heroMenu" data-i18n="hero.explore">Browse Menu</button>
         <button class="btn btn-ghost" type="button" id="heroCart" data-i18n="hero.viewcart">Order Now</button>
       </div>
       <div class="hero-feats">
-        <span>🌿 <span data-i18n="feat.fresh">Fresh Ingredients</span></span>
-        <span>⚡ <span data-i18n="feat.fast">Fast Service</span></span>
-        <span>✓ <span data-i18n="feat.hyg">Hygienic &amp; Safe</span></span>
-        <span>♥ <span data-i18n="feat.love">Made with Love</span></span>
+        <span>ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â¿ <span data-i18n="feat.fresh">Fresh Ingredients</span></span>
+        <span>ÃƒÂ¢Ã…Â¡Ã‚Â¡ <span data-i18n="feat.fast">Fast Service</span></span>
+        <span>ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ <span data-i18n="feat.hyg">Hygienic &amp; Safe</span></span>
+        <span>ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¥ <span data-i18n="feat.love">Made with Love</span></span>
       </div>
     </div>
   </section>
@@ -965,30 +1010,30 @@
   <section class="section" id="services">
     <div class="section-head"><span class="dot"></span><span data-i18n="sec.services">Our Food Services</span><span class="line"></span></div>
     <h2 data-i18n="services.title">Choose your <span>meal time.</span></h2>
-    <p class="sub" data-i18n="services.sub">Three delicious meal categories — pick one and explore the full menu.</p>
+    <p class="sub" data-i18n="services.sub">Three delicious meal categories ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â pick one and explore the full menu.</p>
     <div class="cats" id="catCards"></div>
   </section>
 
   <section class="section" id="about">
     <div class="section-head"><span class="dot"></span><span data-i18n="sec.about">How It Works</span><span class="line"></span></div>
     <h2 data-i18n="about.title">Order your favorite food in <span>3 simple steps.</span></h2>
-    <p class="sub" data-i18n="about.sub">Choose, add, enjoy — it only takes seconds.</p>
+    <p class="sub" data-i18n="about.sub">Choose, add, enjoy ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it only takes seconds.</p>
     <div class="about-grid">
       <div class="step-card">
         <span class="step-num">STEP 1</span>
-        <span class="step-ico">🍽️</span>
+        <span class="step-ico">ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â</span>
         <h3 data-i18n="about.st1">Choose Food</h3>
         <p data-i18n="about.s1">Browse the menu and pick your favorite meal.</p>
       </div>
       <div class="step-card">
         <span class="step-num">STEP 2</span>
-        <span class="step-ico">🛒</span>
+        <span class="step-ico">ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂºÃ¢â‚¬â„¢</span>
         <h3 data-i18n="about.st2">Add to Cart</h3>
         <p data-i18n="about.s2">Select your food and add it to your cart.</p>
       </div>
       <div class="step-card">
         <span class="step-num">STEP 3</span>
-        <span class="step-ico">✅</span>
+        <span class="step-ico">ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦</span>
         <h3 data-i18n="about.st3">Enjoy Meal</h3>
         <p data-i18n="about.s3">Confirm your order and enjoy your meal.</p>
       </div>
@@ -1001,7 +1046,7 @@
 
   <section class="section" id="menu">
     <div class="section-head"><span class="dot"></span><span data-i18n="sec.menu">Food Menu</span><span class="line"></span></div>
-    <h2 data-i18n="menu.title">Fresh food, <span>fair prices.</span></h2>
+    <h2 data-i18n="menu.title">Fresh food, fair prices. Search the menu, pick your favourites and add them straight to your cart.</h2>
     <p class="sub" data-i18n="menu.sub">Search the menu, pick your favourites and add them straight to your cart.</p>
     <div class="toolbar">
       <div class="search-box">
@@ -1014,6 +1059,7 @@
         <button class="filter-btn" data-cat="lunch" data-i18n="cat.lunch">Lunch</button>
         <button class="filter-btn" data-cat="dinner" data-i18n="cat.dinner">Dinner</button>
         <button class="filter-btn" data-cat="drinks" data-i18n="cat.drinks">Drinks</button>
+        <button class="filter-btn" data-cat="desserts" data-i18n="cat.desserts">Desserts</button>
       </div>
     </div>
     <div class="food-grid" id="foodGrid"></div>
@@ -1021,8 +1067,8 @@
 
   <section class="section" id="scan">
     <div class="section-head"><span class="dot"></span><span data-i18n="sec.scan">Scan & Order</span><span class="line"></span></div>
-    <h2 data-i18n="scan.title">Scan the code — <span>order in seconds.</span></h2>
-    <p class="sub" data-i18n="scan.sub">Point your phone camera at this QR code and you will land straight on our ClockTower menu — order instantly.</p>
+    <h2 data-i18n="scan.title">Scan the code ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <span>order in seconds.</span></h2>
+    <p class="sub" data-i18n="scan.sub">Point your phone camera at this QR code and you will land straight on our ClockTower menu ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â order instantly.</p>
     <div class="qr-box">
       <div class="qr-frame">
         <img id="qrCode" alt="QR Code" width="280" height="280">
@@ -1056,6 +1102,10 @@
         <span class="em"><i class="fas fa-phone" aria-hidden="true"></i></span>
         <span><span class="nm">0759 597 199</span><span class="tg" style="display:block;" data-i18n="contact.call">Tap to call</span></span>
       </a>
+      <a class="contact-card" href="/backup-order/" target="_blank" rel="noopener">
+        <span class="em"><i class="fas fa-wifi" style="color:var(--danger);" aria-hidden="true"></i></span>
+        <span><span class="nm" data-i18n="contact.offline">Order Offline</span><span class="tg" style="display:block;" data-i18n="contact.offlineSub">Works without internet</span></span>
+      </a>
     </div>
   </section>
 
@@ -1079,8 +1129,8 @@
       <i class="fab fa-youtube" style="font-size:18px" aria-hidden="true"></i>
     </a>
   </div>
-  <div class="foot-note" data-i18n="foot.note">ClockTower Food Service Provider — Dar es Salaam, Tanzania.</div>
-  <div style="margin-top:10px;">&copy; <span id="year"></span> <b>CLOCKTOWER FOOD SERVICE PROVIDER</b> — <span data-i18n="footer.tag">Fresh food, served every moment.</span></div>
+  <div class="foot-note" data-i18n="foot.note">ClockTower Food Service Provider ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Dar es Salaam, Tanzania.</div>
+  <div style="margin-top:10px;">&copy; <span id="year"></span> <b>CLOCKTOWER FOOD SERVICE PROVIDER</b> ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <span data-i18n="footer.tag">Fresh food, served every moment.</span></div>
 </footer>
 
 <div class="overlay" id="cartOverlay"></div>
@@ -1118,7 +1168,7 @@
       <div class="detail-price" id="detailPrice"></div>
       <div class="detail-actions">
         <div class="qty">
-          <button type="button" data-act="dec" id="detailDec">−</button>
+          <button type="button" data-act="dec" id="detailDec">ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢</button>
           <span class="qv" id="detailQty">1</span>
           <button type="button" data-act="inc" id="detailInc">+</button>
         </div>
@@ -1133,7 +1183,7 @@
     <button class="modal-close" id="checkoutClose" type="button" aria-label="Close">&times;</button>
     <div style="padding:24px 26px 0;text-align:center;">
       <h3 style="margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;" data-i18n="co.title">CHECKOUT</h3>
-      <p style="color:var(--muted);font-size:13.5px;margin:6px 0 0;" data-i18n="co.sub">Almost there — just a few details to confirm your order.</p>
+      <p style="color:var(--muted);font-size:13.5px;margin:6px 0 0;" data-i18n="co.sub">Almost there ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â just a few details to confirm your order.</p>
     </div>
     <div class="checkout-grid">
       <div class="co-summary">
@@ -1151,18 +1201,9 @@
             <div class="err" data-i18n="co.err.name">Please enter your full name.</div>
           </div>
           <div class="field">
-            <label for="coPhone" data-i18n="co.lbl.phone">Phone Number <span class="req">*</span></label>
-            <input type="tel" id="coPhone" placeholder="+255 7XX XXX XXX" data-i18n-ph="co.ph.phone">
-            <div class="err" data-i18n="co.err.phone">Please enter a valid phone number.</div>
-          </div>
-          <div class="field">
-            <label for="coEmail" data-i18n="co.lbl.email">Email Address</label>
-            <input type="email" id="coEmail" placeholder="you@example.com" data-i18n-ph="co.ph.email">
-            <div class="err" data-i18n="co.err.email">Please enter a valid email address.</div>
-          </div>
-          <div class="field">
-            <label for="coTable" data-i18n="co.lbl.table">Table Number / Delivery Location</label>
-            <input type="text" id="coTable" placeholder="e.g. Table 12 or Mbezi Beach" data-i18n-ph="co.ph.table">
+            <label for="coName" data-i18n="co.lbl.name">Full Name <span class="req">*</span></label>
+            <input type="text" id="coName" placeholder="e.g. Amina Juma" data-i18n-ph="co.ph.name">
+            <div class="err" data-i18n="co.err.name">Please enter your full name.</div>
           </div>
           <div class="field">
             <label for="coPayment" data-i18n="co.lbl.payment">Payment Method <span class="req">*</span></label>
@@ -1172,7 +1213,47 @@
               <option value="Airtel Money" data-i18n="co.pay.airtel">Airtel Money</option>
               <option value="Halopesa" data-i18n="co.pay.halo">Halopesa</option>
               <option value="Bank Transfer" data-i18n="co.pay.bank">Bank Transfer</option>
+              <option value="Cash" data-i18n="co.pay.cash">Cash (Utalipa Ukifika)</option>
+              <option value="Other" data-i18n="co.pay.other">Nyingine</option>
             </select>
+          </div>
+          <div class="field">
+            <label for="coPhone" data-i18n="co.lbl.phone">Payment Number <span class="req">*</span></label>
+            <input type="tel" id="coPhone" placeholder="+255 7XX XXX XXX" data-i18n-ph="co.ph.phone">
+            <div class="err" data-i18n="co.err.phone">Please enter a valid phone number.</div>
+          </div>
+          <div class="field">
+            <label for="coTable" data-i18n="co.lbl.table">Table Number / Delivery Location</label>
+            <input type="text" id="coTable" placeholder="e.g. Table 12 or Mbezi Beach" data-i18n-ph="co.ph.table">
+          </div>
+
+          <label class="share-toggle">
+            <input type="checkbox" id="shareBillToggle" name="share_bill">
+            <span class="toggle-track"></span>
+            <span>
+              <span class="toggle-label" data-i18n="co.share.label">Share Bill</span>
+              <span class="toggle-desc" data-i18n="co.share.desc">Gawana bili na mtu mwingine</span>
+            </span>
+          </label>
+          <div class="share-bill-section" id="shareBillSection">
+            <h4><i class="fas fa-users"></i> <span data-i18n="co.share.title">Malipo ya Pili</span></h4>
+            <div class="field">
+              <label for="coSharePayment" data-i18n="co.lbl.sharepay">Payment Method ya Pili</label>
+              <select id="coSharePayment">
+                <option value="">-- Chagua --</option>
+                <option value="M-Pesa">M-Pesa</option>
+                <option value="Tigo Pesa">Tigo Pesa</option>
+                <option value="Airtel Money">Airtel Money</option>
+                <option value="Halopesa">Halopesa</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cash">Cash</option>
+                <option value="Other">Nyingine</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="coSharePhone" data-i18n="co.lbl.sharephone">Namba ya Malipo ya Pili</label>
+              <input type="tel" id="coSharePhone" placeholder="Namba ya malipo ya pili" data-i18n-ph="co.ph.sharephone">
+            </div>
           </div>
           <div class="field">
             <label for="coNotes" data-i18n="co.lbl.notes">Special Instructions / Order Notes</label>
@@ -1194,10 +1275,10 @@
     <div class="confirm-check">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 6.5" stroke="#34d399" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <h3 data-i18n="confirm.title">ORDER CONFIRMED ✓</h3>
+    <h3 data-i18n="confirm.title">ORDER CONFIRMED ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“</h3>
     <p class="confirm-greet" id="confirmGreet">Thank you!</p>
-    <p data-i18n="confirm.text">Thank you for conducting business with us — <b style="color:var(--text);">we will send your order soon.</b></p>
-    <div class="fast-note" data-i18n="confirm.fast"><i class="fas fa-rocket" aria-hidden="true"></i> We will bring you your food <b>fast</b> — our team is already preparing your order!</div>
+    <p data-i18n="confirm.text">Thank you for conducting business with us ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <b style="color:var(--text);">we will send your order soon.</b></p>
+    <div class="fast-note" data-i18n="confirm.fast"><i class="fas fa-rocket" aria-hidden="true"></i> We will bring you your food <b>fast</b> ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â our team is already preparing your order!</div>
     <div class="order-num-box">
       <div class="on-lbl" data-i18n="confirm.onum">Order Number</div>
       <div class="on-val" id="confirmOrderNum">#CTF-000000</div>
@@ -1220,53 +1301,186 @@
 
 <div class="toasts" id="toasts"></div>
 
-<button class="back-top" id="backTop" type="button" aria-label="Back to top">↑</button>
+<button class="back-top" id="backTop" type="button" aria-label="Back to top">ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Ëœ</button>
 
 <script>
   var CATEGORY_META = {
-    breakfast: { emoji: '🍳', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=70', color: '#ffb84d', grad: 'linear-gradient(135deg,#3a2f14,#241d0e)', label: { en: 'Breakfast', sw: 'Kifungua Kinywa' }, tag: { en: 'Morning meals.', sw: 'Chakula cha asubuhi.' } },
-    lunch:     { emoji: '🍛', img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=70', color: '#34d399', grad: 'linear-gradient(135deg,#123a2c,#0c241c)', label: { en: 'Lunch', sw: 'Chakula cha Mchana' }, tag: { en: 'Midday meals.', sw: 'Chakula cha mchana.' } },
-    dinner:    { emoji: '🍽️', img: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=400&q=70', color: '#a78bfa', grad: 'linear-gradient(135deg,#2d2350,#1b1533)', label: { en: 'Dinner', sw: 'Chakula cha Jioni' }, tag: { en: 'Evening meals.', sw: 'Chakula cha jioni.' } },
-    drinks:    { emoji: '🥤', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=400&q=70', color: '#38bdf8', grad: 'linear-gradient(135deg,#0f2c3d,#0a1e2b)', label: { en: 'Drinks', sw: 'Vinywaji' }, tag: { en: 'Fresh drinks & refreshments.', sw: 'Vinywaji baridi na safi.' } }
+    breakfast: { emoji: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: 'photos/breakfast-fish.jpg', color: '#ffb84d', grad: 'linear-gradient(135deg,#3a2f14,#241d0e)', label: { en: 'Breakfast', sw: 'Kifungua Kinywa' }, tag: { en: 'Morning meals.', sw: 'Chakula cha asubuhi.' } },
+    lunch:     { emoji: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: 'photos/chips-yai-kisasa.jpg', color: '#34d399', grad: 'linear-gradient(135deg,#123a2c,#0c241c)', label: { en: 'Lunch', sw: 'Chakula cha Mchana' }, tag: { en: 'Midday meals.', sw: 'Chakula cha mchana.' } },
+    dinner:    { emoji: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â', img: 'photos/pizza-large-combo.jpg', color: '#a78bfa', grad: 'linear-gradient(135deg,#2d2350,#1b1533)', label: { en: 'Dinner', sw: 'Chakula cha Jioni' }, tag: { en: 'Evening meals.', sw: 'Chakula cha jioni.' } },
+    drinks:    { emoji: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: 'photos/fruity-slushie.jpg', color: '#38bdf8', grad: 'linear-gradient(135deg,#0f2c3d,#0a1e2b)', label: { en: 'Drinks', sw: 'Vinywaji' }, tag: { en: 'Fresh drinks & refreshments.', sw: 'Vinywaji baridi na safi.' } }
   };
 
   var FOODS = [
-    { id: 1,  name: 'Chapati',         nameSw: 'Chapati',         category: 'breakfast', price: 2000,  icon: '🫓', img: 'https://images.unsplash.com/photo-1600935926387-12d9b03066f0?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Soft, layered flatbread grilled to a golden finish.', descSw: 'Chapati laini linalopakwa hadi kuwa la rangi ya dhahabu.' },
-    { id: 2,  name: 'Mandazi',         nameSw: 'Mandazi',         category: 'breakfast', price: 1000,  icon: '🍩', img: 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: true,  desc: 'Light, fluffy fried dough — a breakfast classic.', descSw: 'Mandazi laini yenye hewa — tamu ya asubuhi.' },
-    { id: 3,  name: 'Tea',             nameSw: 'Chai',            category: 'breakfast', price: 1500,  icon: '🍵', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Hot, sweet and milky tea to start your morning.', descSw: 'Chai moto, tamu na ya maziwa kuanza asubuhi yako.' },
-    { id: 4,  name: 'Coffee',          nameSw: 'Kahawa',          category: 'breakfast', price: 2500,  icon: '☕', img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Freshly brewed coffee — bold and aromatic.', descSw: 'Kahawa iliyotengenezwa upya — kali na yenye harufu nzuri.' },
-    { id: 5,  name: 'Eggs',            nameSw: 'Mayai',           category: 'breakfast', price: 3000,  icon: '🍳', img: 'https://images.unsplash.com/photo-1518476381266-33596bddffc0?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Farm-fresh eggs cooked to your liking.', descSw: 'Mayai safi yakapikwa kulingana na utakavyo.' },
-    { id: 6,  name: 'Sausage',         nameSw: 'Soseji',          category: 'breakfast', price: 4000,  icon: '🌭', img: 'https://images.unsplash.com/photo-1624234734133-7f1342047e30?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Juicy grilled sausages served hot.', descSw: 'Soseji zilizochomwa kikamilifu zikitolewa moto.' },
-    { id: 7,  name: 'Pancakes',        nameSw: 'Pancakes',        category: 'breakfast', price: 5000,  icon: '🥞', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Fluffy pancakes drizzled with honey or syrup.', descSw: 'Pancakes laini zilizowekwa asali au syrup.' },
-    { id: 8,  name: 'Bread',           nameSw: 'Mkate',           category: 'breakfast', price: 2000,  icon: '🍞', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=70', rating: 4.3, popular: false, desc: 'Freshly baked bread, soft and warm.', descSw: 'Mkate uliookwa upya, laini na wa joto.' },
-    { id: 9,  name: 'Fruit Salad',     nameSw: 'Saladi ya Matunda', category: 'breakfast', price: 4000,  icon: '🥗', img: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'A refreshing mix of seasonal fruits.', descSw: 'Mchanganyiko wa matunda ya msimu yenye kuburudisha.' },
-
-    { id: 10, name: 'Chicken & Chips',  nameSw: 'Kuku na Chips',   category: 'lunch', price: 12000, icon: '🍗', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Crispy grilled chicken served with golden chips.', descSw: 'Kuku aliyechomwa akitolewa na chips za dhahabu.' },
-    { id: 11, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'lunch', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1603496987674-79600a000f55?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Steamed rice with tender, flavourful chicken.', descSw: 'Wali wa mvuke na kuku laini wenye ladha nzuri.' },
-    { id: 12, name: 'Beef & Rice',      nameSw: 'Wali na Nyama',   category: 'lunch', price: 10000, icon: '🥩', img: 'https://images.unsplash.com/photo-1574095443374-6748e7dd6c84?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Slow-cooked beef served over fluffy rice.', descSw: 'Nyama ya ng\'ombe iliyopikwa polepole juu ya wali laini.' },
-    { id: 13, name: 'Pilau',            nameSw: 'Pilau',           category: 'lunch', price: 8000,  icon: '🍚', img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Fragrant spiced rice with tender meat.', descSw: 'Pilau yenye harufu nzuri ya viungo na nyama laini.' },
-    { id: 14, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'lunch', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Soft ugali with rich, savoury beef stew.', descSw: 'Ugali laini na mchuzi mzito wa nyama ya ng\'ombe.' },
-    { id: 15, name: 'Ugali & Chicken',  nameSw: 'Ugali na Kuku',   category: 'lunch', price: 9000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Soft ugali with hearty chicken stew.', descSw: 'Ugali laini na mchuzi wa kuku wenye kutosheleza.' },
-    { id: 16, name: 'Fish & Rice',      nameSw: 'Samaki na Wali',  category: 'lunch', price: 11000, icon: '🐟', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Grilled fish fillet served with steamed rice.', descSw: 'Samaki aliyechomwa akitolewa na wali wa mvuke.' },
-    { id: 17, name: 'Chips Mayai',      nameSw: 'Chips Mayai',     category: 'lunch', price: 7000,  icon: '🍟', img: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Golden chips cooked into a savoury egg omelette.', descSw: 'Chips za dhahabu zilizopikwa kwenye omeleti ya mayai.' },
-    { id: 18, name: 'Vegetable Rice',   nameSw: 'Wali wa Mboga',   category: 'lunch', price: 6000,  icon: '🥦', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Rice stir-fried with fresh seasonal vegetables.', descSw: 'Wali uliochanganywa na mboga mbichi za msimu.' },
-
-    { id: 19, name: 'Grilled Chicken',  nameSw: 'Kuku Mchoma',     category: 'dinner', price: 15000, icon: '🍗', img: 'https://images.unsplash.com/photo-1712579733874-c3a79f0f9d12?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: true,  desc: 'Whole grilled chicken, smoky and juicy.', descSw: 'Kuku mzima aliyechomwa, wenye moshi na juisi.' },
-    { id: 20, name: 'Beef Steak',       nameSw: 'Steki ya Nyama',  category: 'dinner', price: 14000, icon: '🥩', img: 'https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Juicy steak grilled to perfection.', descSw: 'Steki ya juisi iliyochomwa kikamilifu.' },
-    { id: 21, name: 'Fish & Chips',     nameSw: 'Samaki na Chips', category: 'dinner', price: 12000, icon: '🐟', img: 'https://images.unsplash.com/photo-1697748836791-9ddf7e616ece?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Crispy fish fillet with golden chips.', descSw: 'Samaki aliyekaanga akitolewa na chips za dhahabu.' },
-    { id: 22, name: 'Pilau',            nameSw: 'Pilau',           category: 'dinner', price: 8000,  icon: '🍚', img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Evening pilau — fragrant, spiced and satisfying.', descSw: 'Pilau ya jioni — yenye harufu nzuri na kutosheleza.' },
-    { id: 23, name: 'Rice & Beef',      nameSw: 'Wali na Nyama',   category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1519699788450-ad34386a3bfc?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Fluffy rice with tender beef chunks.', descSw: 'Wali laini na vipande vya nyama laini.' },
-    { id: 24, name: 'Rice & Chicken',   nameSw: 'Wali na Kuku',    category: 'dinner', price: 10000, icon: '🍛', img: 'https://images.unsplash.com/photo-1775039983787-3fe9b416c545?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: false, desc: 'Steamed rice with grilled chicken.', descSw: 'Wali wa mvuke na kuku aliyechomwa.' },
-    { id: 25, name: 'Ugali & Fish',     nameSw: 'Ugali na Samaki', category: 'dinner', price: 9000,  icon: '🐠', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: false, desc: 'Soft ugali with a fresh fish stew.', descSw: 'Ugali laini na mchuzi wa samaki safi.' },
-    { id: 26, name: 'Ugali & Beef',     nameSw: 'Ugali na Nyama',  category: 'dinner', price: 8000,  icon: '🍲', img: 'https://images.unsplash.com/photo-1666181551815-b9adecb24e46?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Hearty ugali with beef in rich gravy.', descSw: 'Ugali wenye nyama ya ng\'ombe kwenye mchuzi mzuri.' },
-    { id: 27, name: 'Vegetable Dinner', nameSw: 'Mboga za Jioni',  category: 'dinner', price: 6000,  icon: '🥦', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'A warm platter of fresh vegetables and rice.', descSw: 'Sahani ya joto ya mboga safi na wali.' },
-
-    { id: 28, name: 'Soda',             nameSw: 'Soda',            category: 'drinks', price: 2500,  icon: '🥤', img: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=600&q=70', rating: 4.5, popular: true,  desc: 'Ice-cold soda to refresh your day.', descSw: 'Soda ya barafu kukuburudisha.' },
-    { id: 29, name: 'Bottled Water',    nameSw: 'Maji ya Chupa',   category: 'drinks', price: 1500,  icon: '💧', img: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=70', rating: 4.6, popular: false, desc: 'Pure, clean drinking water.', descSw: 'Maji safi ya kunywa.' },
-    { id: 30, name: 'Fruit Juice',      nameSw: 'Juisi ya Matunda', category: 'drinks', price: 4000, icon: '🧃', img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=70', rating: 4.7, popular: true,  desc: 'Freshly squeezed seasonal fruit juice.', descSw: 'Juisi mpya ya matunda ya msimu.' },
-    { id: 31, name: 'Passion Juice',    nameSw: 'Juisi ya Passion', category: 'drinks', price: 4000, icon: '🍹', img: 'https://images.unsplash.com/photo-1600718374662-0483d2b9da44?auto=format&fit=crop&w=600&q=70', rating: 4.8, popular: true,  desc: 'Sweet, tangy passion fruit juice.', descSw: 'Juisi ya passion tamu na kali kidogo.' },
-    { id: 32, name: 'Mango Smoothie',   nameSw: 'Smoothie ya Embe', category: 'drinks', price: 5000, icon: '🥭', img: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=600&q=70', rating: 4.9, popular: false, desc: 'Creamy, thick mango smoothie.', descSw: 'Smoothie laini ya embe.' },
-    { id: 33, name: 'Yogurt',           nameSw: 'Yoghurt',          category: 'drinks', price: 3000,  icon: '🥛', img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=70', rating: 4.4, popular: false, desc: 'Cool, creamy yogurt.', descSw: 'Yoghurt baridi na laini.' }
+    { id: 1, name: 'Chapati', nameSw: 'Chapati', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.6, popular: false, desc: 'Chapati (1pc)', descSw: 'Chapati (1pc)' },
+    { id: 2, name: 'Andazi', nameSw: 'Andazi', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.7, popular: false, desc: 'Andazi (1pc)', descSw: 'Andazi (1pc)' },
+    { id: 3, name: 'Donut', nameSw: 'Donut', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.8, popular: false, desc: 'Donut (1pc)', descSw: 'Donut (1pc)' },
+    { id: 4, name: 'Mofa', nameSw: 'Mofa', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.9, popular: false, desc: 'Mofa (1pc)', descSw: 'Mofa (1pc)' },
+    { id: 5, name: 'Kachori', nameSw: 'Kachori', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.5, popular: false, desc: 'Kachori (2pc)', descSw: 'Kachori (2pc)' },
+    { id: 6, name: 'Viazi', nameSw: 'Viazi', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.6, popular: false, desc: 'Viazi (1pc)', descSw: 'Viazi (1pc)' },
+    { id: 7, name: 'Bagia kubwa', nameSw: 'Bagia kubwa', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.7, popular: false, desc: 'Bagia kubwa (1pc)', descSw: 'Bagia kubwa (1pc)' },
+    { id: 8, name: 'Bagia ndogo', nameSw: 'Bagia ndogo', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.8, popular: false, desc: 'Bagia ndogo (2pc)', descSw: 'Bagia ndogo (2pc)' },
+    { id: 9, name: 'Mihogo', nameSw: 'Mihogo', category: 'breakfast', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: 'photos/veg-bites-platter.jpg', rating: 4.9, popular: false, desc: 'Mihogo (1pc)', descSw: 'Mihogo (1pc)' },
+    { id: 10, name: 'Mihogo ya kukaanga', nameSw: 'Mihogo ya kukaanga', category: 'breakfast', price: 1500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.5, popular: false, desc: 'Mihogo ya kukaanga (1pc)', descSw: 'Mihogo ya kukaanga (1pc)' },
+    { id: 11, name: 'Veg Samosa', nameSw: 'Veg Samosa', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: 'photos/non-veg-pastries-tray.jpg', rating: 4.6, popular: false, desc: 'Veg Samosa (1pc)', descSw: 'Veg Samosa (1pc)' },
+    { id: 12, name: 'Naan Bread', nameSw: 'Naan Bread', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: 'photos/chips-yai-kisasa.jpg', rating: 4.7, popular: false, desc: 'Naan Bread (1pc)', descSw: 'Naan Bread (1pc)' },
+    { id: 13, name: 'Kalmati', nameSw: 'Kalmati', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.8, popular: false, desc: 'Kalmati (5pcs)', descSw: 'Kalmati (5pcs)' },
+    { id: 14, name: 'Veg Chapati roll with cheese', nameSw: 'Veg Chapati roll with cheese', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â«Ã¢â‚¬Å“', img: '', rating: 4.9, popular: false, desc: 'Veg Chapati roll with cheese (1pc)', descSw: 'Veg Chapati roll with cheese (1pc)' },
+    { id: 15, name: 'Chips plain', nameSw: 'Chips plain', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.5, popular: false, desc: 'Chips plain', descSw: 'Chips plain' },
+    { id: 16, name: 'Chips yai kisasa', nameSw: 'Chips yai kisasa', category: 'lunch', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: 'photos/chips-yai-kisasa.jpg', rating: 4.6, popular: false, desc: 'Chips yai kisasa', descSw: 'Chips yai kisasa' },
+    { id: 17, name: 'Chips yai kienyeji', nameSw: 'Chips yai kienyeji', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.7, popular: false, desc: 'Chips yai kienyeji', descSw: 'Chips yai kienyeji' },
+    { id: 18, name: 'Vuruga plain', nameSw: 'Vuruga plain', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.8, popular: false, desc: 'Vuruga plain', descSw: 'Vuruga plain' },
+    { id: 19, name: 'Vuruga nyama', nameSw: 'Vuruga nyama', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: 'photos/chips-vuruga-nyama.jpg', rating: 4.9, popular: false, desc: 'Vuruga nyama', descSw: 'Vuruga nyama' },
+    { id: 20, name: 'Vuruga sausage', nameSw: 'Vuruga sausage', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.5, popular: false, desc: 'Vuruga sausage', descSw: 'Vuruga sausage' },
+    { id: 21, name: 'Vuruga maini choma', nameSw: 'Vuruga maini choma', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.6, popular: false, desc: 'Vuruga maini choma', descSw: 'Vuruga maini choma' },
+    { id: 22, name: 'Vuruga kuku 1/4', nameSw: 'Vuruga kuku 1/4', category: 'lunch', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.7, popular: true, desc: 'Vuruga kuku 1/4', descSw: 'Vuruga kuku 1/4' },
+    { id: 23, name: 'Vuruga kuku 1/2', nameSw: 'Vuruga kuku 1/2', category: 'lunch', price: 15000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: '', rating: 4.8, popular: true, desc: 'Vuruga kuku 1/2', descSw: 'Vuruga kuku 1/2' },
+    { id: 24, name: 'Dry masala', nameSw: 'Dry masala', category: 'lunch', price: 4000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: 'photos/chips-masala.jpg', rating: 4.9, popular: false, desc: 'Dry masala', descSw: 'Dry masala' },
+    { id: 25, name: 'Sossy masala', nameSw: 'Sossy masala', category: 'lunch', price: 6000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ…Â¸', img: 'photos/chips-masala.jpg', rating: 4.5, popular: false, desc: 'Sossy masala', descSw: 'Sossy masala' },
+    { id: 26, name: 'Kalmati 2pcs & Chai Maziwa', nameSw: 'Kalmati 2pcs & Chai Maziwa', category: 'breakfast', price: 1500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.6, popular: false, desc: 'Kalmati 2pcs & Chai Maziwa', descSw: 'Kalmati 2pcs & Chai Maziwa' },
+    { id: 27, name: 'Chapati & Maharage', nameSw: 'Chapati & Maharage', category: 'breakfast', price: 1500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.7, popular: false, desc: 'Chapati & Maharage', descSw: 'Chapati & Maharage' },
+    { id: 28, name: 'Fried Eggs & Chapati', nameSw: 'Fried Eggs & Chapati', category: 'breakfast', price: 2500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.8, popular: false, desc: 'Fried Eggs & Chapati', descSw: 'Fried Eggs & Chapati' },
+    { id: 29, name: 'Scrambled Egg & Chapati', nameSw: 'Scrambled Egg & Chapati', category: 'breakfast', price: 3500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.9, popular: false, desc: 'Scrambled Egg & Chapati', descSw: 'Scrambled Egg & Chapati' },
+    { id: 30, name: 'Roast Maini & Chapati', nameSw: 'Roast Maini & Chapati', category: 'breakfast', price: 3500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.5, popular: false, desc: 'Roast Maini & Chapati', descSw: 'Roast Maini & Chapati' },
+    { id: 31, name: 'Beef Stew & Chapati', nameSw: 'Beef Stew & Chapati', category: 'breakfast', price: 3500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.6, popular: false, desc: 'Beef Stew & Chapati', descSw: 'Beef Stew & Chapati' },
+    { id: 32, name: 'Eggchop, Sausage & Kachori', nameSw: 'Eggchop, Sausage & Kachori', category: 'breakfast', price: 4000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.7, popular: false, desc: 'Eggchop, Sausage & Kachori', descSw: 'Eggchop, Sausage & Kachori' },
+    { id: 33, name: 'Beef Soup & Chapati', nameSw: 'Beef Soup & Chapati', category: 'breakfast', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.8, popular: false, desc: 'Beef Soup & Chapati', descSw: 'Beef Soup & Chapati' },
+    { id: 34, name: 'Chicken Soup & Chapati', nameSw: 'Chicken Soup & Chapati', category: 'breakfast', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: '', rating: 4.9, popular: false, desc: 'Chicken Soup & Chapati', descSw: 'Chicken Soup & Chapati' },
+    { id: 35, name: 'English Breakfast', nameSw: 'English Breakfast', category: 'breakfast', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â³', img: 'photos/breakfast-fish.jpg', rating: 4.5, popular: true, desc: 'English Breakfast', descSw: 'English Breakfast' },
+    { id: 36, name: 'Chapati Maji', nameSw: 'Chapati Maji', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.6, popular: false, desc: 'Chapati Maji (1pc)', descSw: 'Chapati Maji (1pc)' },
+    { id: 37, name: 'Andazi la kuoka', nameSw: 'Andazi la kuoka', category: 'lunch', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.7, popular: false, desc: 'Andazi la kuoka (1pc)', descSw: 'Andazi la kuoka (1pc)' },
+    { id: 38, name: 'Kabab', nameSw: 'Kabab', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.8, popular: false, desc: 'Kabab (1pc)', descSw: 'Kabab (1pc)' },
+    { id: 39, name: 'Beef Samosa', nameSw: 'Beef Samosa', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.9, popular: false, desc: 'Beef Samosa (1pc)', descSw: 'Beef Samosa (1pc)' },
+    { id: 40, name: 'Beef Bread', nameSw: 'Beef Bread', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.5, popular: false, desc: 'Beef Bread (1pc)', descSw: 'Beef Bread (1pc)' },
+    { id: 41, name: 'Shawarma Bread', nameSw: 'Shawarma Bread', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.6, popular: false, desc: 'Shawarma Bread (1pc)', descSw: 'Shawarma Bread (1pc)' },
+    { id: 42, name: 'Sausage', nameSw: 'Sausage', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.7, popular: false, desc: 'Sausage (1pc)', descSw: 'Sausage (1pc)' },
+    { id: 43, name: 'French toast', nameSw: 'French toast', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.8, popular: false, desc: 'French toast (2pc)', descSw: 'French toast (2pc)' },
+    { id: 44, name: 'Vegetable Omelet', nameSw: 'Vegetable Omelet', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.9, popular: false, desc: 'Vegetable Omelet (1pc)', descSw: 'Vegetable Omelet (1pc)' },
+    { id: 45, name: 'Shariphe', nameSw: 'Shariphe', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.5, popular: false, desc: 'Shariphe (1pc)', descSw: 'Shariphe (1pc)' },
+    { id: 46, name: 'Meat Pie', nameSw: 'Meat Pie', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.6, popular: false, desc: 'Meat Pie (1pc)', descSw: 'Meat Pie (1pc)' },
+    { id: 47, name: 'Meat Chop', nameSw: 'Meat Chop', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.7, popular: false, desc: 'Meat Chop (1pc)', descSw: 'Meat Chop (1pc)' },
+    { id: 48, name: 'Egg Chop', nameSw: 'Egg Chop', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.8, popular: false, desc: 'Egg Chop (1pc)', descSw: 'Egg Chop (1pc)' },
+    { id: 49, name: 'Beef Potato Chop', nameSw: 'Beef Potato Chop', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.9, popular: false, desc: 'Beef Potato Chop (1pc)', descSw: 'Beef Potato Chop (1pc)' },
+    { id: 50, name: 'Sausage roll', nameSw: 'Sausage roll', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.5, popular: false, desc: 'Sausage roll (1pc)', descSw: 'Sausage roll (1pc)' },
+    { id: 51, name: 'Mtabaq', nameSw: 'Mtabaq', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.6, popular: false, desc: 'Mtabaq (1pc)', descSw: 'Mtabaq (1pc)' },
+    { id: 52, name: 'Beef Spring roll', nameSw: 'Beef Spring roll', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: 'photos/non-veg-pastries-tray.jpg', rating: 4.7, popular: false, desc: 'Beef Spring roll (1pc)', descSw: 'Beef Spring roll (1pc)' },
+    { id: 53, name: 'Sweet & Sour Chicken Wings', nameSw: 'Sweet & Sour Chicken Wings', category: 'lunch', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã…Â¸', img: '', rating: 4.8, popular: true, desc: 'Sweet & Sour Chicken Wings (4pcs)', descSw: 'Sweet & Sour Chicken Wings (4pcs)' },
+    { id: 54, name: 'Vegetable salad', nameSw: 'Vegetable salad', category: 'lunch', price: 6000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã¢â‚¬â€', img: '', rating: 4.9, popular: false, desc: 'Vegetable salad', descSw: 'Vegetable salad' },
+    { id: 55, name: 'Fruits salad', nameSw: 'Fruits salad', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã¢â‚¬â€', img: '', rating: 4.5, popular: false, desc: 'Fruits salad', descSw: 'Fruits salad' },
+    { id: 56, name: 'Chicken Salad', nameSw: 'Chicken Salad', category: 'lunch', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã¢â‚¬â€', img: 'photos/salad-chicken.jpg', rating: 4.6, popular: true, desc: 'Chicken Salad', descSw: 'Chicken Salad' },
+    { id: 57, name: 'Tuna salad', nameSw: 'Tuna salad', category: 'lunch', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã¢â‚¬â€', img: '', rating: 4.7, popular: true, desc: 'Tuna salad', descSw: 'Tuna salad' },
+    { id: 58, name: 'Smash beef Burger', nameSw: 'Smash beef Burger', category: 'lunch', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.8, popular: false, desc: 'Smash beef Burger', descSw: 'Smash beef Burger' },
+    { id: 59, name: 'Vegetable Burger', nameSw: 'Vegetable Burger', category: 'lunch', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.9, popular: false, desc: 'Vegetable Burger', descSw: 'Vegetable Burger' },
+    { id: 60, name: 'Beef Burger', nameSw: 'Beef Burger', category: 'lunch', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: 'photos/burger-beef.jpg', rating: 4.5, popular: false, desc: 'Beef Burger', descSw: 'Beef Burger' },
+    { id: 61, name: 'Sausage Burger', nameSw: 'Sausage Burger', category: 'lunch', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.6, popular: false, desc: 'Sausage Burger', descSw: 'Sausage Burger' },
+    { id: 62, name: 'Chicken Burger', nameSw: 'Chicken Burger', category: 'lunch', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.7, popular: false, desc: 'Chicken Burger', descSw: 'Chicken Burger' },
+    { id: 63, name: 'Chicken Cheese Sandwich', nameSw: 'Chicken Cheese Sandwich', category: 'lunch', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.8, popular: false, desc: 'Chicken Cheese Sandwich', descSw: 'Chicken Cheese Sandwich' },
+    { id: 64, name: 'Tuna Sandwich', nameSw: 'Tuna Sandwich', category: 'lunch', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.9, popular: false, desc: 'Tuna Sandwich', descSw: 'Tuna Sandwich' },
+    { id: 65, name: 'Big Mac Burger', nameSw: 'Big Mac Burger', category: 'lunch', price: 11000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.5, popular: true, desc: 'Big Mac Burger', descSw: 'Big Mac Burger' },
+    { id: 66, name: 'Chicken Cheese Chapati roll', nameSw: 'Chicken Cheese Chapati roll', category: 'lunch', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â', img: '', rating: 4.6, popular: true, desc: 'Chicken Cheese Chapati roll', descSw: 'Chicken Cheese Chapati roll' },
+    { id: 67, name: 'Chicken pizza', nameSw: 'Chicken pizza', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.7, popular: true, desc: 'Chicken pizza', descSw: 'Chicken pizza' },
+    { id: 68, name: 'Beef pizza', nameSw: 'Beef pizza', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.8, popular: true, desc: 'Beef pizza', descSw: 'Beef pizza' },
+    { id: 69, name: 'Sausage pizza', nameSw: 'Sausage pizza', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.9, popular: true, desc: 'Sausage pizza', descSw: 'Sausage pizza' },
+    { id: 70, name: 'Margherita pizza', nameSw: 'Margherita pizza', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.5, popular: true, desc: 'Margherita pizza', descSw: 'Margherita pizza' },
+    { id: 71, name: 'Combo pizza', nameSw: 'Combo pizza', category: 'dinner', price: 20000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: 'photos/pizza-medium-combo.jpg', rating: 4.6, popular: true, desc: 'Combo pizza', descSw: 'Combo pizza' },
+    { id: 72, name: 'Chicken pizza', nameSw: 'Chicken pizza', category: 'dinner', price: 20000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.7, popular: true, desc: 'Chicken pizza', descSw: 'Chicken pizza' },
+    { id: 73, name: 'Beef pizza', nameSw: 'Beef pizza', category: 'dinner', price: 20000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.8, popular: true, desc: 'Beef pizza', descSw: 'Beef pizza' },
+    { id: 74, name: 'Sausage pizza', nameSw: 'Sausage pizza', category: 'dinner', price: 20000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.9, popular: true, desc: 'Sausage pizza', descSw: 'Sausage pizza' },
+    { id: 75, name: 'Margherita pizza', nameSw: 'Margherita pizza', category: 'dinner', price: 20000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: '', rating: 4.5, popular: true, desc: 'Margherita pizza', descSw: 'Margherita pizza' },
+    { id: 76, name: 'Combo pizza', nameSw: 'Combo pizza', category: 'dinner', price: 28000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Â¢', img: 'photos/pizza-large-combo.jpg', rating: 4.6, popular: true, desc: 'Combo pizza', descSw: 'Combo pizza' },
+    { id: 77, name: 'Chips Tikisa', nameSw: 'Chips Tikisa', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥', img: 'photos/tikisa-chips-closeup.jpg', rating: 4.7, popular: false, desc: 'Chips + choice of 2: Sausage choma, Mshikaki wa ng\'ombe, Nyama ya kuku ya kuchoma, Maini choma, Firigisi choma', descSw: 'Chips + choice of 2: Sausage choma, Mshikaki wa ng\'ombe, Nyama ya kuku ya kuchoma, Maini choma, Firigisi choma' },
+    { id: 78, name: 'Special Chips Tikisa', nameSw: 'Special Chips Tikisa', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥', img: 'photos/tikisa-special-bowls.jpg', rating: 4.8, popular: true, desc: 'Chips + Kuku 1/4 + Sausage choma + Mshikaki wa ng\'ombe', descSw: 'Chips + Kuku 1/4 + Sausage choma + Mshikaki wa ng\'ombe' },
+    { id: 79, name: 'Mtu Mmoja (1 person)', nameSw: 'Mtu Mmoja (1 person)', category: 'dinner', price: 15000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â', img: 'photos/visinia-1-person.jpg', rating: 4.9, popular: true, desc: 'Kuku 1/4, Mishkaki 3, Sausage choma 1, Chips yai 1, Wali au pilau 1/2 portion', descSw: 'Kuku 1/4, Mishkaki 3, Sausage choma 1, Chips yai 1, Wali au pilau 1/2 portion' },
+    { id: 80, name: 'Watu Wawili (2 people)', nameSw: 'Watu Wawili (2 people)', category: 'dinner', price: 30000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â', img: 'photos/visinia-2-people.jpg', rating: 4.5, popular: true, desc: 'Kuku 1/2, Mishkaki 5, Sausage choma 2, Chips yai 2, Juice 2, Wali au pilau', descSw: 'Kuku 1/2, Mishkaki 5, Sausage choma 2, Chips yai 2, Juice 2, Wali au pilau' },
+    { id: 81, name: 'Watu Watatu (3 people)', nameSw: 'Watu Watatu (3 people)', category: 'dinner', price: 45000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â', img: 'photos/visinia-3-people.jpg', rating: 4.6, popular: true, desc: 'Kuku 3/4, Mishkaki 9, Sausage choma 3, Chips yai 3, Juice 3, Wali au pilau', descSw: 'Kuku 3/4, Mishkaki 9, Sausage choma 3, Chips yai 3, Juice 3, Wali au pilau' },
+    { id: 82, name: 'Watu Wanne (4 people)', nameSw: 'Watu Wanne (4 people)', category: 'dinner', price: 60000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â', img: 'photos/visinia-4-people.jpg', rating: 4.7, popular: true, desc: 'Kuku mzima, Mishkaki 10, Sausage choma 4, Chips yai 4, Juice 4, Wali au pilau', descSw: 'Kuku mzima, Mishkaki 10, Sausage choma 4, Chips yai 4, Juice 4, Wali au pilau' },
+    { id: 83, name: 'Mshkaki BBQ', nameSw: 'Mshkaki BBQ', category: 'dinner', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: false, desc: 'Mshkaki BBQ', descSw: 'Mshkaki BBQ' },
+    { id: 84, name: 'Chicken Skewers (mishkaki)', nameSw: 'Chicken Skewers (mishkaki)', category: 'dinner', price: 1500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: false, desc: 'Chicken Skewers (mishkaki)', descSw: 'Chicken Skewers (mishkaki)' },
+    { id: 85, name: 'Sausage chill choma (kubwa)', nameSw: 'Sausage chill choma (kubwa)', category: 'dinner', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: false, desc: 'Sausage chill choma (kubwa)', descSw: 'Sausage chill choma (kubwa)' },
+    { id: 86, name: 'Sausage chill choma (ndogo)', nameSw: 'Sausage chill choma (ndogo)', category: 'dinner', price: 1500, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: false, desc: 'Sausage chill choma (ndogo)', descSw: 'Sausage chill choma (ndogo)' },
+    { id: 87, name: 'Chips Vuruga plain', nameSw: 'Chips Vuruga plain', category: 'dinner', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: false, desc: 'Chips Vuruga plain', descSw: 'Chips Vuruga plain' },
+    { id: 88, name: 'Chips Mayai', nameSw: 'Chips Mayai', category: 'dinner', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: false, desc: 'Chips Mayai', descSw: 'Chips Mayai' },
+    { id: 89, name: 'Chips Mayai Organic', nameSw: 'Chips Mayai Organic', category: 'dinner', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: false, desc: 'Chips Mayai Organic', descSw: 'Chips Mayai Organic' },
+    { id: 90, name: 'Chips with 1/4 Tandoori Chicken', nameSw: 'Chips with 1/4 Tandoori Chicken', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: false, desc: 'Chips with 1/4 Tandoori Chicken', descSw: 'Chips with 1/4 Tandoori Chicken' },
+    { id: 91, name: 'Chips with 1/2 Tandoori Chicken', nameSw: 'Chips with 1/2 Tandoori Chicken', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: true, desc: 'Chips with 1/2 Tandoori Chicken', descSw: 'Chips with 1/2 Tandoori Chicken' },
+    { id: 92, name: 'Chips with Fried beef', nameSw: 'Chips with Fried beef', category: 'dinner', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: false, desc: 'Chips with Fried beef', descSw: 'Chips with Fried beef' },
+    { id: 93, name: 'Ugali nyama', nameSw: 'Ugali nyama', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: false, desc: 'Ugali nyama', descSw: 'Ugali nyama' },
+    { id: 94, name: 'Ugali/wali dagaa', nameSw: 'Ugali/wali dagaa', category: 'dinner', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: false, desc: 'Ugali/wali dagaa', descSw: 'Ugali/wali dagaa' },
+    { id: 95, name: 'Rice with Fried beef & Vegies', nameSw: 'Rice with Fried beef & Vegies', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: true, desc: 'Rice with Fried beef & Vegies', descSw: 'Rice with Fried beef & Vegies' },
+    { id: 96, name: 'Rice with Beef Stew / Wali nyama', nameSw: 'Rice with Beef Stew / Wali nyama', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: false, desc: 'Rice with Beef Stew / Wali nyama', descSw: 'Rice with Beef Stew / Wali nyama' },
+    { id: 97, name: 'Rice with firigisi', nameSw: 'Rice with firigisi', category: 'dinner', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: false, desc: 'Rice with firigisi', descSw: 'Rice with firigisi' },
+    { id: 98, name: 'Rice served with cooked liver', nameSw: 'Rice served with cooked liver', category: 'dinner', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: false, desc: 'Rice served with cooked liver', descSw: 'Rice served with cooked liver' },
+    { id: 99, name: 'Rice with fish coconut Stew', nameSw: 'Rice with fish coconut Stew', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: true, desc: 'Rice with fish coconut Stew', descSw: 'Rice with fish coconut Stew' },
+    { id: 100, name: 'Rice with Makange', nameSw: 'Rice with Makange', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: true, desc: 'Rice with Makange', descSw: 'Rice with Makange' },
+    { id: 101, name: 'Pilau nyama', nameSw: 'Pilau nyama', category: 'dinner', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: 'photos/pilau-biryani-plate.jpg', rating: 4.6, popular: false, desc: 'Pilau nyama', descSw: 'Pilau nyama' },
+    { id: 102, name: 'Pilau Chicken (free soda)', nameSw: 'Pilau Chicken (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: true, desc: 'Pilau Chicken (free soda)', descSw: 'Pilau Chicken (free soda)' },
+    { id: 103, name: 'Pilau Mutton/Mbuzi (free soda)', nameSw: 'Pilau Mutton/Mbuzi (free soda)', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: true, desc: 'Pilau Mutton/Mbuzi (free soda)', descSw: 'Pilau Mutton/Mbuzi (free soda)' },
+    { id: 104, name: 'Pilau Samaki (free soda)', nameSw: 'Pilau Samaki (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: true, desc: 'Pilau Samaki (free soda)', descSw: 'Pilau Samaki (free soda)' },
+    { id: 105, name: 'Pilau Prawns (free soda)', nameSw: 'Pilau Prawns (free soda)', category: 'dinner', price: 15000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: true, desc: 'Pilau Prawns (free soda)', descSw: 'Pilau Prawns (free soda)' },
+    { id: 106, name: 'Biryani Beef (free soda)', nameSw: 'Biryani Beef (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: 'photos/pilau-biryani-plate.jpg', rating: 4.6, popular: true, desc: 'Biryani Beef (free soda)', descSw: 'Biryani Beef (free soda)' },
+    { id: 107, name: 'Biryani Chicken (free soda)', nameSw: 'Biryani Chicken (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: true, desc: 'Biryani Chicken (free soda)', descSw: 'Biryani Chicken (free soda)' },
+    { id: 108, name: 'Biryani Mutton/Mbuzi (free soda)', nameSw: 'Biryani Mutton/Mbuzi (free soda)', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: true, desc: 'Biryani Mutton/Mbuzi (free soda)', descSw: 'Biryani Mutton/Mbuzi (free soda)' },
+    { id: 109, name: 'Kapsa Samaki (free soda)', nameSw: 'Kapsa Samaki (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: true, desc: 'Kapsa Samaki (free soda)', descSw: 'Kapsa Samaki (free soda)' },
+    { id: 110, name: 'Fried Rice & Fried Beef (free soda)', nameSw: 'Fried Rice & Fried Beef (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: true, desc: 'Fried Rice & Fried Beef (free soda)', descSw: 'Fried Rice & Fried Beef (free soda)' },
+    { id: 111, name: 'Fried Rice Chicken (free soda)', nameSw: 'Fried Rice Chicken (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: true, desc: 'Fried Rice Chicken (free soda)', descSw: 'Fried Rice Chicken (free soda)' },
+    { id: 112, name: 'Fried Rice with beef stew', nameSw: 'Fried Rice with beef stew', category: 'dinner', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: false, desc: 'Fried Rice with beef stew', descSw: 'Fried Rice with beef stew' },
+    { id: 113, name: 'Mandi Mutton/Mbuzi (free soda)', nameSw: 'Mandi Mutton/Mbuzi (free soda)', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: true, desc: 'Mandi Mutton/Mbuzi (free soda)', descSw: 'Mandi Mutton/Mbuzi (free soda)' },
+    { id: 114, name: 'Mandi Chicken (free soda)', nameSw: 'Mandi Chicken (free soda)', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: true, desc: 'Mandi Chicken (free soda)', descSw: 'Mandi Chicken (free soda)' },
+    { id: 115, name: 'Prawns Fried Rice (free soda)', nameSw: 'Prawns Fried Rice (free soda)', category: 'dinner', price: 15000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: true, desc: 'Prawns Fried Rice (free soda)', descSw: 'Prawns Fried Rice (free soda)' },
+    { id: 116, name: 'Beef Spaghetti', nameSw: 'Beef Spaghetti', category: 'dinner', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: false, desc: 'Beef Spaghetti', descSw: 'Beef Spaghetti' },
+    { id: 117, name: 'Tuna Spaghetti', nameSw: 'Tuna Spaghetti', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: true, desc: 'Tuna Spaghetti', descSw: 'Tuna Spaghetti' },
+    { id: 118, name: 'Chicken Macaroni & Cheese', nameSw: 'Chicken Macaroni & Cheese', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: true, desc: 'Chicken Macaroni & Cheese', descSw: 'Chicken Macaroni & Cheese' },
+    { id: 119, name: 'Beef stir-fry', nameSw: 'Beef stir-fry', category: 'dinner', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: false, desc: 'Beef stir-fry', descSw: 'Beef stir-fry' },
+    { id: 120, name: 'Shawarma with chips', nameSw: 'Shawarma with chips', category: 'dinner', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: false, desc: 'Shawarma with chips', descSw: 'Shawarma with chips' },
+    { id: 121, name: 'Manchurian', nameSw: 'Manchurian', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: false, desc: 'Manchurian', descSw: 'Manchurian' },
+    { id: 122, name: 'Crispy chicken', nameSw: 'Crispy chicken', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: false, desc: 'Crispy chicken', descSw: 'Crispy chicken' },
+    { id: 123, name: 'Fried rice chicken Plain', nameSw: 'Fried rice chicken Plain', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: false, desc: 'Fried rice chicken Plain', descSw: 'Fried rice chicken Plain' },
+    { id: 124, name: 'Organic (Local) chicken 1/4', nameSw: 'Organic (Local) chicken 1/4', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.9, popular: false, desc: 'Organic (Local) chicken 1/4', descSw: 'Organic (Local) chicken 1/4' },
+    { id: 125, name: 'Organic (Local) chicken 1/2', nameSw: 'Organic (Local) chicken 1/2', category: 'dinner', price: 12000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.5, popular: true, desc: 'Organic (Local) chicken 1/2', descSw: 'Organic (Local) chicken 1/2' },
+    { id: 126, name: 'Cottage pie', nameSw: 'Cottage pie', category: 'dinner', price: 14000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.6, popular: true, desc: 'Cottage pie', descSw: 'Cottage pie' },
+    { id: 127, name: 'Loaded Fries', nameSw: 'Loaded Fries', category: 'dinner', price: 20000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.7, popular: true, desc: 'Loaded Fries', descSw: 'Loaded Fries' },
+    { id: 128, name: 'Broast chicken (KFC) 4pcs', nameSw: 'Broast chicken (KFC) 4pcs', category: 'dinner', price: 25000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ¢â‚¬Âº', img: '', rating: 4.8, popular: true, desc: 'Broast chicken (KFC) 4pcs', descSw: 'Broast chicken (KFC) 4pcs' },
+    { id: 129, name: 'Vegetable Soup', nameSw: 'Vegetable Soup', category: 'lunch', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.9, popular: false, desc: 'Vegetable Soup', descSw: 'Vegetable Soup' },
+    { id: 130, name: 'Beef Soup', nameSw: 'Beef Soup', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: 'photos/beef-soup.jpg', rating: 4.5, popular: false, desc: 'Beef Soup', descSw: 'Beef Soup' },
+    { id: 131, name: 'Fish Soup', nameSw: 'Fish Soup', category: 'lunch', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.6, popular: false, desc: 'Fish Soup', descSw: 'Fish Soup' },
+    { id: 132, name: 'Mutton/Mbuzi Soup', nameSw: 'Mutton/Mbuzi Soup', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.7, popular: false, desc: 'Mutton/Mbuzi Soup', descSw: 'Mutton/Mbuzi Soup' },
+    { id: 133, name: 'Organic Chicken soup medium', nameSw: 'Organic Chicken soup medium', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.8, popular: false, desc: 'Organic Chicken soup medium', descSw: 'Organic Chicken soup medium' },
+    { id: 134, name: 'Organic Chicken soup large', nameSw: 'Organic Chicken soup large', category: 'lunch', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.9, popular: true, desc: 'Organic Chicken soup large', descSw: 'Organic Chicken soup large' },
+    { id: 135, name: 'Beef stripe banana stew (ndizi utumbo)', nameSw: 'Beef stripe banana stew (ndizi utumbo)', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.5, popular: false, desc: 'Beef stripe banana stew (ndizi utumbo)', descSw: 'Beef stripe banana stew (ndizi utumbo)' },
+    { id: 136, name: 'Green banana beef stew (ndizi nyama)', nameSw: 'Green banana beef stew (ndizi nyama)', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â²', img: '', rating: 4.6, popular: false, desc: 'Green banana beef stew (ndizi nyama)', descSw: 'Green banana beef stew (ndizi nyama)' },
+    { id: 137, name: 'Beans', nameSw: 'Beans', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.7, popular: false, desc: 'Beans', descSw: 'Beans' },
+    { id: 138, name: 'Green Vegies', nameSw: 'Green Vegies', category: 'lunch', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: 'photos/vegetables-ugali-plate.jpg', rating: 4.8, popular: false, desc: 'Green Vegies', descSw: 'Green Vegies' },
+    { id: 139, name: 'Plain Chips', nameSw: 'Plain Chips', category: 'lunch', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.9, popular: false, desc: 'Plain Chips', descSw: 'Plain Chips' },
+    { id: 140, name: 'Plain Rice', nameSw: 'Plain Rice', category: 'lunch', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.5, popular: false, desc: 'Plain Rice', descSw: 'Plain Rice' },
+    { id: 141, name: 'Coconut Banana / Curry Mtori', nameSw: 'Coconut Banana / Curry Mtori', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.6, popular: false, desc: 'Coconut Banana / Curry Mtori', descSw: 'Coconut Banana / Curry Mtori' },
+    { id: 142, name: 'Chips masala dry', nameSw: 'Chips masala dry', category: 'lunch', price: 4000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.7, popular: false, desc: 'Chips masala dry', descSw: 'Chips masala dry' },
+    { id: 143, name: 'Veg Chapati roll with Cheese', nameSw: 'Veg Chapati roll with Cheese', category: 'lunch', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.8, popular: false, desc: 'Veg Chapati roll with Cheese', descSw: 'Veg Chapati roll with Cheese' },
+    { id: 144, name: 'Vegetable Spaghetti', nameSw: 'Vegetable Spaghetti', category: 'lunch', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.9, popular: false, desc: 'Vegetable Spaghetti', descSw: 'Vegetable Spaghetti' },
+    { id: 145, name: 'Ugali Dona with Vegies', nameSw: 'Ugali Dona with Vegies', category: 'lunch', price: 6000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: 'photos/vegetables-ugali-plate.jpg', rating: 4.5, popular: false, desc: 'Ugali Dona with Vegies', descSw: 'Ugali Dona with Vegies' },
+    { id: 146, name: 'Ugali Sembe with Vegies', nameSw: 'Ugali Sembe with Vegies', category: 'lunch', price: 6000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.6, popular: false, desc: 'Ugali Sembe with Vegies', descSw: 'Ugali Sembe with Vegies' },
+    { id: 147, name: 'Vegetable stir-fry', nameSw: 'Vegetable stir-fry', category: 'lunch', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¦', img: '', rating: 4.7, popular: false, desc: 'Vegetable stir-fry', descSw: 'Vegetable stir-fry' },
+    { id: 148, name: 'Black Tea', nameSw: 'Black Tea', category: 'drinks', price: 500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.8, popular: false, desc: 'Black Tea', descSw: 'Black Tea' },
+    { id: 149, name: 'Black Coffee', nameSw: 'Black Coffee', category: 'drinks', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.9, popular: false, desc: 'Black Coffee', descSw: 'Black Coffee' },
+    { id: 150, name: 'Hot Milk', nameSw: 'Hot Milk', category: 'drinks', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.5, popular: false, desc: 'Hot Milk', descSw: 'Hot Milk' },
+    { id: 151, name: 'Milk Tea', nameSw: 'Milk Tea', category: 'drinks', price: 1000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.6, popular: false, desc: 'Milk Tea', descSw: 'Milk Tea' },
+    { id: 152, name: 'Milk And coffee', nameSw: 'Milk And coffee', category: 'drinks', price: 1500, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.7, popular: false, desc: 'Milk And coffee', descSw: 'Milk And coffee' },
+    { id: 153, name: 'Ginger shot', nameSw: 'Ginger shot', category: 'drinks', price: 2000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.8, popular: false, desc: 'Ginger shot', descSw: 'Ginger shot' },
+    { id: 154, name: 'Cappuccino', nameSw: 'Cappuccino', category: 'drinks', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.9, popular: false, desc: 'Cappuccino', descSw: 'Cappuccino' },
+    { id: 155, name: 'Tende Shake / Date milkshake', nameSw: 'Tende Shake / Date milkshake', category: 'drinks', price: 3000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.5, popular: false, desc: 'Tende Shake / Date milkshake', descSw: 'Tende Shake / Date milkshake' },
+    { id: 156, name: 'Hot Chocolate (Galaxy, Twix, Snickers, Maltesers)', nameSw: 'Hot Chocolate (Galaxy, Twix, Snickers, Maltesers)', category: 'drinks', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.6, popular: false, desc: 'Hot Chocolate (Galaxy, Twix, Snickers, Maltesers)', descSw: 'Hot Chocolate (Galaxy, Twix, Snickers, Maltesers)' },
+    { id: 157, name: 'Mojito', nameSw: 'Mojito', category: 'drinks', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.7, popular: false, desc: 'Mojito', descSw: 'Mojito' },
+    { id: 158, name: 'Fruity slushie', nameSw: 'Fruity slushie', category: 'drinks', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: 'photos/fruity-slushie.jpg', rating: 4.8, popular: false, desc: 'Fruity slushie', descSw: 'Fruity slushie' },
+    { id: 159, name: 'Vanilla milkshake', nameSw: 'Vanilla milkshake', category: 'drinks', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.9, popular: false, desc: 'Vanilla milkshake', descSw: 'Vanilla milkshake' },
+    { id: 160, name: 'Strawberry milkshake', nameSw: 'Strawberry milkshake', category: 'drinks', price: 8000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.5, popular: false, desc: 'Strawberry milkshake', descSw: 'Strawberry milkshake' },
+    { id: 161, name: 'Kitkat Milkshake', nameSw: 'Kitkat Milkshake', category: 'drinks', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: 'photos/milkshake-chocolate.jpg', rating: 4.6, popular: true, desc: 'Kitkat Milkshake', descSw: 'Kitkat Milkshake' },
+    { id: 162, name: 'Snickers Milkshake', nameSw: 'Snickers Milkshake', category: 'drinks', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.7, popular: true, desc: 'Snickers Milkshake', descSw: 'Snickers Milkshake' },
+    { id: 163, name: 'Oreo Milkshake', nameSw: 'Oreo Milkshake', category: 'drinks', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¤', img: '', rating: 4.8, popular: true, desc: 'Oreo Milkshake', descSw: 'Oreo Milkshake' },
+    { id: 164, name: 'Ice Cream 2 Scoops', nameSw: 'Ice Cream 2 Scoops', category: 'dinner', price: 4000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â°', img: 'photos/ice-cream-dessert.jpg', rating: 4.9, popular: false, desc: 'Ice Cream 2 Scoops', descSw: 'Ice Cream 2 Scoops' },
+    { id: 165, name: 'Ice Cream & Oreo Biscuits', nameSw: 'Ice Cream & Oreo Biscuits', category: 'dinner', price: 5000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â°', img: '', rating: 4.5, popular: false, desc: 'Ice Cream & Oreo Biscuits', descSw: 'Ice Cream & Oreo Biscuits' },
+    { id: 166, name: 'Chocolate cake', nameSw: 'Chocolate cake', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â°', img: '', rating: 4.6, popular: false, desc: 'Chocolate cake', descSw: 'Chocolate cake' },
+    { id: 167, name: 'Red velvet cake', nameSw: 'Red velvet cake', category: 'dinner', price: 7000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â°', img: '', rating: 4.7, popular: false, desc: 'Red velvet cake', descSw: 'Red velvet cake' },
+    { id: 168, name: 'Chocolate Cake & Ice Cream', nameSw: 'Chocolate Cake & Ice Cream', category: 'dinner', price: 9000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â°', img: '', rating: 4.8, popular: false, desc: 'Chocolate Cake & Ice Cream', descSw: 'Chocolate Cake & Ice Cream' },
+    { id: 169, name: 'Black Forest Cake', nameSw: 'Black Forest Cake', category: 'dinner', price: 10000, icon: 'ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â°', img: '', rating: 4.9, popular: true, desc: 'Black Forest Cake', descSw: 'Black Forest Cake' }
   ];
 
   var TESTIMONIALS = [
@@ -1297,26 +1511,26 @@
   function starHtml(r){
     var full = Math.round(r);
     var out = '';
-    for(var i = 1; i <= 5; i++){ out += (i <= full) ? '★' : '☆'; }
+    for(var i = 1; i <= 5; i++){ out += (i <= full) ? 'ÃƒÂ¢Ã‹Å“Ã¢â‚¬Â¦' : 'ÃƒÂ¢Ã‹Å“Ã¢â‚¬Â '; }
     return out + '<span class="rt">' + Number(r).toFixed(1) + '</span>';
   }
 
   var LANG = {
     en: {
       'nav.home': 'Home', 'nav.menu': 'Menu', 'nav.services': 'Food Services', 'nav.contact': 'Contact', 'nav.cart': 'Cart', 'nav.scan': 'Scan Order',
-      'cat.breakfast': 'Breakfast', 'cat.lunch': 'Lunch', 'cat.dinner': 'Dinner', 'cat.drinks': 'Drinks',
+      'cat.breakfast': 'Breakfast', 'cat.lunch': 'Lunch', 'cat.dinner': 'Dinner', 'cat.drinks': 'Drinks', 'cat.desserts': 'Desserts',
       'hero.badge': 'WELCOME TO CLOCKTOWER',
       'hero.title': 'DELICIOUS FOOD.<br><span>SERVING EVERY MOMENT.</span>',
-      'hero.lede': 'Fresh and delicious meals for Breakfast, Lunch and Dinner — order in seconds, served hot and made with love.',
+      'hero.lede': 'Fresh and delicious meals for Breakfast, Lunch and Dinner ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â order in seconds, served hot and made with love.',
       'hero.explore': 'Browse Menu', 'hero.viewcart': 'Order Now',
       'feat.fresh': 'Fresh Ingredients', 'feat.fast': 'Fast Service', 'feat.hyg': 'Hygienic &amp; Safe', 'feat.love': 'Made with Love',
       'stat.items': 'Menu items', 'stat.meals': 'Meals a day', 'stat.price': 'Local prices', 'stat.fresh': 'Hot &amp; fresh daily',
       'sec.services': 'Our Food Services',
       'services.title': 'Choose your <span>meal time.</span>',
-      'services.sub': 'Three delicious meal categories — pick one and explore the full menu.',
+      'services.sub': 'Three delicious meal categories ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â pick one and explore the full menu.',
       'cats.view': 'View Menu', 'cats.items': 'items',
       'sec.menu': 'Food Menu',
-      'menu.title': 'Fresh food, <span>fair prices.</span>',
+      'menu.title': 'Fresh food, fair prices. Search the menu, pick your favourites and add them straight to your cart.',
       'menu.sub': 'Search the menu, pick your favourites and add them straight to your cart.',
       'menu.search': 'Search food...',
       'menu.none': 'No foods found. Try a different search.',
@@ -1329,37 +1543,40 @@
       'cart.subtotal': 'Subtotal', 'cart.checkout': 'Proceed to Checkout',
       'cart.added': 'added to cart', 'cart.removed': 'Item removed from cart',
       'sec.scan': 'Scan & Order',
-      'scan.title': 'Scan the code — <span>order in seconds.</span>',
-      'scan.sub': 'Point your phone camera at this QR code and you will land straight on our ClockTower menu — order instantly.',
+      'scan.title': 'Scan the code ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <span>order in seconds.</span>',
+      'scan.sub': 'Point your phone camera at this QR code and you will land straight on our ClockTower menu ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â order instantly.',
       'qr.copy': 'Copy Link', 'qr.copied': 'Link copied to clipboard',
-      'qr.print': 'Print', 'qr.download': 'Download', 'qr.fail': 'Could not download the QR code — please try again.',
+      'qr.print': 'Print', 'qr.download': 'Download', 'qr.fail': 'Could not download the QR code ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â please try again.',
       'qr.seturl': 'Set the live website link so the QR code can be scanned.',
       'sec.contact': 'Contact Us',
       'contact.title': 'Order directly on <span>WhatsApp.</span>',
       'contact.sub': 'Questions about the menu, deliveries or events? Reach us any time.',
       'contact.chat': 'Tap to chat', 'contact.call': 'Tap to call',
       'footer.tag': 'Fresh food, served every moment.',
-      'co.title': 'CHECKOUT', 'co.sub': 'Almost there — just a few details to confirm your order.',
+      'co.title': 'CHECKOUT', 'co.sub': 'Almost there ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â just a few details to confirm your order.',
       'co.summary': 'ORDER <span>SUMMARY</span>', 'co.cust': 'CUSTOMER <span>INFORMATION</span>',
       'co.total': 'Total', 'co.metaItems': 'item', 'co.metaFoods': 'food',
-      'co.lbl.name': 'Full Name <span class="req">*</span>', 'co.lbl.phone': 'Phone Number <span class="req">*</span>',
+      'co.lbl.name': 'Full Name <span class="req">*</span>', 'co.lbl.phone': 'Payment Number <span class="req">*</span>',
       'co.lbl.email': 'Email Address', 'co.lbl.table': 'Table Number / Delivery Location',
       'co.lbl.notes': 'Special Instructions / Order Notes', 'co.lbl.comments': 'Comments',
       'co.lbl.payment': 'Payment Method',
-      'co.pay.mpesa': 'M-Pesa', 'co.pay.tigo': 'Tigo Pesa', 'co.pay.airtel': 'Airtel Money', 'co.pay.halo': 'Halopesa', 'co.pay.bank': 'Bank Transfer',
+      'co.pay.mpesa': 'M-Pesa', 'co.pay.tigo': 'Tigo Pesa', 'co.pay.airtel': 'Airtel Money', 'co.pay.halo': 'Halopesa', 'co.pay.bank': 'Bank Transfer', 'co.pay.cash': 'Cash (Utalipa Ukifika)', 'co.pay.other': 'Nyingine',
       'co.ph.name': 'e.g. Amina Juma', 'co.ph.phone': '+255 7XX XXX XXX', 'co.ph.email': 'you@example.com',
       'co.ph.table': 'e.g. Table 12 or Mbezi Beach', 'co.ph.notes': 'e.g. Less spicy, extra sauce...',
       'co.ph.comments': 'Leave a comment or feedback...',
+      'co.ph.payphone': 'Namba ya mpesa/tigo/airtel', 'co.ph.sharephone': 'Namba ya malipo ya pili',
       'co.err.name': 'Please enter your full name.', 'co.err.phone': 'Please enter a valid phone number.', 'co.err.email': 'Please enter a valid email address.',
       'co.submit': 'Place Order', 'co.placed': 'Order placed successfully',
-      'co.popup': 'Popup blocked — please allow popups so your order reaches us on WhatsApp.',
-      'confirm.title': 'ORDER CONFIRMED ✓',
-      'confirm.text': 'Thank you for conducting business with us — <b style="color:var(--text);">we will send your order soon.</b>',
-      'confirm.fast': '<i class="fas fa-rocket" aria-hidden="true"></i> We will bring you your food <b>fast</b> — our team is already preparing your order!',
+      'co.popup': 'Popup blocked ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â please allow popups so your order reaches us on WhatsApp.',
+      'co.lbl.payphone': 'Payment Phone Number', 'co.lbl.sharepay': 'Payment Method ya Pili', 'co.lbl.sharephone': 'Namba ya Malipo ya Pili',
+      'co.share.label': 'Share Bill', 'co.share.desc': 'Gawana bili na mtu mwingine', 'co.share.title': 'Malipo ya Pili',
+      'confirm.title': 'ORDER CONFIRMED ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“',
+      'confirm.text': 'Thank you for conducting business with us ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <b style="color:var(--text);">we will send your order soon.</b>',
+      'confirm.fast': '<i class="fas fa-rocket" aria-hidden="true"></i> We will bring you your food <b>fast</b> ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â our team is already preparing your order!',
       'confirm.onum': 'Order Number', 'confirm.total': 'Total:', 'confirm.done': 'Order Again',
       'nav.about': 'How It Works', 'sec.about': 'How It Works',
       'about.title': 'Order your favorite food in <span>3 simple steps.</span>',
-      'about.sub': 'Choose, add, enjoy — it only takes seconds.',
+      'about.sub': 'Choose, add, enjoy ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it only takes seconds.',
       'about.st1': 'Choose Food', 'about.s1': 'Browse the menu and pick your favorite meal.',
       'about.st2': 'Add to Cart', 'about.s2': 'Select your food and add it to your cart.',
       'about.st3': 'Enjoy Meal', 'about.s3': 'Confirm your order and enjoy your meal.',
@@ -1371,20 +1588,20 @@
       'history.btn': 'Order History', 'history.title': 'Order History',
       'history.sub': 'Your recent orders from ClockTower.',
       'history.empty': 'No orders yet. Place your first order today!',
-      'foot.note': 'ClockTower Food Service Provider — Dar es Salaam, Tanzania.'
+      'foot.note': 'ClockTower Food Service Provider ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Dar es Salaam, Tanzania.'
     },
     sw: {
       'nav.home': 'Nyumbani', 'nav.menu': 'Menyu', 'nav.services': 'Huduma za Chakula', 'nav.contact': 'Wasiliana', 'nav.cart': 'Kikapu', 'nav.scan': 'Changanua Agiza',
-      'cat.breakfast': 'Kifungua Kinywa', 'cat.lunch': 'Chakula cha Mchana', 'cat.dinner': 'Chakula cha Jioni', 'cat.drinks': 'Vinywaji',
+      'cat.breakfast': 'Kifungua Kinywa', 'cat.lunch': 'Chakula cha Mchana', 'cat.dinner': 'Chakula cha Jioni', 'cat.drinks': 'Vinywaji', 'cat.desserts': 'Desserts',
       'hero.badge': 'KARIBU CLOCKTOWER',
       'hero.title': 'CHAKULA TAMU.<br><span>KUKUHUDUMIA KILA WAKATI.</span>',
-      'hero.lede': 'Chakula kipya na kitamu cha Kifungua Kinywa, Mchana na Jioni — agiza kwa sekunde chache, kitolewe moto na kwa upendo.',
+      'hero.lede': 'Chakula kipya na kitamu cha Kifungua Kinywa, Mchana na Jioni ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â agiza kwa sekunde chache, kitolewe moto na kwa upendo.',
       'hero.explore': 'Angalia Menyu', 'hero.viewcart': 'Agiza Sasa',
       'feat.fresh': 'Viungo Safi', 'feat.fast': 'Huduma ya Haraka', 'feat.hyg': 'Usafi na Usalama', 'feat.love': 'Kwa Upendo',
       'stat.items': 'Vitu vya menyu', 'stat.meals': 'Milo kwa siku', 'stat.price': 'Bei za hapa', 'stat.fresh': 'Moto na mapya kila siku',
       'sec.services': 'Huduma Zetu za Chakula',
       'services.title': 'Chagua <span>wakati wa mlo.</span>',
-      'services.sub': 'Kategoria tatu za chakula kitamu — chagua moja uangalie menyu nzima.',
+      'services.sub': 'Kategoria tatu za chakula kitamu ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â chagua moja uangalie menyu nzima.',
       'cats.view': 'Angalia Menyu', 'cats.items': 'vitu',
       'sec.menu': 'Menyu ya Chakula',
       'menu.title': 'Chakula kipya, <span>bei nzuri.</span>',
@@ -1400,20 +1617,20 @@
       'cart.subtotal': 'Jumla Ndogo', 'cart.checkout': 'Endelea Kulipa',
       'cart.added': 'kimeongezwa kwenye kikapu', 'cart.removed': 'Kitu kimeondolewa kwenye kikapu',
       'sec.scan': 'Changanua & Agiza',
-      'scan.title': 'Changanua msimbo — <span>agiza kwa sekunde.</span>',
-      'scan.sub': 'Elekeza kamera ya simu yako kwenye QR code hii na utafika moja kwa moja kwenye menyu ya ClockTower — agiza papo hapo.',
+      'scan.title': 'Changanua msimbo ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <span>agiza kwa sekunde.</span>',
+      'scan.sub': 'Elekeza kamera ya simu yako kwenye QR code hii na utafika moja kwa moja kwenye menyu ya ClockTower ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â agiza papo hapo.',
       'qr.copy': 'Nakili Kiungo', 'qr.copied': 'Kiungo kimenakiliwa',
-      'qr.print': 'Chapisha', 'qr.download': 'Pakua', 'qr.fail': 'Imeshindikana kupakua QR code — tafadhali jaribu tena.',
+      'qr.print': 'Chapisha', 'qr.download': 'Pakua', 'qr.fail': 'Imeshindikana kupakua QR code ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â tafadhali jaribu tena.',
       'qr.seturl': 'Weka kiungo halisi cha tovuti ili QR isomeke.',
       'sec.contact': 'Wasiliana Nasi',
       'contact.title': 'Agiza moja kwa moja kwenye <span>WhatsApp.</span>',
       'contact.sub': 'Maswali kuhusu menyu, uwasilishaji au matukio? Tufikie wakati wowote.',
       'contact.chat': 'Bonyeza kuongea', 'contact.call': 'Bonyeza kupiga',
       'footer.tag': 'Chakula kipya, kikihudumia kila wakati.',
-      'co.title': 'KULIPA', 'co.sub': 'Karibu umalize — maelezo machache tu kuthibitisha agizo lako.',
+      'co.title': 'KULIPA', 'co.sub': 'Karibu umalize ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â maelezo machache tu kuthibitisha agizo lako.',
       'co.summary': 'MUHTASARI WA <span>AGIZO</span>', 'co.cust': 'TAARIFA ZA <span>MTEJA</span>',
       'co.total': 'Jumla', 'co.metaItems': 'kitu', 'co.metaFoods': 'chakula',
-      'co.lbl.name': 'Jina Kamili <span class="req">*</span>', 'co.lbl.phone': 'Nambari ya Simu <span class="req">*</span>',
+      'co.lbl.name': 'Jina Kamili <span class="req">*</span>', 'co.lbl.phone': 'Namba ya Malipo <span class="req">*</span>',
       'co.lbl.email': 'Barua Pepe', 'co.lbl.table': 'Nambari ya Meza / Mahali pa Uwasilishaji',
       'co.lbl.notes': 'Maelekezo Maalum / Vidokezo vya Agizo', 'co.lbl.comments': 'Maoni',
       'co.lbl.payment': 'Njia ya Malipo',
@@ -1423,14 +1640,14 @@
       'co.ph.comments': 'Acha maoni yako hapa...',
       'co.err.name': 'Tafadhali ingiza jina lako kamili.', 'co.err.phone': 'Tafadhali ingiza nambari sahihi.', 'co.err.email': 'Tafadhali ingiza barua pepe sahihi.',
       'co.submit': 'Weka Agizo', 'co.placed': 'Agizo limewekwa kikamilifu',
-      'co.popup': 'Popup imezuiliwa — tafadhali ruhusu popups ili agizo lako lifike kwetu kwa WhatsApp.',
-      'confirm.title': 'AGIZO LIMETHIBITISHWA ✓',
-      'confirm.text': 'Asante kwa kuagiza kwetu — <b style="color:var(--text);">tutakutumia agizo lako hivi punde.</b>',
-      'confirm.fast': '<i class="fas fa-rocket" aria-hidden="true"></i> Tutakuletea chakula chako <b>haraka</b> — timu yetu tayari inakitayarisha!',
+      'co.popup': 'Popup imezuiliwa ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â tafadhali ruhusu popups ili agizo lako lifike kwetu kwa WhatsApp.',
+      'confirm.title': 'AGIZO LIMETHIBITISHWA ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“',
+      'confirm.text': 'Asante kwa kuagiza kwetu ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â <b style="color:var(--text);">tutakutumia agizo lako hivi punde.</b>',
+      'confirm.fast': '<i class="fas fa-rocket" aria-hidden="true"></i> Tutakuletea chakula chako <b>haraka</b> ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â timu yetu tayari inakitayarisha!',
       'confirm.onum': 'Nambari ya Agizo', 'confirm.total': 'Jumla:', 'confirm.done': 'Agiza Tena',
       'nav.about': 'Jinsi Inavyofanya Kazi', 'sec.about': 'Jinsi Inavyofanya Kazi',
       'about.title': 'Agiza chakula unachokipenda kwa <span>hatua 3 rahisi.</span>',
-      'about.sub': 'Chagua, ongeza kikapuni, furahia — inachukua sekunde.',
+      'about.sub': 'Chagua, ongeza kikapuni, furahia ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â inachukua sekunde.',
       'about.st1': 'Chagua Chakula', 'about.s1': 'Tazama menyu na uchague chakula unachokipenda.',
       'about.st2': 'Ongeza Kikapuni', 'about.s2': 'Chagua chakula chako na ukiongeze kwenye kikapu.',
       'about.st3': 'Furahia Mlo', 'about.s3': 'Thibitisha agizo lako na ufurahie mlo wako.',
@@ -1442,7 +1659,7 @@
       'history.btn': 'Historia ya Agizo', 'history.title': 'Historia ya Agizo',
       'history.sub': 'Maagizo yako ya hivi karibuni kutoka ClockTower.',
       'history.empty': 'Hakuna maagizo bado. Weka agizo lako la kwanza leo!',
-      'foot.note': 'ClockTower Food Service Provider — Dar es Salaam, Tanzania.'
+      'foot.note': 'ClockTower Food Service Provider ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Dar es Salaam, Tanzania.'
     }
   };
 
@@ -1484,7 +1701,7 @@
     else { cart.push({ foodId: food.id, quantity: qty }); }
     saveCart();
     renderCart();
-    toast(foodName(food) + ' ' + t('cart.added'), '✓');
+    toast(foodName(food) + ' ' + t('cart.added'), 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“');
   }
 
   function changeQty(id, delta){
@@ -1506,6 +1723,14 @@
   function renderCart(){
     var count = cartQuantity();
     document.getElementById('cartCount').textContent = count;
+
+    // Update cart button style
+    var cartBtn = document.getElementById('cartOpen');
+    if(count > 0){
+      cartBtn.classList.add('has-items');
+    } else {
+      cartBtn.classList.remove('has-items');
+    }
 
     var list = document.getElementById('cartList');
     var empty = document.getElementById('cartEmpty');
@@ -1533,13 +1758,13 @@
       var li = document.createElement('div');
       li.className = 'cart-item';
       li.innerHTML =
-        '<div class="ci-img" style="background:' + cm.grad + ';"><img src="' + f.img + '" alt="' + foodName(f) + '" loading="lazy"></div>' +
+        '<div class="ci-img" style="background:' + cm.grad + ';">' + (f.img ? '<img src="' + f.img + '" alt="' + foodName(f) + '" loading="lazy">' : '<span style="font-size:26px;">' + f.icon + '</span>') + '</div>' +
         '<div class="ci-mid">' +
           '<div class="ci-name">' + foodName(f) + '</div>' +
           '<div class="ci-unit">' + fmt(f.price) + ' ' + t('cart.each') + '</div>' +
           '<div class="ci-bottom">' +
             '<div class="qty">' +
-              '<button type="button" data-act="dec" data-id="' + f.id + '">−</button>' +
+              '<button type="button" data-act="dec" data-id="' + f.id + '">ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢</button>' +
               '<span class="qv">' + i.quantity + '</span>' +
               '<button type="button" data-act="inc" data-id="' + f.id + '">+</button>' +
             '</div>' +
@@ -1586,6 +1811,7 @@
       if(q && f.name.toLowerCase().indexOf(q) === -1 && (f.nameSw || '').toLowerCase().indexOf(q) === -1) return false;
       return true;
     });
+    list.sort(function(a,b){ return (b.img ? 1 : 0) - (a.img ? 1 : 0); });
     if(list.length === 0){
       grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:50px 0;">' + t('menu.none') + '</p>';
       return;
@@ -1598,11 +1824,12 @@
       card.className = 'food-card' + (inCart ? ' added' : '');
       card.dataset.id = f.id;
       card.innerHTML =
+        '<div class="fc-thumb" style="background:' + cm.grad + ';">' + (f.img ? '<img src="' + f.img + '" alt="' + foodName(f) + '" loading="lazy">' : '<span class="fc-emoji">' + f.icon + '</span>') + '</div>' +
         '<div class="fc-top"><span class="fc-dot" style="background:' + cm.color + ';box-shadow:0 0 0 3px ' + cm.color + '33;"></span><h3>' + foodName(f) + '</h3></div>' +
         '<div class="food-price">' + fmt(f.price) + '</div>' +
         '<div class="food-actions">' +
           '<div class="qty">' +
-            '<button type="button" data-act="dec">−</button>' +
+            '<button type="button" data-act="dec">ÃƒÂ¢Ã‹â€ Ã¢â‚¬â„¢</button>' +
             '<span class="qv">' + qty + '</span>' +
             '<button type="button" data-act="inc">+</button>' +
           '</div>' +
@@ -1634,7 +1861,7 @@
       card.classList.add('added');
       var lbl = t('food.addBtn');
       btn.classList.add('success');
-      btn.textContent = '✓ ' + lbl;
+      btn.textContent = 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ ' + lbl;
       setTimeout(function(){
         btn.classList.remove('success');
         btn.textContent = lbl;
@@ -1728,7 +1955,7 @@
     var box = document.getElementById('toasts');
     var t = document.createElement('div');
     t.className = 'toast';
-    t.innerHTML = '<span class="tick">' + (icon || '✓') + '</span> ' + msg;
+    t.innerHTML = '<span class="tick">' + (icon || 'ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“') + '</span> ' + msg;
     box.appendChild(t);
     requestAnimationFrame(function(){ t.classList.add('show'); });
     setTimeout(function(){
@@ -1778,7 +2005,7 @@
       list.appendChild(li);
     });
     document.getElementById('coTotal').textContent = fmt(cartSubtotal());
-    document.getElementById('coMeta').textContent = cartQuantity() + ' ' + t('co.metaItems') + (cartQuantity() === 1 ? '' : 's') + ' • ' + cart.length + ' ' + t('co.metaFoods') + (cart.length === 1 ? '' : 's');
+    document.getElementById('coMeta').textContent = cartQuantity() + ' ' + t('co.metaItems') + (cartQuantity() === 1 ? '' : 's') + ' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ ' + cart.length + ' ' + t('co.metaFoods') + (cart.length === 1 ? '' : 's');
   }
 
   document.getElementById('checkoutBtn').addEventListener('click', function(){
@@ -1803,7 +2030,7 @@
 
   function buildOrderMessage(orderNum){
     var lines = [];
-    lines.push('🍽️ NEW ORDER — CLOCKTOWER FOOD SERVICE PROVIDER');
+    lines.push('ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â½ÃƒÂ¯Ã‚Â¸Ã‚Â NEW ORDER ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â CLOCKTOWER FOOD SERVICE PROVIDER');
     lines.push('Order Number: ' + orderNum);
     lines.push('');
     lines.push('CUSTOMER');
@@ -1831,7 +2058,7 @@
   function sendOrderToProviders(msg){
     PROVIDER_WHATSAPP.forEach(function(num){
       var w = window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(msg), '_blank');
-      if(!w) toast(t('co.popup'), '⚠️');
+      if(!w) toast(t('co.popup'), 'ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â');
     });
   }
 
@@ -1876,7 +2103,7 @@
 
   document.getElementById('qrShare').addEventListener('click', function(){
     var url = qrTargetUrl();
-    if(!url){ toast(t('qr.seturl'), '⚠️'); return; }
+    if(!url){ toast(t('qr.seturl'), 'ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â'); return; }
     var done = function(){ toast(t('qr.copied'), '<i class="fas fa-copy"></i>'); };
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(done, function(){ copyFallback(url, done); });
@@ -1889,7 +2116,7 @@
 
   document.getElementById('qrDownload').addEventListener('click', function(){
     var qr = document.getElementById('qrCode');
-    if(!qr.src){ toast(t('qr.fail'), '⚠️'); return; }
+    if(!qr.src){ toast(t('qr.fail'), 'ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â'); return; }
     fetch(qr.src, { mode: 'cors' })
       .then(function(r){ return r.blob(); })
       .then(function(blob){
@@ -1904,7 +2131,7 @@
       })
       .catch(function(){
         var w = window.open(qr.src, '_blank');
-        if(!w) toast(t('qr.fail'), '⚠️');
+        if(!w) toast(t('qr.fail'), 'ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â');
       });
   });
 
@@ -1913,10 +2140,10 @@
     if(phone.length < 9) return;
     var nm = document.getElementById('coName').value.trim() || 'Customer';
     var msg = lang === 'sw'
-      ? 'Asante sana, ' + nm + '! 🎉\nAgizo lako ' + orderNum + ' limepokelewa.\nTutapeleka chakula chako hivi karibuni. Karibu tena!'
-      : 'Thank you very much, ' + nm + '! 🎉\nYour order ' + orderNum + ' has been received.\nWe will deliver your food soon. Welcome again!';
+      ? 'Asante sana, ' + nm + '! ÃƒÂ°Ã…Â¸Ã…Â½Ã¢â‚¬Â°\nAgizo lako ' + orderNum + ' limepokelewa.\nTutapeleka chakula chako hivi karibuni. Karibu tena!'
+      : 'Thank you very much, ' + nm + '! ÃƒÂ°Ã…Â¸Ã…Â½Ã¢â‚¬Â°\nYour order ' + orderNum + ' has been received.\nWe will deliver your food soon. Welcome again!';
     var w = window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
-    if(!w) toast(t('co.popup'), '⚠️');
+    if(!w) toast(t('co.popup'), 'ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â');
   }
 
   document.getElementById('checkoutForm').addEventListener('submit', function(e){
@@ -1969,7 +2196,7 @@
     closeModal('checkoutModal');
     document.body.style.overflow = '';
     openModal('confirmModal');
-    toast(t('co.placed'), '🎉');
+    toast(t('co.placed'), 'ÃƒÂ°Ã…Â¸Ã…Â½Ã¢â‚¬Â°');
   });
 
   document.getElementById('confirmDone').addEventListener('click', function(){
@@ -1991,8 +2218,8 @@
       var li = document.createElement('li');
       li.innerHTML =
         '<div class="h-top"><span class="h-num">' + o.num + '</span><span class="h-total">' + fmt(o.total) + '</span></div>' +
-        '<div class="h-items">' + o.items.join(' • ') + '</div>' +
-        '<div class="h-date">' + ds + (o.name ? ' • ' + o.name : '') + '</div>';
+        '<div class="h-items">' + o.items.join(' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ ') + '</div>' +
+        '<div class="h-date">' + ds + (o.name ? ' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ ' + o.name : '') + '</div>';
       box.appendChild(li);
     });
   }
@@ -2064,8 +2291,8 @@
   function applyLang(){
     document.documentElement.lang = lang;
     document.title = lang === 'sw'
-      ? 'CLOCKTOWER FOOD SERVICE PROVIDER — Agiza Chakula'
-      : 'CLOCKTOWER FOOD SERVICE PROVIDER — Order Food Online';
+      ? 'CLOCKTOWER FOOD SERVICE PROVIDER ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Agiza Chakula'
+      : 'CLOCKTOWER FOOD SERVICE PROVIDER ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Order Food Online';
     document.querySelectorAll('[data-i18n]').forEach(function(el){
       var key = el.getAttribute('data-i18n');
       if(LANG[lang][key] !== undefined) el.innerHTML = LANG[lang][key];
@@ -2095,16 +2322,6 @@
       try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
       applyLang();
     });
-  });
-
-  var themeToggle = document.getElementById('themeToggle');
-  var theme = localStorage.getItem('ctfTheme') || 'dark';
-  if(theme !== 'light' && theme !== 'dark') theme = 'dark';
-  document.documentElement.setAttribute('data-theme', theme);
-  themeToggle.addEventListener('click', function(){
-    theme = theme === 'dark' ? 'light' : 'dark';
-    try{ localStorage.setItem('ctfTheme', theme); }catch(e){}
-    document.documentElement.setAttribute('data-theme', theme);
   });
 
   document.getElementById('year').textContent = new Date().getFullYear();

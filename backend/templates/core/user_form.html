@@ -1,0 +1,139 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Ongeza/Hariri Mtumiaji{% endblock %}
+
+{% block content %}
+<style>
+    .form-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-header h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 0;
+    }
+    .back-btn {
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    .back-btn:hover { color: var(--text); border-color: var(--accent); }
+
+    .form-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        max-width: 550px;
+    }
+    .form-group {
+        margin-bottom: 1.1rem;
+    }
+    .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group select {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        font-size: 0.9rem;
+        font-family: inherit;
+        box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+    .form-group select option { background: var(--bg2); color: var(--text); }
+    .form-group .hint {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+    }
+
+    .submit-btn {
+        margin-top: 1rem;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .submit-btn:hover { opacity: 0.85; }
+</style>
+
+<div class="form-header">
+    <a href="{% url 'admin_users' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    {% if user_obj %}
+    <h2>Hariri: {{ user_obj.username }}</h2>
+    {% else %}
+    <h2>Ongeza Mtumiaji Mpya</h2>
+    {% endif %}
+</div>
+
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_first_name">Jina La Mbele</label>
+            <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value|default:'' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username" value="{{ form.username.value|default:'' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" id="id_password" {% if not user_obj %}required{% endif %}>
+            {% if user_obj %}
+            <div class="hint">Wacha wazi ikiwa haungei.</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone">Simu</label>
+            <input type="text" name="phone" id="id_phone" value="{{ form.phone.value|default:'' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="id_role">Role</label>
+            <select name="role" id="id_role" required>
+                <option value="admin" {% if form.role.value == 'admin' %}selected{% endif %}>Admin</option>
+                <option value="accountant" {% if form.role.value == 'accountant' %}selected{% endif %}>Accountant</option>
+                <option value="staff" {% if form.role.value == 'staff' %}selected{% endif %}>Staff</option>
+                <option value="receptionist" {% if form.role.value == 'receptionist' %}selected{% endif %}>Receptionist</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Hifadhi Mtumiaji</button>
+    </form>
+</div>
+{% endblock %}
