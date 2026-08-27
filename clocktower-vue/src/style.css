@@ -417,6 +417,15 @@
   .toolbar{
     display:flex;flex-direction:column;gap:14px;margin-bottom:28px;
   }
+  .menu-tagline{text-align:center;max-width:620px;margin:0 auto;}
+  .menu-tagline .mt-title{
+    margin:0 0 6px;font-family:'Space Grotesk',sans-serif;
+    font-size:clamp(22px,4vw,28px);font-weight:700;color:var(--text);
+  }
+  .menu-tagline .mt-title span{color:#0F532A;}
+  .menu-tagline .mt-sub{
+    margin:0;font-size:15px;line-height:1.6;color:var(--text);
+  }
   .search-box{position:relative;max-width:480px;margin:0 auto;width:100%;}
   .search-box input{
     width:100%;
