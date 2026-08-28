@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block title %}Login — ClockTower Admin{% endblock %}
 
 {% block body %}
@@ -40,8 +41,15 @@
   }
 
   .login-card .logo {
-    font-size: 48px;
     margin-bottom: 6px;
+    display: block;
+  }
+
+  .login-card .logo .brand-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    margin: 0 auto;
     display: block;
   }
 
@@ -199,7 +207,7 @@
 
 <div class="login-wrap">
   <div class="login-card">
-    <span class="logo">🔒</span>
+    <span class="logo"><img src="{% static 'img/logo.png' %}" alt="ClockTower" class="brand-logo"></span>
     <h1 class="brand">Clock<span>Tower</span></h1>
     <p class="subtitle">Food Service Admin Panel</p>
 

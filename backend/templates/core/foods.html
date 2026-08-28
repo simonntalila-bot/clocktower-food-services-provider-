@@ -115,6 +115,7 @@
     .cat-lunch { background: rgba(34,197,94,0.15); color: var(--green); }
     .cat-dinner { background: rgba(168,85,247,0.15); color: var(--purple); }
     .cat-drinks { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .cat-visinia { background: rgba(167,139,250,0.15); color: #a78bfa; }
 
     .rating { color: #fbbf24; }
     .popular-yes { color: var(--green); }
@@ -147,6 +148,7 @@
         <a href="?cat=lunch" class="{% if current_cat == 'lunch' %}active{% endif %}">Lunch</a>
         <a href="?cat=dinner" class="{% if current_cat == 'dinner' %}active{% endif %}">Dinner</a>
         <a href="?cat=drinks" class="{% if current_cat == 'drinks' %}active{% endif %}">Drinks</a>
+        <a href="?cat=visinia" class="{% if current_cat == 'visinia' %}active{% endif %}">Visinia</a>
     </div>
     <form method="get" style="margin:0">
         <input type="text" name="q" class="search-box" placeholder="🔍 Tafuta chakula..." value="{{ search_query }}">

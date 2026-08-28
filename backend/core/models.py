@@ -52,6 +52,7 @@ class Food(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1, default=4.5)
     popular = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    v_id = models.PositiveIntegerField(default=0, db_index=True, help_text='Vue app food id')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

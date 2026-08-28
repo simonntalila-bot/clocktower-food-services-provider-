@@ -24,6 +24,14 @@ class ForgotPasswordForm(forms.Form):
 
 
 class FoodForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), to_field_name='slug')
+    icon = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'e.g. 🍕',
+    }))
+
+    def clean_icon(self):
+        return self.cleaned_data.get('icon') or '🍽️'
+
     class Meta:
         model = Food
         fields = ['name', 'name_sw', 'category', 'price', 'icon', 'description',
