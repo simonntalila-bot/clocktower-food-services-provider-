@@ -84,7 +84,7 @@
 <div class="toolbar">
     <form method="post" action="{% url 'comments_clear' %}" style="margin-left:auto" onsubmit="return confirm('Futa maoni yote?');">
         {% csrf_token %}
-        <button type="submit" class="clear-btn"><i class="fas fa-trash"></i> Clear All</button>
+        <button type="submit" class="clear-btn"><i class="li-n-trash"></i> Clear All</button>
     </form>
 </div>
 
@@ -102,7 +102,7 @@
     </div>
     {% empty %}
     <div class="empty-state">
-        <i class="fas fa-comments" style="font-size:2rem;margin-bottom:0.5rem;display:block;color:var(--muted);"></i>
+        <i class="li-n-comments" data-li-size="28" style="display:block;margin:0 auto;color:var(--muted);"></i>
         Hakuna maoni bado
     </div>
     {% endfor %}

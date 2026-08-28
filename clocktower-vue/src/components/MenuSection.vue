@@ -9,6 +9,15 @@ const menu = useMenuStore();
 const emit = defineEmits(['open-food', 'add-to-cart']);
 
 const filters = ['all', 'breakfast', 'visinia', 'drinks', 'lunch', 'dinner'];
+
+const filterColors = {
+  all: '#087f5b',
+  breakfast: '#e5484d',
+  visinia: '#a78bfa',
+  drinks: '#0a9a4a',
+  lunch: '#ff7a45',
+  dinner: '#2563eb',
+};
 </script>
 
 <template>
@@ -44,6 +53,7 @@ const filters = ['all', 'breakfast', 'visinia', 'drinks', 'lunch', 'dinner'];
           :key="cat"
           class="filter-btn"
           :class="{ active: menu.currentCat === cat }"
+          :style="{ '--fc': filterColors[cat] }"
           type="button"
           @click="menu.setFilter(cat)"
         >

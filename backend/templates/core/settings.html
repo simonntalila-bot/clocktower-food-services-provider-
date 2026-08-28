@@ -116,7 +116,7 @@
 
 <div class="settings-grid">
     <div class="settings-card">
-        <h3><i class="fab fa-whatsapp" style="color:var(--green);"></i> WhatsApp</h3>
+        <h3><i class="li-n-whatsapp" data-li-color="var(--green)"></i> WhatsApp</h3>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -128,19 +128,19 @@
     </div>
 
     <div class="settings-card">
-        <h3><i class="fas fa-file-export"></i> Export Data</h3>
+        <h3><i class="li-n-fileexport"></i> Export Data</h3>
         <form method="post" action="{% url 'export_data' %}">
             {% csrf_token %}
-            <button type="submit" class="export-btn"><i class="fas fa-download"></i> Export Data</button>
+            <button type="submit" class="export-btn"><i class="li-n-download"></i> Export Data</button>
         </form>
     </div>
 
     <div class="danger-card">
-        <h3><i class="fas fa-exclamation-triangle"></i> Danger Zone</h3>
+        <h3><i class="li-n-alerttriangle"></i> Danger Zone</h3>
         <p>Hii itafuta data yote kabisa. Kitendo hiki hakiwezi kutenduliwa.</p>
         <form method="post" action="{% url 'reset_data' %}" onsubmit="return confirm('WAANGALIZO: Futa data YOTE? Hii haiwezi kutenduliwa!');">
             {% csrf_token %}
-            <button type="submit" class="danger-btn"><i class="fas fa-trash"></i> Reset All Data</button>
+            <button type="submit" class="danger-btn"><i class="li-n-trash"></i> Reset All Data</button>
         </form>
     </div>
 </div>

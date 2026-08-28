@@ -210,12 +210,12 @@
 
     {% if error %}
     <div class="error-msg">
-      <i class="fas fa-exclamation-circle"></i>
+      <i class="li-n-alertcircle"></i>
       {{ error }}
     </div>
     {% elif success %}
     <div class="success-msg">
-      <i class="fas fa-check-circle"></i>
+      <i class="li-n-checkcircle"></i>
       {{ success }}
     </div>
     {% endif %}
@@ -242,12 +242,12 @@
       </div>
 
       <button type="submit" class="submit-btn">
-        <i class="fas fa-key"></i>&nbsp; Reset Password
+        <i class="li-n-key"></i>&nbsp; Reset Password
       </button>
     </form>
 
     <div class="back-link">
-      <a href="{% url 'login' %}"><i class="fas fa-arrow-left"></i> Rudi kwenye Login</a>
+      <a href="{% url 'login' %}"><i class="li-n-arrowleft"></i> Rudi kwenye Login</a>
     </div>
   </div>
 </div>

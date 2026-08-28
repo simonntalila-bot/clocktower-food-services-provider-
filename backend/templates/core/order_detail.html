@@ -30,10 +30,10 @@
     .btn-delete { background:var(--danger); color:#fff; }
 </style>
 
-<a href="{% url 'admin_orders' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Rudi Maagizo</a>
+  <a href="{% url 'admin_orders' %}" class="back-btn"><i class="li-n-arrowleft"></i> Rudi Maagizo</a>
 
 <div class="detail-card">
-    <h3><i class="fas fa-file-invoice"></i> Order #{{ order.order_num }}</h3>
+    <h3><i class="li-n-fileinvoice"></i> Order #{{ order.order_num }}</h3>
     <div class="detail-grid">
         <div class="detail-item">
             <div class="label">Mteja</div>
@@ -71,7 +71,7 @@
 </div>
 
 <div class="detail-card">
-    <h3><i class="fas fa-utensils"></i> Bidhaa</h3>
+    <h3><i class="li-n-utensils"></i> Bidhaa</h3>
     <table class="items-table">
         <thead>
             <tr><th>Chakula</th><th>Bei</th><th>Idadi</th><th>Jumla</th></tr>
@@ -96,7 +96,7 @@
 
 {% if order.notes or order.comments %}
 <div class="detail-card">
-    <h3><i class="fas fa-sticky-note"></i> Maelezo</h3>
+    <h3><i class="li-n-stickynote"></i> Maelezo</h3>
     {% if order.notes %}<p style="font-size:13px;margin-bottom:8px;"><strong>Malipo:</strong> {{ order.notes }}</p>{% endif %}
     {% if order.comments %}<p style="font-size:13px;"><strong>Maoni:</strong> {{ order.comments }}</p>{% endif %}
 </div>
@@ -106,18 +106,18 @@
     {% if order.status == 'new' %}
     <form method="post" action="{% url 'order_confirm' order.pk %}">
         {% csrf_token %}
-        <button type="submit" class="btn-confirm"><i class="fas fa-check"></i> Thibitisha</button>
+        <button type="submit" class="btn-confirm"><i class="li-n-check"></i> Thibitisha</button>
     </form>
     {% endif %}
     {% if order.payment_status != 'paid' %}
     <form method="post" action="{% url 'order_pay' order.pk %}">
         {% csrf_token %}
-        <button type="submit" class="btn-pay"><i class="fas fa-money-bill"></i> Lipa</button>
+        <button type="submit" class="btn-pay"><i class="li-n-money"></i> Lipa</button>
     </form>
     {% endif %}
     <form method="post" action="{% url 'order_delete' order.pk %}" onsubmit="return confirm('Futa order hii?');">
         {% csrf_token %}
-        <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> Futa</button>
+        <button type="submit" class="btn-delete"><i class="li-n-trash"></i> Futa</button>
     </form>
 </div>
 {% endblock %}

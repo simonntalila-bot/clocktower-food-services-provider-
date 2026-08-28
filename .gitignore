@@ -31,3 +31,8 @@ Thumbs.db
 node_modules/
 clocktower-vue/node_modules/
 clocktower-vue/dist/
+
+# QA / temp
+qa-*.mjs
+*-check.png
+*-side.png

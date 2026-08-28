@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [vue()],
   base: './',
   server: {
-    allowedHosts: ['frill-suitor-gone.ngrok-free.dev'],
+    allowedHosts: [
+      'frill-suitor-gone.ngrok-free.dev',
+      '.ngrok-free.app',
+      '.ngrok-free.dev',
+    ],
     proxy: {
       '/api': 'http://127.0.0.1:8000',
       '/admin-panel': 'http://127.0.0.1:8000',

@@ -3,8 +3,8 @@
 {% block body %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 <style>
-:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--overlay:rgba(4,7,12,0.72);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);--sidebar-bg:#0d1219;--sidebar-w:260px;}
-html[data-theme="light"]{--bg:#f4f6f9;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.92);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#ffffff;}
+:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--overlay:rgba(4,7,12,0.72);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);--sidebar-bg:#0B3D2E;--sidebar-w:260px;}
+html[data-theme="light"]{--bg:#f4f6f9;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.92);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#0B3D2E;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(255,184,77,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(255,122,69,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
@@ -88,6 +88,17 @@ button{font-family:inherit;cursor:pointer;}
 @media(max-width:500px){
   .topbar h1{font-size:14px;}
 }
+.sidebar{background:var(--sidebar-bg);}
+.sidebar .brand-area{border-bottom-color:rgba(255,255,255,0.12);}
+.sidebar .brand-area small,
+.sidebar nav .nav-label,
+.sidebar .sidebar-footer{color:rgba(255,255,255,0.7);}
+.sidebar nav a{color:rgba(255,255,255,0.75);}
+.sidebar nav a i{color:rgba(255,255,255,0.85);}
+.sidebar nav a:hover{color:#fff;background:rgba(255,255,255,0.08);}
+.sidebar nav a:hover i{color:var(--accent);}
+.sidebar .sidebar-footer{border-top-color:rgba(255,255,255,0.12);}
+.sidebar .sidebar-footer a{color:var(--accent);}
 </style>
 
 <div class="app">
@@ -103,61 +114,61 @@ button{font-family:inherit;cursor:pointer;}
     </div>
     <nav>
       <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
-        <i class="fas fa-th-large"></i> Dashboard
+        <i class="li-n-grid"></i> Dashboard
       </a>
       <a href="{% url 'admin_orders' %}" class="{% if request.resolver_match.url_name == 'admin_orders' %}active{% endif %}">
-        <i class="fas fa-receipt"></i> Maagizo / Orders
+        <i class="li-n-receipt"></i> Maagizo / Orders
         <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="orderBadge"></span>
       </a>
       <a href="{% url 'admin_customers' %}" class="{% if request.resolver_match.url_name == 'admin_customers' %}active{% endif %}">
-        <i class="fas fa-users"></i> Wateja / Customers
+        <i class="li-n-users"></i> Wateja / Customers
       </a>
       <a href="{% url 'admin_comments' %}" class="{% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
-        <i class="fas fa-comments"></i> Maoni / Comments
+        <i class="li-n-comments"></i> Maoni / Comments
       </a>
 
       <div class="nav-label">Menyu</div>
       <a href="{% url 'admin_foods' %}" class="{% if request.resolver_match.url_name == 'admin_foods' %}active{% endif %}">
-        <i class="fas fa-utensils"></i> Menyu / Foods
+        <i class="li-n-utensils"></i> Menyu / Foods
       </a>
       <a href="{% url 'food_add' %}" class="{% if request.resolver_match.url_name == 'food_add' %}active{% endif %}">
-        <i class="fas fa-plus-circle"></i> Ongeza Chakula
+        <i class="li-n-pluscircle"></i> Ongeza Chakula
       </a>
 
       {% if user.role == 'admin' %}
       <div class="nav-label">Usimamizi</div>
       <a href="{% url 'admin_users' %}" class="{% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
-        <i class="fas fa-user-shield"></i> Watumiaji / Users
+        <i class="li-n-shielduser"></i> Watumiaji / Users
       </a>
       <a href="{% url 'admin_activity' %}" class="{% if request.resolver_match.url_name == 'admin_activity' %}active{% endif %}">
-        <i class="fas fa-history"></i> Activity Log
+        <i class="li-n-history"></i> Activity Log
       </a>
       {% endif %}
 
       <div class="nav-label">Mifumo</div>
       <a href="{% url 'admin_profile' %}" class="{% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
-        <i class="fas fa-user-circle"></i> Profaili / Profile
+        <i class="li-n-user"></i> Profaili / Profile
       </a>
       <a href="{% url 'admin_settings' %}" class="{% if request.resolver_match.url_name == 'admin_settings' %}active{% endif %}">
-        <i class="fas fa-cog"></i> Settings
+        <i class="li-n-gear"></i> Settings
       </a>
     </nav>
     <div class="sidebar-footer">
-      <a href="/"><i class="fas fa-arrow-left"></i> Rudi kwenye tovuti</a>
+      <a href="/"><i class="li-n-arrowleft"></i> Rudi kwenye tovuti</a>
     </div>
   </aside>
 
   <div class="main">
     <header class="topbar">
       <div class="left">
-        <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+        <button class="hamburger" id="hamburgerBtn"><i class="li-n-menu" data-li-size="20"></i></button>
         <h1>{% block topbar_title %}Dashboard{% endblock %}</h1>
         <span class="pill">{{ user.get_role_display }}</span>
       </div>
       <div class="right">
         <div class="notif-wrapper">
           <button class="notif-btn" id="notifBtn">
-            <i class="fas fa-bell"></i>
+            <i class="li-n-bell"></i>
             <span class="notif-count{% if unread_notifs %} show{% endif %}" id="notifCount">{{ unread_notifs }}</span>
           </button>
           <div class="notif-dropdown" id="notifDropdown">
@@ -168,7 +179,7 @@ button{font-family:inherit;cursor:pointer;}
             {% for notif in notifications %}
             <div class="notif-item{% if not notif.is_read %} unread{% endif %}">
               <div class="notif-icon" style="background:rgba(255,184,77,0.12);color:var(--accent);">
-                <i class="fas fa-bell"></i>
+                <i class="li-n-bell" data-li-size="14"></i>
               </div>
               <div class="notif-text">
                 <strong>{{ notif.title }}</strong>
@@ -181,8 +192,8 @@ button{font-family:inherit;cursor:pointer;}
             </div>
           </div>
         </div>
-        <button class="theme-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
-        <a href="{% url 'logout' %}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <button class="theme-btn" id="themeToggle"><i class="li-n-moon"></i></button>
+        <a href="{% url 'logout' %}" class="logout-btn"><i class="li-n-logout" data-li-size="14"></i> Logout</a>
       </div>
     </header>
 
@@ -257,8 +268,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('ctfAdminTheme', next);
-      var icon = themeBtn.querySelector('i');
-      icon.className = next === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+      var icon = themeBtn.querySelector('[class*="li-n-"]');
+      if (icon) icon.outerHTML = lineIcon(next === 'dark' ? 'moon' : 'sun', 16, 'currentColor');
     });
   }
 

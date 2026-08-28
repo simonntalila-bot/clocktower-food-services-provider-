@@ -131,7 +131,7 @@ const LANG = {
     'history.title': 'Order History',
     'history.sub': 'Your recent orders from ClockTower.',
     'history.empty': 'No orders yet. Place your first order today!',
-    'foot.note': 'ClockTower Food Service Provider — Dar es Salaam, Tanzania.'
+    'foot.note': 'ClockTower Food Service Provider — Iringa, Tanzania (Near Mnara wa Saa).'
   },
   sw: {
     'nav.home': 'Nyumbani',
@@ -265,7 +265,7 @@ const LANG = {
     'history.title': 'Historia ya Agizo',
     'history.sub': 'Maagizo yako ya hivi karibuni kutoka ClockTower.',
     'history.empty': 'Hakuna maagizo bado. Weka agizo lako la kwanza leo!',
-    'foot.note': 'ClockTower Food Service Provider — Dar es Salaam, Tanzania.'
+    'foot.note': 'ClockTower Food Service Provider — Iringa, Tanzania (Near Mnara wa Saa).'
   }
 };
 

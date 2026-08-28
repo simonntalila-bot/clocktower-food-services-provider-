@@ -12,8 +12,8 @@
         margin-bottom: 1.5rem;
     }
     .stat-card {
-        background: var(--card);
-        border: 1px solid var(--border);
+        background: #0B3D2E;
+        border: 1px solid rgba(255,255,255,0.12);
         border-radius: 12px;
         padding: 1.5rem;
         text-align: center;
@@ -21,12 +21,9 @@
     }
     .stat-card:hover { transform: translateY(-2px); }
     .stat-card .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-    .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text); }
-    .stat-card .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
-    .stat-card.orange { border-top: 3px solid #f59e0b; }
-    .stat-card.green { border-top: 3px solid var(--green); }
-    .stat-card.purple { border-top: 3px solid var(--purple); }
-    .stat-card.red { border-top: 3px solid var(--danger); }
+    .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
+    .stat-card .stat-label { color: rgba(255,255,255,0.75); font-size: 0.85rem; margin-top: 0.25rem; }
+    .stat-card.orange, .stat-card.green, .stat-card.purple, .stat-card.red { border-top: 3px solid #34d399; }
 
     .quick-actions {
         display: grid;
@@ -35,11 +32,11 @@
         margin-bottom: 1.5rem;
     }
     .quick-actions a, .quick-actions button {
-        background: var(--card);
-        border: 1px solid var(--border);
+        background: #0B3D2E;
+        border: 1px solid rgba(255,255,255,0.12);
         border-radius: 10px;
         padding: 1rem;
-        color: var(--text);
+        color: #fff;
         text-decoration: none;
         text-align: center;
         font-weight: 500;
@@ -50,7 +47,7 @@
         cursor: pointer;
         transition: background 0.2s;
     }
-    .quick-actions a:hover, .quick-actions button:hover { background: var(--bg2); }
+    .quick-actions a:hover, .quick-actions button:hover { background: #0E4A38; }
     .quick-actions .qa-icon { font-size: 1.4rem; }
 
     .section-title {
@@ -163,7 +160,7 @@
 
 <div class="two-col">
     <div>
-        <div class="section-title"><i class="fas fa-receipt"></i> Maagizo ya Hivi Karibuni</div>
+        <div class="section-title"><i class="li-n-receipt"></i> Maagizo ya Hivi Karibuni</div>
         <div class="order-list">
             {% for order in recent_orders %}
             <div class="order-item">
@@ -180,7 +177,7 @@
         </div>
     </div>
     <div>
-        <div class="section-title"><i class="fas fa-users"></i> Wateja wa Leo</div>
+        <div class="section-title"><i class="li-n-users"></i> Wateja wa Leo</div>
         <div class="customer-list">
             {% for cust in today_customers %}
             <div class="customer-item">

@@ -89,7 +89,7 @@
 </style>
 
 <div class="toolbar">
-    <a href="{% url 'user_add' %}" class="add-btn"><i class="fas fa-user-plus"></i> Ongeza Mtumiaji</a>
+    <a href="{% url 'user_add' %}" class="add-btn"><i class="li-n-userplus"></i> Ongeza Mtumiaji</a>
 </div>
 
 <div class="table-wrap">
@@ -120,10 +120,10 @@
                 </td>
                 <td>
                     <div class="action-btns">
-                        <a href="{% url 'user_edit' user.pk %}"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="{% url 'user_edit' user.pk %}"><i class="li-n-edit"></i> Edit</a>
                         <form method="post" action="{% url 'user_delete' user.pk %}" style="margin:0" onsubmit="return confirm('Futa mtumiaji huyu?');">
                             {% csrf_token %}
-                            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i></button>
+                            <button type="submit" class="btn-delete"><i class="li-n-trash"></i></button>
                         </form>
                     </div>
                 </td>

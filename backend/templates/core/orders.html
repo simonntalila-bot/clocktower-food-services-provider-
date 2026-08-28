@@ -137,7 +137,7 @@
     </form>
     <form method="post" action="{% url 'orders_clear' %}" style="margin:0" onsubmit="return confirm('Futa maagizo yote?');">
         {% csrf_token %}
-        <button type="submit" class="clear-btn"><i class="fas fa-trash"></i> Clear All</button>
+        <button type="submit" class="clear-btn"><i class="li-n-trash"></i> Clear All</button>
     </form>
 </div>
 
@@ -167,22 +167,22 @@
                 <td>{{ order.created_at|date:"M d, H:i" }}</td>
                 <td>
                     <div class="action-btns">
-                        <a href="{% url 'order_detail' order.pk %}"><i class="fas fa-eye"></i> View</a>
+                        <a href="{% url 'order_detail' order.pk %}"><i class="li-n-eye"></i> View</a>
                         {% if order.status == 'new' %}
                         <form method="post" action="{% url 'order_confirm' order.pk %}" style="margin:0">
                             {% csrf_token %}
-                            <button type="submit" class="btn-confirm"><i class="fas fa-check"></i> Confirm</button>
+                            <button type="submit" class="btn-confirm"><i class="li-n-check"></i> Confirm</button>
                         </form>
                         {% endif %}
                         {% if order.status != 'paid' %}
                         <form method="post" action="{% url 'order_pay' order.pk %}" style="margin:0">
                             {% csrf_token %}
-                            <button type="submit" class="btn-pay"><i class="fas fa-money-bill"></i> Pay</button>
+                            <button type="submit" class="btn-pay"><i class="li-n-money"></i> Pay</button>
                         </form>
                         {% endif %}
                         <form method="post" action="{% url 'order_delete' order.pk %}" style="margin:0" onsubmit="return confirm('Futa order hii?');">
                             {% csrf_token %}
-                            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i></button>
+                            <button type="submit" class="btn-delete"><i class="li-n-trash"></i></button>
                         </form>
                     </div>
                 </td>

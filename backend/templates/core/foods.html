@@ -151,7 +151,7 @@
     <form method="get" style="margin:0">
         <input type="text" name="q" class="search-box" placeholder="🔍 Tafuta chakula..." value="{{ search_query }}">
     </form>
-    <a href="{% url 'food_add' %}" class="add-btn"><i class="fas fa-plus"></i> Ongeza</a>
+    <a href="{% url 'food_add' %}" class="add-btn"><i class="li-n-plus"></i> Ongeza</a>
 </div>
 
 <div class="table-wrap">
@@ -184,17 +184,17 @@
                 <td><span class="rating">⭐ {{ food.rating|floatformat:1 }}</span></td>
                 <td>
                     {% if food.popular %}
-                    <span class="popular-yes"><i class="fas fa-fire"></i> Ndiyo</span>
+                    <span class="popular-yes"><i class="li-n-fire"></i> Ndiyo</span>
                     {% else %}
                     <span class="popular-no">Hapana</span>
                     {% endif %}
                 </td>
                 <td>
                     <div class="action-btns">
-                        <a href="{% url 'food_edit' food.pk %}"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="{% url 'food_edit' food.pk %}"><i class="li-n-edit"></i> Edit</a>
                         <form method="post" action="{% url 'food_delete' food.pk %}" style="margin:0" onsubmit="return confirm('Futa chakula hiki?');">
                             {% csrf_token %}
-                            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                            <button type="submit" class="btn-delete"><i class="li-n-trash"></i> Delete</button>
                         </form>
                     </div>
                 </td>

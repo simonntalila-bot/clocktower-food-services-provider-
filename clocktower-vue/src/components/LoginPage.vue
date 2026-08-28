@@ -31,7 +31,6 @@ async function handleSubmit() {
     const data = await res.json().catch(() => ({}));
     if (res.ok && data.ok) {
       localStorage.setItem('ct_user', JSON.stringify(data));
-      emit('logged-in', data);
       window.location.href = API_BASE + '/admin-panel/';
     } else {
       error.value = data.error || 'Login imeshindikana. Jaribu tena.';

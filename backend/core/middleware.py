@@ -1,11 +1,5 @@
 from django.http import HttpResponse
 
-ALLOWED_ORIGIN_PREFIXES = (
-    'http://localhost:',
-    'http://127.0.0.1:',
-    'https://frill-suitor-gone.ngrok-free.dev',
-)
-
 
 class CorsMiddleware:
     def __init__(self, get_response):
@@ -13,7 +7,12 @@ class CorsMiddleware:
 
     def __call__(self, request):
         origin = request.headers.get('Origin', '')
-        allowed = any(origin.startswith(p) for p in ALLOWED_ORIGIN_PREFIXES)
+        allowed = bool(origin) and (
+            origin.startswith('http://localhost:')
+            or origin.startswith('http://127.0.0.1:')
+            or origin.endswith('.ngrok-free.app')
+            or origin.endswith('.ngrok-free.dev')
+        )
 
         if request.method == 'OPTIONS' and origin and allowed:
             response = HttpResponse()
