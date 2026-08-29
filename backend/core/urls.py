@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
@@ -49,7 +49,8 @@ urlpatterns = [
     path('admin-panel/expenses/', views.expenses_view, name='admin_expenses'),
     path('admin-panel/expenses/<int:pk>/delete/', views.expense_delete_view, name='expense_delete'),
 
-    # Public
-    path('', views.menu_view, name='menu'),
+    # Public / SPA
+    path('', views.spa_view, name='home'),
     path('order/', views.place_order_view, name='place_order'),
+    re_path(r'^(?!api/|admin-panel/|login/|forgot/|logout/|django-admin/|media/|static/|backup-order/)(?P<path>.*)$', views.spa_view, name='spa'),
 ]

@@ -3,10 +3,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import LineIcon from './LineIcon.vue';
 import logoImg from '../assets/logo.png';
+import { API_BASE } from '../api.js';
 
 const router = useRouter();
-
-const API_BASE = '';
 
 const username = ref('');
 const password = ref('');

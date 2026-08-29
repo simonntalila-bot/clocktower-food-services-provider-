@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { FOODS as baseFoods, CATEGORY_META } from '../foods';
+import { API_BASE } from '../api.js';
 
 const VISINIA_RE = /visinia/i;
 
@@ -62,7 +63,7 @@ export const useMenuStore = defineStore('menu', () => {
   // The cache-busting query + no-store mean the menu is never re-served from
   // a stale browser cache.
   function refresh() {
-    const cacheBust = '/api/foods/?t=' + Date.now();
+    const cacheBust = API_BASE + '/api/foods/?t=' + Date.now();
     return fetch(cacheBust, { cache: 'no-store' })
       .then(r => (r.ok ? r.json() : Promise.reject()))
       .then(data => {

@@ -9,11 +9,11 @@ class Command(BaseCommand):
         # Create admin user
         if not User.objects.filter(username='admin').exists():
             User.objects.create_superuser(
-                username='admin', password='clocktower2026',
+                username='admin', password='Clocktower@2026',
                 first_name='Admin', email='admin@clocktower.tz',
                 role='admin', phone='0700000000'
             )
-            self.stdout.write(self.style.SUCCESS('Admin user created (admin / clocktower2026)'))
+            self.stdout.write(self.style.SUCCESS('Admin user created (admin / Clocktower@2026)'))
 
         # Create categories
         cats = {

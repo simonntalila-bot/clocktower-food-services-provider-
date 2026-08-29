@@ -16,6 +16,7 @@ class CorsMiddleware:
             or origin.startswith('http://127.0.0.1:')
             or origin.endswith('.ngrok-free.app')
             or origin.endswith('.ngrok-free.dev')
+            or origin.endswith('.github.io')
         )
 
         if request.method == 'OPTIONS' and origin and allowed:

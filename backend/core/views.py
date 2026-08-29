@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -804,15 +805,15 @@ def walkin_order_view(request):
         notes = request.POST.get('notes', '').strip()
 
         if not name:
-            error = 'Tafadhali jaza jina la mteja.'
-        else:
-            price_i = 0
-            try:
-                price_i = int(price) if price else 0
-            except ValueError:
-                error = 'Bei (price) lazima iwe namba.'
+            name = 'Mteja'
 
-            if not error:
+        price_i = 0
+        try:
+            price_i = int(price) if price else 0
+        except ValueError:
+            error = 'Bei (price) lazima iwe namba.'
+
+        if not error:
                 qty_i = 1
                 try:
                     qty_i = int(qty) if qty else 1
@@ -856,6 +857,7 @@ def walkin_order_view(request):
                 )
                 log_activity(request.user, 'Agizo la mteja walk-in', f'#{order.order_num} {name} TSh {order.total:,}')
                 clear_caches()
+                messages.success(request, f'Agizo #{order.order_num} limeandikwa ({name}, TSh {order.total:,}).')
                 return redirect('admin_orders')
 
     notifications = Notification.objects.all()[:20]
@@ -1178,3 +1180,25 @@ def api_foods_view(request):
             'descSw': f.description_sw or '',
         })
     return JsonResponse({'foods': payload})
+
+
+# ========== SPA (Vue storefront) ==========
+
+from pathlib import Path
+from django.http import FileResponse
+from django.views.static import serve as static_serve
+
+
+@never_cache
+def spa_view(request, path=''):
+    """Serve the built Vue storefront from Django so the whole system (storefront,
+    login, orders and the /api/ endpoints) lives on one origin. Because the SPA
+    uses hash-history routing, any unknown path simply returns index.html."""
+    from django.conf import settings
+    spa_root = Path(settings.SPA_ROOT)
+    if path:
+        target = (spa_root / path).resolve()
+        if target.is_file() and target.is_relative_to(spa_root.resolve()):
+            return static_serve(request, target.name, document_root=str(target.parent))
+        return FileResponse(open(spa_root / 'index.html', 'rb'))
+    return FileResponse(open(spa_root / 'index.html', 'rb'))

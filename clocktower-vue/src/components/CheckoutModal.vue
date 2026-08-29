@@ -4,6 +4,7 @@ import { useLangStore } from '../stores/lang';
 import { useCartStore } from '../stores/cart';
 import { useMenuStore } from '../stores/menu';
 import LineIcon from './LineIcon.vue';
+import { API_BASE } from '../api.js';
 
 const props = defineProps({ show: Boolean });
 const emit = defineEmits(['close', 'order-placed']);
@@ -103,7 +104,7 @@ function postOrderToBackend(orderNum) {
       .filter(i => menu.byId(i.foodId))
       .map(i => ({ v_id: i.foodId, quantity: i.quantity }))
   };
-  fetch('/api/order/', {
+  fetch(API_BASE + '/api/order/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
