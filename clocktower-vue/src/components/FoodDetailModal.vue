@@ -8,8 +8,9 @@ const emit = defineEmits(['close', 'add-to-cart']);
 const lang = useLangStore();
 const menu = useMenuStore();
 const qty = ref(1);
+const imgFailed = ref(false);
 
-watch(() => props.food, () => { qty.value = 1; });
+watch(() => props.food, () => { qty.value = 1; imgFailed.value = false; });
 
 function starHtml(r) {
   const full = Math.round(r);
@@ -31,8 +32,11 @@ function handleAdd() {
     <div class="modal-card" v-if="food">
       <button class="modal-close" type="button" aria-label="Close" @click="emit('close')">&times;</button>
       <div class="detail-img">
-        <template v-if="food.img">
-          <img :src="food.img" :alt="lang.$foodName(food)" />
+        <template v-if="food.img && !imgFailed">
+          <img :src="food.img" :alt="lang.$foodName(food)" @error="imgFailed = true" />
+        </template>
+        <template v-else>
+          <span class="fc-emoji" style="font-size:64px;line-height:1">{{ food.icon }}</span>
         </template>
       </div>
       <div class="detail-body">

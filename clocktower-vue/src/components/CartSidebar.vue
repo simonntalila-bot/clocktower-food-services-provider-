@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { useLangStore } from '../stores/lang';
 import { useCartStore } from '../stores/cart';
 import { useMenuStore } from '../stores/menu';
@@ -9,6 +10,9 @@ const emit = defineEmits(['close', 'open-checkout', 'open-history']);
 const lang = useLangStore();
 const cart = useCartStore();
 const menu = useMenuStore();
+const imgFailedSet = ref(new Set());
+
+function markFailed(id) { imgFailedSet.value = new Set(imgFailedSet.value).add(id); }
 
 function fmt(n) { return 'TSh ' + n.toLocaleString('en'); }
 </script>
@@ -34,8 +38,8 @@ function fmt(n) { return 'TSh ' + n.toLocaleString('en'); }
       <div class="cart-list">
         <div class="cart-item" v-for="item in cart.items" :key="item.foodId">
           <div class="ci-img">
-            <template v-if="menu.byId(item.foodId)?.img">
-              <img :src="menu.byId(item.foodId).img" :alt="lang.$foodName(menu.byId(item.foodId))" loading="lazy" />
+            <template v-if="menu.byId(item.foodId)?.img && !imgFailedSet.has(item.foodId)">
+              <img :src="menu.byId(item.foodId).img" :alt="lang.$foodName(menu.byId(item.foodId))" loading="lazy" @error="markFailed(item.foodId)" />
             </template>
             <template v-else>
               <span style="font-size:26px;">{{ menu.byId(item.foodId)?.icon }}</span>

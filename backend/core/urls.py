@@ -32,14 +32,18 @@ urlpatterns = [
     path('admin-panel/comments/clear/', views.comments_clear_view, name='comments_clear'),
     path('admin-panel/settings/', views.settings_view, name='admin_settings'),
     path('admin-panel/export/', views.export_view, name='export_data'),
+    path('admin-panel/export-report/', views.export_report_view, name='export_report'),
     path('admin-panel/reset/', views.reset_data_view, name='reset_data'),
 
     # API
     path('api/login/', views.api_login_view, name='api_login'),
     path('api/order/', views.api_order_view, name='api_order'),
+    path('api/foods/', views.api_foods_view, name='api_foods'),
     path('api/notifications/', views.notifications_api, name='notifications_api'),
     path('api/notifications/<int:pk>/read/', views.notification_read_view, name='notif_read'),
     path('api/notifications/clear/', views.notifications_clear_view, name='notifs_clear'),
+    path('api/notifications/delete/', views.notifications_delete_view, name='notifs_delete'),
+    path('admin-panel/notifications/', views.notifications_view, name='admin_notifications'),
 
     # Public
     path('', views.menu_view, name='menu'),

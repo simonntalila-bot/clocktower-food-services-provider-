@@ -758,3 +758,28 @@ def api_order_view(request):
         pass
 
     return JsonResponse({'ok': True, 'order_num': order.order_num, 'total': total})
+
+
+def api_foods_view(request):
+    """Public menu API used by the Vue user app so admin edits (names, prices,
+    and especially images) show up on the user-facing site immediately."""
+    foods = Food.objects.filter(v_id__gt=0, is_active=True).select_related('category')
+    payload = []
+    for f in foods:
+        img = f.get_image
+        if img and not img.startswith(('http://', 'https://', '/', 'media/', 'photos/')):
+            img = 'photos/' + img
+        payload.append({
+            'id': f.v_id,
+            'name': f.name,
+            'nameSw': f.name_sw or '',
+            'category': f.category.slug if f.category else '',
+            'price': f.price,
+            'icon': f.icon or '🍽️',
+            'img': img,
+            'rating': float(f.rating),
+            'popular': f.popular,
+            'desc': f.description or '',
+            'descSw': f.description_sw or '',
+        })
+    return JsonResponse({'foods': payload})

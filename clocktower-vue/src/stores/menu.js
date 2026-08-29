@@ -56,5 +56,38 @@ export const useMenuStore = defineStore('menu', () => {
     });
   } catch (e) {}
 
+  // Fetch live menu from the Django backend so admin edits (esp. images)
+  // show up on the user site. Falls back to the static food list when the
+  // backend isn't reachable (e.g. static GitHub Pages deploy).
+  fetch('/api/foods/')
+    .then(r => (r.ok ? r.json() : Promise.reject()))
+    .then(data => {
+      if (!data || !Array.isArray(data.foods)) return;
+      const byId = new Map((data.foods || []).map(f => [Number(f.id), f]));
+      foods.value = foods.value.map(f => {
+        const live = byId.get(Number(f.id));
+        if (!live) return f;
+        return {
+          ...f,
+          name: live.name || f.name,
+          nameSw: live.nameSw || f.nameSw,
+          category: live.category || f.category,
+          price: live.price || f.price,
+          icon: live.icon || f.icon,
+          img: live.img || f.img,
+          rating: live.rating || f.rating,
+          popular: live.popular,
+          desc: live.desc || f.desc,
+          descSw: live.descSw || f.descSw,
+        };
+      });
+      for (const live of data.foods || []) {
+        if (!foods.value.find(f => f.id === Number(live.id))) {
+          foods.value.push({ ...live, nameSw: live.nameSw || '', desc: live.desc || '', descSw: live.descSw || '' });
+        }
+      }
+    })
+    .catch(() => {});
+
   return { foods, currentCat, searchTerm, byId, specialList, filteredFoods, setFilter, catCount, catMeta, CATEGORY_META };
 });
