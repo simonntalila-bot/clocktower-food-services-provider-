@@ -524,13 +524,13 @@
   .add-btn{
     display:inline-flex;align-items:center;justify-content:center;gap:5px;
     padding:0 12px;border:none;border-radius:8px;
-    background:#0A5C36;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
+    background:#228B22;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
     transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
     height:32px;cursor:pointer;white-space:nowrap;min-width:74px;
   }
-  .add-btn:hover{background:#0A3D1F;transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(15,83,42,0.50);}
-  .add-btn:focus-visible{outline:2px solid #0A5C36;outline-offset:2px;}
-  .add-btn.success{background:#16A34A;}
+  .add-btn:hover{background:#1B5E20;transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(34,139,34,0.50);}
+  .add-btn:focus-visible{outline:2px solid #228B22;outline-offset:2px;}
+  .add-btn.success{background:#2E9E2E;}
   .food-card.added{border-color:#16A34A;}
 
   /* ---------- CART SIDEBAR ---------- */
