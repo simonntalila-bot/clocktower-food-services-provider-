@@ -721,11 +721,11 @@
   .field.invalid .err{display:block;}
   .place-btn{
     width:100%;padding:16px;border:none;border-radius:13px;
-background:#16A34A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
-    margin-top:10px;box-shadow:0 12px 30px -10px rgba(22,163,74,0.55);
+background:#228B22;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
+    margin-top:10px;box-shadow:0 12px 30px -10px rgba(34,139,34,0.55);
     transition:transform .12s ease, background .15s ease;cursor:pointer;
   }
-  .place-btn:hover{transform:translateY(-2px);background:#15803D;}
+  .place-btn:hover{transform:translateY(-2px);background:#1B5E20;}
 
   /* Share Bill */
   .share-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;margin-top:10px;}
@@ -1061,10 +1061,10 @@ background:#16A34A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     padding:60px 30px;text-align:center;gap:16px;
   }
-  .pay-spinner{
+.pay-spinner{
     width:56px;height:56px;border-radius:50%;
-    border:5px solid rgba(8,127,91,0.15);
-    border-top-color:#087F5B;
+    border:5px solid rgba(27,77,27,0.2);
+    border-top-color:#1B4D1B;
     animation:spinPay .8s linear infinite;
   }
   @keyframes spinPay{to{transform:rotate(360deg);}}
@@ -1080,19 +1080,19 @@ background:#16A34A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight
     from{opacity:0;transform:scale(0.8);}
     to{opacity:1;transform:scale(1);}
   }
-  .pay-done-circle{
+.pay-done-circle{
     width:80px;height:80px;border-radius:50%;
-    background:#087F5B;
+    background:#228B22;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 0 0 rgba(8,127,91,0.3);
+    box-shadow:0 0 0 0 rgba(34,139,34,0.3);
     animation:payPulse 1.5s ease-in-out infinite;
   }
   @keyframes payPulse{
-    0%{box-shadow:0 0 0 0 rgba(8,127,91,0.35);}
-    50%{box-shadow:0 0 0 16px rgba(8,127,91,0);}
-    100%{box-shadow:0 0 0 0 rgba(8,127,91,0);}
+    0%{box-shadow:0 0 0 0 rgba(34,139,34,0.35);}
+    50%{box-shadow:0 0 0 16px rgba(34,139,34,0);}
+    100%{box-shadow:0 0 0 0 rgba(34,139,34,0);}
   }
-  .pay-done h3{margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;color:#087F5B;}
+  .pay-done h3{margin:0;font-family:'Space Grotesk',sans-serif;font-size:22px;color:#1B5E20;}
   .pay-done p{margin:0;font-size:14px;color:var(--muted);line-height:1.6;max-width:34ch;}
 
   /* ---------- CART DARK THEME ---------- */
