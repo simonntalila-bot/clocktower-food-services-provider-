@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
@@ -9,6 +10,7 @@ class User(AbstractUser):
         ('accountant', 'Accountant / Mhasibu'),
         ('staff', 'Staff / Mfanyakazi'),
         ('receptionist', 'Receptionist / Msaidizi'),
+        ('price_manager', 'Price Manager / Msimamizi wa Bei'),
     ]
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='staff')
     phone = models.CharField(max_length=20, blank=True)
@@ -109,6 +111,13 @@ class Order(models.Model):
     date = models.DateField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    handled_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='handled_orders',
+        verbose_name='Handling staff (reception / accountant)',
+    )
 
     class Meta:
         db_table = 'ctf_orders'
@@ -192,6 +201,37 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.action} - {self.user}"
+
+
+class Expense(models.Model):
+    CATEGORY_CHOICES = [
+        ('general', 'General / Jumla'),
+        ('stock', 'Stock / Malighafi'),
+        ('utilities', 'Utilities / Umeme & Maji'),
+        ('marketing', 'Marketing / Utangazaji'),
+        ('salary', 'Salaries / Mishahara'),
+        ('maintenance', 'Maintenance / Matengenezo'),
+        ('other', 'Other / Nyingine'),
+    ]
+    title = models.CharField(max_length=150)
+    amount = models.PositiveIntegerField(default=0)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='general')
+    date = models.DateField(default=timezone.now)
+    note = models.TextField(blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='recorded_expenses',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ctf_expenses'
+        ordering = ['-date', '-created_at']
+
+    def __str__(self):
+        return f"{self.title} - {self.amount}"
 
 
 class NotificationLog(models.Model):

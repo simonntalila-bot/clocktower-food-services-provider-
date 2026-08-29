@@ -37,6 +37,27 @@
     .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text); }
     .stat-card .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
 
+    .role-banner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: linear-gradient(135deg, #0B3D2E, #12634a);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 1.5rem;
+        color: #fff;
+        box-shadow: 0 12px 26px -14px rgba(11,61,46,0.7);
+    }
+    .role-banner-icon {
+        width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+        background: rgba(255,184,77,0.16); color: #ffb84d;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px;
+    }
+    .role-banner-text { flex: 1; min-width: 0; }
+    .role-banner-title { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.01em; }
+    .role-banner-sub { font-size: 0.8rem; color: rgba(255,255,255,0.85); margin-top: 2px; }
+
     .quick-actions {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -192,7 +213,18 @@
     @media (max-width: 500px) { .chart { height: 120px; } }
 </style>
 
+<div class="role-banner">
+    <span class="role-banner-icon">&#128100;</span>
+    <div class="role-banner-text">
+        <div class="role-banner-title">Wewe ni {{ user.get_role_display }}</div>
+        <div class="role-banner-sub">
+            {% if user.role == 'admin' %}Una uwezo kamili wa mfumo (fedha, wateja, watumiaji, ripoti).{% elif user.role == 'accountant' %}Unasimamia fedha na ripoti za biashara.{% elif user.role == 'receptionist' %}Unasimamia maagizo na wateja.{% elif user.role == 'staff' %}Unasimamia maagizo na menyu.{% elif user.role == 'price_manager' %}Unasimamia menyu na bei.{% endif %}
+        </div>
+    </div>
+</div>
+
 <div class="stats-grid">
+    {% if user.role == 'admin' or user.role == 'accountant' %}
     <div class="stat-card orange">
         <div class="stat-icon-wrap orange">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -229,9 +261,44 @@
         <div class="stat-value">{{ unpaid_count }}</div>
         <div class="stat-label">Haijalipwa</div>
     </div>
+    {% else %}
+    <div class="stat-card orange">
+        <div class="stat-icon-wrap orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="stat-value">{{ pending_count }}</div>
+        <div class="stat-label">Maagizo Mapya</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-icon-wrap green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/>
+            </svg>
+        </div>
+        <div class="stat-value">{{ today_orders_count }}</div>
+        <div class="stat-label">Maagizo Leo</div>
+    </div>
+    <div class="stat-card purple">
+        <div class="stat-icon-wrap purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="stat-value">{{ today_customers_count }}</div>
+        <div class="stat-label">Wateja Leo</div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-icon-wrap red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+        </div>
+        <div class="stat-value">{{ unpaid_count }}</div>
+        <div class="stat-label">Haijalipwa</div>
+    </div>
+    {% endif %}
 </div>
 
 <div class="quick-actions">
+    {% if user.role == 'admin' or user.role == 'accountant' %}
     <form method="post" action="{% url 'export_data' %}" style="margin:0">
         {% csrf_token %}
         <button type="submit">
@@ -239,16 +306,32 @@
             Export Data
         </button>
     </form>
+    {% endif %}
+    {% if user.role == 'admin' or user.role == 'receptionist' or user.role == 'staff' %}
+    <a href="{% url 'admin_orders' %}">
+        <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></span>
+            Maagizo
+        </a>
+    {% endif %}
+    {% if user.role == 'admin' or user.role == 'receptionist' %}
+    <a href="{% url 'admin_customers' %}">
+        <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+            Wateja
+        </a>
+    {% endif %}
+    {% if user.role == 'admin' or user.role == 'price_manager' %}
     <a href="{% url 'food_add' %}">
         <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
         Ongeza Chakula
     </a>
     <a href="{% url 'admin_foods' %}">
         <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M4 6v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6"/><path d="M8 4a2 2 0 0 1 4 0v2H8z"/></svg></span>
-        Menyu
-    </a>
+            Menyu
+        </a>
+    {% endif %}
 </div>
 
+{% if user.role == 'admin' or user.role == 'accountant' %}
 <div class="biz-section">
     <div class="biz-head">
         <div class="biz-title">
@@ -442,6 +525,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <div class="two-col">
     <div>

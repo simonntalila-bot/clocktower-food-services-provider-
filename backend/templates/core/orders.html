@@ -135,10 +135,12 @@
     <form method="get" style="margin:0">
         <input type="text" name="q" class="search-box" placeholder="🔍 Tafuta maagizo..." value="{{ search_query }}">
     </form>
+    {% if 'orders_clear' in admin_allowed %}
     <form method="post" action="{% url 'orders_clear' %}" style="margin:0" onsubmit="return confirm('Futa maagizo yote?');">
         {% csrf_token %}
         <button type="submit" class="clear-btn"><i class="li-n-trash"></i> Clear All</button>
     </form>
+    {% endif %}
 </div>
 
 <div class="table-wrap">
@@ -168,22 +170,24 @@
                 <td>
                     <div class="action-btns">
                         <a href="{% url 'order_detail' order.pk %}"><i class="li-n-eye"></i> View</a>
-                        {% if order.status == 'new' %}
+                        {% if order.status == 'new' and 'order_confirm' in admin_allowed %}
                         <form method="post" action="{% url 'order_confirm' order.pk %}" style="margin:0">
                             {% csrf_token %}
                             <button type="submit" class="btn-confirm"><i class="li-n-check"></i> Confirm</button>
                         </form>
                         {% endif %}
-                        {% if order.status != 'paid' %}
+                        {% if order.status != 'paid' and 'order_pay' in admin_allowed %}
                         <form method="post" action="{% url 'order_pay' order.pk %}" style="margin:0">
                             {% csrf_token %}
                             <button type="submit" class="btn-pay"><i class="li-n-money"></i> Pay</button>
                         </form>
                         {% endif %}
+                        {% if 'order_delete' in admin_allowed %}
                         <form method="post" action="{% url 'order_delete' order.pk %}" style="margin:0" onsubmit="return confirm('Futa order hii?');">
                             {% csrf_token %}
                             <button type="submit" class="btn-delete"><i class="li-n-trash"></i></button>
                         </form>
+                        {% endif %}
                     </div>
                 </td>
             </tr>

@@ -44,6 +44,8 @@ urlpatterns = [
     path('api/notifications/clear/', views.notifications_clear_view, name='notifs_clear'),
     path('api/notifications/delete/', views.notifications_delete_view, name='notifs_delete'),
     path('admin-panel/notifications/', views.notifications_view, name='admin_notifications'),
+    path('admin-panel/expenses/', views.expenses_view, name='admin_expenses'),
+    path('admin-panel/expenses/<int:pk>/delete/', views.expense_delete_view, name='expense_delete'),
 
     # Public
     path('', views.menu_view, name='menu'),

@@ -37,6 +37,11 @@ button{font-family:inherit;cursor:pointer;}
 .topbar .right{display:flex;align-items:center;gap:8px;}
 .hamburger{display:none;background:none;border:none;color:var(--text);font-size:20px;padding:6px;}
 .topbar .pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,184,77,0.12);color:var(--accent);}
+.topbar .pill.pill-admin{background:rgba(224,138,30,0.14);color:#c27019;border:1px solid rgba(224,138,30,0.35);}
+.topbar .pill.pill-accountant{background:rgba(124,92,240,0.12);color:#6d4fd1;border:1px solid rgba(124,92,240,0.35);}
+.topbar .pill.pill-receptionist{background:rgba(14,165,233,0.12);color:#0b82bd;border:1px solid rgba(14,165,233,0.35);}
+.topbar .pill.pill-staff{background:rgba(15,157,114,0.12);color:#0b7a58;border:1px solid rgba(15,157,114,0.35);}
+.topbar .pill.pill-price_manager{background:rgba(217,70,239,0.12);color:#b022c9;border:1px solid rgba(217,70,239,0.35);}
 .notif-btn{position:relative;background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .notif-btn:hover{border-color:var(--accent);color:var(--accent);}
 .notif-btn .notif-count{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;}
@@ -105,64 +110,131 @@ button{font-family:inherit;cursor:pointer;}
 .sidebar nav a.active{color:#ffb84d;}
 .sidebar .sidebar-footer{border-top-color:rgba(255,255,255,0.12);}
 .sidebar .sidebar-footer a{color:#ffb84d;}
+
+.role-strip{height:5px;width:100%;flex:0 0 auto;}
+.sidebar .role-chip{
+  display:inline-block;margin-top:4px;padding:2px 10px;border-radius:12px;
+  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;
+}
+.sidebar.role-admin .role-strip{background:linear-gradient(90deg,#e08a1e,#e2601f);}
+.sidebar.role-admin .role-chip{background:rgba(224,138,30,0.22);color:#ffb84d;}
+.sidebar.role-accountant .role-strip{background:linear-gradient(90deg,#7c5cf0,#a78bfa);}
+.sidebar.role-accountant .role-chip{background:rgba(124,92,240,0.28);color:#b9a6ff;}
+.sidebar.role-receptionist .role-strip{background:linear-gradient(90deg,#0ea5e9,#38bdf8);}
+.sidebar.role-receptionist .role-chip{background:rgba(14,165,233,0.28);color:#7dd3fc;}
+.sidebar.role-staff .role-strip{background:linear-gradient(90deg,#0f9d72,#22c55e);}
+.sidebar.role-staff .role-chip{background:rgba(15,157,114,0.28);color:#6ee7b7;}
+.sidebar.role-price_manager .role-strip{background:linear-gradient(90deg,#d946ef,#f472b6);}
+.sidebar.role-price_manager .role-chip{background:rgba(217,70,239,0.28);color:#f0abfc;}
 </style>
 
 <div class="app">
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <aside class="sidebar" id="sidebar">
+  <aside class="sidebar role-{{ user.role }}" id="sidebar">
+    <div class="role-strip"></div>
     <div class="brand-area">
       <span class="logo"><img src="{% static 'img/logo.png' %}" alt="ClockTower" class="brand-logo"></span>
       <div class="brand-text">
         <h2>Clock<em>Tower</em></h2>
-        <small>{{ user.get_role_display }}</small>
+        <span class="role-chip">{{ user.get_role_display }}</span>
       </div>
     </div>
     <nav>
+      {% if 'admin_dashboard' in admin_allowed %}
       <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
         <i class="li-n-grid"></i> <span data-i18n="dashboard">Dashboard</span>
       </a>
+      {% endif %}
+      {% if 'admin_orders' in admin_allowed %}
       <a href="{% url 'admin_orders' %}" class="{% if request.resolver_match.url_name == 'admin_orders' %}active{% endif %}">
         <i class="li-n-receipt"></i> <span data-i18n="orders">Maagizo</span>
         <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="orderBadge"></span>
       </a>
+      {% endif %}
+      {% if 'admin_customers' in admin_allowed %}
       <a href="{% url 'admin_customers' %}" class="{% if request.resolver_match.url_name == 'admin_customers' %}active{% endif %}">
         <i class="li-n-users"></i> <span data-i18n="customers">Wateja</span>
       </a>
+      {% endif %}
+      {% if 'admin_comments' in admin_allowed %}
       <a href="{% url 'admin_comments' %}" class="{% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
         <i class="li-n-comments"></i> <span data-i18n="comments">Maoni</span>
       </a>
+      {% endif %}
+      {% if 'admin_notifications' in admin_allowed %}
       <a href="{% url 'admin_notifications' %}" id="sidebarNotifLink" class="{% if request.resolver_match.url_name == 'admin_notifications' %}active{% endif %}">
         <i class="li-n-bell"></i> <span data-i18n="notifications">Arifa</span>
         <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="sidebarNotifDot"></span>
         <span class="notif-count-side{% if unread_notifs %} show{% endif %}" id="sidebarNotifCount">{{ unread_notifs }}</span>
       </a>
+      {% endif %}
 
+      {% if 'admin_expenses' in admin_allowed %}
+      <div class="nav-label" data-i18n="nav_finance">Fedha / Finance</div>
+      <a href="{% url 'admin_expenses' %}" class="{% if request.resolver_match.url_name == 'admin_expenses' %}active{% endif %}">
+        <i class="li-n-wallet"></i> <span data-i18n="expenses">Matumizi (Expenses)</span>
+      </a>
+      {% endif %}
+
+      {% if 'admin_foods' in admin_allowed or 'food_add' in admin_allowed %}
       <div class="nav-label" data-i18n="nav_menu">Menyu</div>
+      {% if 'admin_foods' in admin_allowed %}
       <a href="{% url 'admin_foods' %}" class="{% if request.resolver_match.url_name == 'admin_foods' %}active{% endif %}">
         <i class="li-n-utensils"></i> <span data-i18n="foods">Menyu</span>
       </a>
+      {% endif %}
+      {% if 'food_add' in admin_allowed %}
       <a href="{% url 'food_add' %}" class="{% if request.resolver_match.url_name == 'food_add' %}active{% endif %}">
         <i class="li-n-pluscircle"></i> <span data-i18n="add_food">Ongeza Chakula</span>
       </a>
+      {% endif %}
+      {% endif %}
 
-      {% if user.role == 'admin' %}
+      {% if 'admin_users' in admin_allowed or 'admin_activity' in admin_allowed %}
       <div class="nav-label" data-i18n="nav_manage">Usimamizi</div>
+      {% if 'admin_users' in admin_allowed %}
       <a href="{% url 'admin_users' %}" class="{% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
         <i class="li-n-shielduser"></i> <span data-i18n="users">Watumiaji</span>
       </a>
+      {% endif %}
+      {% if 'admin_activity' in admin_allowed %}
       <a href="{% url 'admin_activity' %}" class="{% if request.resolver_match.url_name == 'admin_activity' %}active{% endif %}">
         <i class="li-n-history"></i> <span data-i18n="activity">Activity Log</span>
       </a>
       {% endif %}
+      {% endif %}
+
+      {% if 'export_data' in admin_allowed or 'export_report' in admin_allowed or 'reset_data' in admin_allowed %}
+      <div class="nav-label" data-i18n="nav_more">More / Zaidi</div>
+      {% if 'export_data' in admin_allowed %}
+      <a href="{% url 'export_data' %}" class="{% if request.resolver_match.url_name == 'export_data' %}active{% endif %}">
+        <i class="li-n-download"></i> <span data-i18n="export_data">Export Data</span>
+      </a>
+      {% endif %}
+      {% if 'export_report' in admin_allowed %}
+      <a href="{% url 'export_report' %}" class="{% if request.resolver_match.url_name == 'export_report' %}active{% endif %}">
+        <i class="li-n-chart"></i> <span data-i18n="export_report">Ripoti (Report)</span>
+      </a>
+      {% endif %}
+      {% if 'reset_data' in admin_allowed %}
+      <a href="{% url 'reset_data' %}" class="{% if request.resolver_match.url_name == 'reset_data' %}active{% endif %}">
+        <i class="li-n-refresh"></i> <span data-i18n="reset_data">Reset System</span>
+      </a>
+      {% endif %}
+      {% endif %}
 
       <div class="nav-label" data-i18n="nav_systems">Mifumo</div>
+      {% if 'admin_profile' in admin_allowed %}
       <a href="{% url 'admin_profile' %}" class="{% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
         <i class="li-n-user"></i> <span data-i18n="profile">Profaili</span>
       </a>
+      {% endif %}
+      {% if 'admin_settings' in admin_allowed %}
       <a href="{% url 'admin_settings' %}" class="{% if request.resolver_match.url_name == 'admin_settings' %}active{% endif %}">
         <i class="li-n-gear"></i> <span data-i18n="settings">Settings</span>
       </a>
+      {% endif %}
     </nav>
     <div class="sidebar-footer">
       <a href="/"><i class="li-n-arrowleft"></i> <span data-i18n="back_site">Rudi kwenye tovuti</span></a>
@@ -174,7 +246,7 @@ button{font-family:inherit;cursor:pointer;}
       <div class="left">
         <button class="hamburger" id="hamburgerBtn"><i class="li-n-menu" data-li-size="20"></i></button>
         <h1><span data-i18n="page_title">Dashboard</span></h1>
-        <span class="pill" data-i18n="role_{{ user.role }}">{{ user.get_role_display }}</span>
+        <span class="pill pill-{{ user.role }}" data-i18n="role_{{ user.role }}">{{ user.get_role_display }}</span>
       </div>
       <div class="right">
         <a href="{% url 'admin_notifications' %}" class="notif-btn" id="notifBtn" title="Arifa" aria-label="Arifa">
@@ -222,7 +294,10 @@ var CTF_LANG = {
     nav_manage: 'Management', users: 'Users', activity: 'Activity Log',
     nav_systems: 'Systems', profile: 'Profile', settings: 'Settings',
     back_site: 'Back to website', notifications: 'Notifications',
-    role_admin: 'Admin', role_accountant: 'Accountant', role_staff: 'Staff', role_receptionist: 'Receptionist'
+    nav_finance: 'Finance', expenses: 'Expenses', nav_more: 'More',
+    export_data: 'Export Data', export_report: 'Report', reset_data: 'Reset System',
+    role_admin: 'Admin', role_accountant: 'Accountant', role_staff: 'Staff', role_receptionist: 'Receptionist',
+    role_price_manager: 'Price Manager'
   },
   sw: {
     page_title: 'Dashibodi', dashboard: 'Dashibodi', orders: 'Maagizo', customers: 'Wateja',
@@ -230,7 +305,10 @@ var CTF_LANG = {
     nav_manage: 'Usimamizi', users: 'Watumiaji', activity: 'Activity Log',
     nav_systems: 'Mifumo', profile: 'Profaili', settings: 'Settings',
     back_site: 'Rudi kwenye tovuti', notifications: 'Arifa',
-    role_admin: 'Admin', role_accountant: 'Mhasibu', role_staff: 'Mfanyakazi', role_receptionist: 'Msaidizi'
+    nav_finance: 'Fedha', expenses: 'Matumizi (Expenses)', nav_more: 'Zaidi',
+    export_data: 'Pakua Data', export_report: 'Ripoti', reset_data: 'Reset Mfumo',
+    role_admin: 'Admin', role_accountant: 'Mhasibu', role_staff: 'Mfanyakazi', role_receptionist: 'Msaidizi',
+    role_price_manager: 'Msimamizi wa Bei'
   }
 };
 function applyAdminLang(lang) {

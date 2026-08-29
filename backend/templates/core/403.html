@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Hairuhusiwi - ClockTower{% endblock %}
+{% block body %}
+<style>
+    .denied {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, #0B3D2E 0%, #14532d 100%);
+        font-family: 'Inter', sans-serif;
+    }
+    .denied-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 2.5rem;
+        max-width: 430px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
+    }
+    .denied-card .code {
+        font-size: 3.4rem;
+        font-weight: 800;
+        color: #d94a4a;
+        line-height: 1;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+    .denied-card h1 {
+        font-size: 1.15rem;
+        margin: 0.4rem 0 0.3rem;
+        color: #0f172a;
+    }
+    .denied-card p {
+        font-size: 0.85rem;
+        color: #5c6b7e;
+        line-height: 1.6;
+        margin: 0 0 1.5rem;
+    }
+    .denied-card .role {
+        display: inline-block;
+        padding: 0.25rem 0.8rem;
+        border-radius: 20px;
+        background: rgba(14,116,144,0.1);
+        color: #0c6b87;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 1.2rem;
+    }
+    .denied-card a {
+        display: inline-block;
+        text-decoration: none;
+        padding: 0.6rem 1.4rem;
+        border-radius: 10px;
+        background: #0B3D2E;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+    .denied-card a:hover { opacity: 0.88; }
+</style>
+<div class="denied">
+    <div class="denied-card">
+        <div class="code">403</div>
+        <h1>Hairuhusiwi / Access Denied</h1>
+        <span class="role">{{ user.get_role_display }}</span>
+        <p>Wajibu wako haukuweza kufikia ukurasa huu. Wasiliana na Admin kama unahitaji ruhusa zaidi.</p>
+        <a href="{% url 'admin_dashboard' %}"><i class="li-n-grid"></i> Rudi kwenye Dashboard</a>
+    </div>
+</div>
+<script src="{% static 'js/admin.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Ekspensi / Expenses{% endblock %}
+
+{% block content %}
+<style>
+    .exp-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+    .exp-stat {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+    }
+    .exp-stat .lbl {
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+    .exp-stat .val {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: var(--text);
+        font-family: 'Space Grotesk', sans-serif;
+        margin-top: 0.25rem;
+    }
+    .exp-stat .val.neg { color: var(--danger); }
+    @media (max-width: 640px) { .exp-stats { grid-template-columns: 1fr; } }
+
+    .exp-grid {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 1.25rem;
+        align-items: start;
+    }
+    @media (max-width: 860px) { .exp-grid { grid-template-columns: 1fr; } }
+
+    .form-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.2rem 1.3rem;
+    }
+    .form-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0 0 1rem; display: flex; align-items: center; gap: 0.45rem; }
+    .form-group { margin-bottom: 0.9rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.3rem; }
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        font-size: 0.9rem;
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
+    .submit-btn {
+        padding: 0.6rem 1.4rem;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-weight: 600;
+        font-size: 0.88rem;
+        cursor: pointer;
+        width: 100%;
+    }
+    .submit-btn:hover { opacity: 0.85; }
+    .error-msg {
+        background: rgba(217,74,74,0.12);
+        color: var(--danger);
+        border: 1px solid rgba(217,74,74,0.25);
+        padding: 0.55rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .table-wrap {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: var(--bg2); color: var(--muted); font-weight: 600; text-align: left; padding: 0.75rem 0.85rem; white-space: nowrap; }
+    td { padding: 0.7rem 0.85rem; border-top: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .amt { font-weight: 700; color: var(--danger); font-family: 'Space Grotesk', sans-serif; }
+    .cat-badge {
+        display: inline-block;
+        padding: 0.18rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        background: rgba(124,92,240,0.12);
+        color: var(--purple);
+    }
+    .action-btns { display: flex; gap: 0.35rem; }
+    .action-btns button {
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border: 1px solid var(--danger);
+        background: var(--bg2);
+        color: var(--danger);
+        cursor: pointer;
+    }
+    .action-btns button:hover { background: var(--danger); color: #fff; }
+</style>
+
+<div class="exp-stats">
+    <div class="exp-stat">
+        <div class="lbl">Jumla / Total</div>
+        <div class="val neg">TZS {{ total_all }}</div>
+    </div>
+    <div class="exp-stat">
+        <div class="lbl">Leo / Today</div>
+        <div class="val neg">TZS {{ total_today }}</div>
+    </div>
+    <div class="exp-stat">
+        <div class="lbl">Mwezi Huu / This Month</div>
+        <div class="val neg">TZS {{ total_month }}</div>
+    </div>
+</div>
+
+<div class="exp-grid">
+    <div class="form-card">
+        <h3><i class="li-n-wallet"></i> Andika Matumizi / Record Expense</h3>
+        {% if error %}<div class="error-msg">{{ error }}</div>{% endif %}
+        <form method="post" action="{% url 'admin_expenses' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_title">Kitu / Item *</label>
+                <input type="text" name="title" id="id_title" required placeholder="Mf. Uneme, Sukari...">
+            </div>
+            <div class="form-group">
+                <label for="id_amount">Kiasi / Amount (TZS) *</label>
+                <input type="number" name="amount" id="id_amount" required min="0" placeholder="Mf. 15000">
+            </div>
+            <div class="form-group">
+                <label for="id_category">Kategoria / Category</label>
+                <select name="category" id="id_category">
+                    <option value="general">General / Jumla</option>
+                    <option value="stock">Stock / Malighafi</option>
+                    <option value="utilities">Utilities / Umeme &amp; Maji</option>
+                    <option value="marketing">Marketing / Utangazaji</option>
+                    <option value="salary">Salaries / Mishahara</option>
+                    <option value="maintenance">Maintenance / Matengenezo</option>
+                    <option value="other">Other / Nyingine</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="id_note">Maelezo / Notes</label>
+                <input type="text" name="note" id="id_note" placeholder="Hiari / Optional">
+            </div>
+            <button type="submit" class="submit-btn"><i class="li-n-plus"></i> Hifadhi Matumizi</button>
+        </form>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Kitu / Item</th>
+                    <th>Kiasi / Amount</th>
+                    <th>Kategoria</th>
+                    <th>Tarehe</th>
+                    <th>Aliyeandika</th>
+                    {% if 'expense_delete' in admin_allowed %}
+                    <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for exp in expenses %}
+                <tr>
+                    <td>{{ exp.title }}{% if exp.note %}<br><small style="color:var(--muted)">{{ exp.note }}</small>{% endif %}</td>
+                    <td class="amt">TZS {{ exp.amount }}</td>
+                    <td><span class="cat-badge">{{ exp.get_category_display }}</span></td>
+                    <td>{{ exp.date|date:"d M Y" }}</td>
+                    <td>{{ exp.created_by.get_role_display|default:"-" }}</td>
+                    {% if 'expense_delete' in admin_allowed %}
+                    <td>
+                        <div class="action-btns">
+                            <form method="post" action="{% url 'expense_delete' exp.pk %}" style="margin:0" onsubmit="return confirm('Futa matumizi haya?');">
+                                {% csrf_token %}
+                                <button type="submit"><i class="li-n-trash"></i></button>
+                            </form>
+                        </div>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Hakuna matumizi bado / No expenses yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

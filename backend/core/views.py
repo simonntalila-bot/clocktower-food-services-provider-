@@ -10,7 +10,7 @@ from django.db.models import Sum, Count, Q
 from django.db.models.functions import TruncDate
 from django.utils import timezone
 from datetime import date, timedelta
-from .models import User, Category, Food, Order, OrderItem, Notification, Comment, ActivityLog
+from .models import User, Category, Food, Order, OrderItem, Notification, Comment, ActivityLog, Expense
 from .forms import (LoginForm, ForgotPasswordForm, FoodForm, UserForm,
                     ProfileForm, ChangePasswordForm, CommentForm, SettingsForm)
 
@@ -362,16 +362,19 @@ def orders_view(request):
 def order_confirm_view(request, pk):
     order = get_object_or_404(Order, pk=pk)
     order.status = 'confirmed'
+    if not order.handled_by:
+        order.handled_by = request.user
     order.save()
     log_activity(request.user, 'Agizo limethibitishwa', f'#{order.order_num} {order.name}')
     return redirect('admin_orders')
-
 
 @login_required
 @require_POST
 def order_pay_view(request, pk):
     order = get_object_or_404(Order, pk=pk)
     order.payment_status = 'paid'
+    if not order.handled_by:
+        order.handled_by = request.user
     order.save()
     push_notification(
         f'Malipo yamerekodiwa! #{order.order_num}',
@@ -413,7 +416,7 @@ def orders_clear_view(request):
 
 @login_required
 def customers_view(request):
-    orders = Order.objects.all()
+    orders = Order.objects.select_related('handled_by').prefetch_related('items__food')
     cust_filter = request.GET.get('filter', 'all')
     search = request.GET.get('q', '').strip()
     today = date.today()
@@ -434,7 +437,7 @@ def customers_view(request):
     unread_notifs = Notification.objects.filter(is_read=False).count()
 
     return render(request, 'core/customers.html', {
-        'orders': orders, 'cust_filter': cust_filter, 'search': search,
+        'customers': orders, 'current_filter': cust_filter, 'search': search,
         'notifications': notifications, 'unread_notifs': unread_notifs,
     })
 
@@ -684,6 +687,64 @@ def comments_view(request):
 def comments_clear_view(request):
     Comment.objects.all().delete()
     return redirect('admin_comments')
+
+
+# ========== EXPENSES ==========
+
+@login_required
+@never_cache
+def expenses_view(request):
+    today = timezone.localdate()
+    expenses = Expense.objects.all()
+    total_all = expenses.aggregate(s=Sum('amount'))['s'] or 0
+    total_today = expenses.filter(date=today).aggregate(s=Sum('amount'))['s'] or 0
+    total_month = expenses.filter(date__year=today.year, date__month=today.month).aggregate(s=Sum('amount'))['s'] or 0
+
+    error = ''
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        amount = request.POST.get('amount', '').strip()
+        category = request.POST.get('category', 'general')
+        note = request.POST.get('note', '').strip()
+        if not title or not amount:
+            error = 'Tafadhali jaza "Kitu" na "Kiasi".'
+        else:
+            try:
+                amount_i = int(amount)
+            except ValueError:
+                error = 'Kiasi lazima kiwe namba.'
+            else:
+                Expense.objects.create(
+                    title=title, amount=amount_i, category=category,
+                    note=note, created_by=request.user,
+                )
+                log_activity(request.user, 'Expense imeongezwa', f'{title} - {amount_i}')
+                push_notification(
+                    'Expense mpya',
+                    f'{request.user.get_role_display()} ameandika matumizi "{title}" TZS {amount_i}.',
+                )
+                clear_caches()
+                return redirect('admin_expenses')
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/expenses.html', {
+        'expenses': expenses,
+        'total_all': total_all, 'total_today': total_today, 'total_month': total_month,
+        'error': error,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
+@login_required
+@require_POST
+def expense_delete_view(request, pk):
+    expense = get_object_or_404(Expense, pk=pk)
+    log_activity(request.user, 'Expense imefutwa', f'{expense.title} - {expense.amount}')
+    expense.delete()
+    clear_caches()
+    return redirect('admin_expenses')
 
 
 # ========== SETTINGS ==========

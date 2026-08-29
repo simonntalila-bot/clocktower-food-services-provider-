@@ -41,7 +41,10 @@ var LINE_ICONS={
   paperplane:['M22 2 11 13','M22 2l-7 20-4-9-9-4 20-7z'],
   plus:['M12 5v14','M5 12h14'],
   cart:['M3 3h2l2.4 12.2A2 2 0 0 0 9.4 17h8.9a2 2 0 0 0 2-1.6L22 7H6','M11 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2z','M18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2z'],
-  stickynote:['M15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z','M15 3v5h5','M9 13h6','M9 17h6']
+  stickynote:['M15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z','M15 3v5h5','M9 13h6','M9 17h6'],
+  wallet:['M21 6.5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-11z','M21 10H3','M8 15h4.5'],
+  chart:['M3 3v18h18','m7 16-1.5-1.5 4-4 3 3 5-5','M19 12V6'],
+  refresh:['M20.5 8A9 9 0 1 0 21 12','M21 3v5h-5']
 };
 function lineIcon(name,size,color){
   var paths=LINE_ICONS[name]||[];

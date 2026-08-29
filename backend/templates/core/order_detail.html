@@ -103,21 +103,23 @@
 {% endif %}
 
 <div class="action-btns">
-    {% if order.status == 'new' %}
+    {% if order.status == 'new' and 'order_confirm' in admin_allowed %}
     <form method="post" action="{% url 'order_confirm' order.pk %}">
         {% csrf_token %}
         <button type="submit" class="btn-confirm"><i class="li-n-check"></i> Thibitisha</button>
     </form>
     {% endif %}
-    {% if order.payment_status != 'paid' %}
+    {% if order.payment_status != 'paid' and 'order_pay' in admin_allowed %}
     <form method="post" action="{% url 'order_pay' order.pk %}">
         {% csrf_token %}
         <button type="submit" class="btn-pay"><i class="li-n-money"></i> Lipa</button>
     </form>
     {% endif %}
+    {% if 'order_delete' in admin_allowed %}
     <form method="post" action="{% url 'order_delete' order.pk %}" onsubmit="return confirm('Futa order hii?');">
         {% csrf_token %}
         <button type="submit" class="btn-delete"><i class="li-n-trash"></i> Futa</button>
     </form>
+    {% endif %}
 </div>
 {% endblock %}
