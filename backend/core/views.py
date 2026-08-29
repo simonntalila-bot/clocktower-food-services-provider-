@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.decorators.cache import never_cache
 from django.db.models import Sum, Count, Q
 from django.db.models.functions import TruncDate
 from django.utils import timezone
@@ -25,6 +26,20 @@ def log_activity(user, action, detail=''):
 
 def push_notification(title, detail=''):
     Notification.objects.create(title=title, detail=detail)
+
+
+def clear_caches():
+    """Purge any server-side caches (menu, dashboard stats, notifications,
+    etc.) right after an order is placed so the admin panel and the user
+    site always show fresh data. Safe no-op when caching isn't configured.
+    """
+    try:
+        from django.core.cache import cache
+        cache.clear()
+        for key in ('foods_api', 'admin_dashboard_stats', 'notifications_list'):
+            cache.delete(key)
+    except Exception:
+        pass
 
 
 def generate_order_num():
@@ -115,6 +130,7 @@ def api_login_view(request):
 # ========== ADMIN PANEL ==========
 
 @login_required
+@never_cache
 def admin_dashboard(request):
     today = date.today()
     foods = Food.objects.filter(is_active=True)
@@ -312,6 +328,7 @@ def _report_build(period, today=None):
 # ========== ORDERS ==========
 
 @login_required
+@never_cache
 def orders_view(request):
     orders = Order.objects.all()
     status_filter = request.GET.get('status', 'all')
@@ -715,6 +732,7 @@ def notifications_clear_view(request):
 
 
 @login_required
+@never_cache
 def notifications_view(request):
     notifs = Notification.objects.all()
     total = notifs.count()
@@ -844,6 +862,8 @@ def place_order_view(request):
         order.total = total
         order.save()
 
+        clear_caches()
+
         if comments_text:
             Comment.objects.create(name=name, email=email, text=comments_text, order=order)
 
@@ -922,6 +942,8 @@ def api_order_view(request):
     order.total = total
     order.save()
 
+    clear_caches()
+
     comment_text = (data.get('comments') or '').strip()
     if comment_text:
         Comment.objects.create(name=name, email=(data.get('email') or '').strip(),
@@ -948,9 +970,12 @@ def api_order_view(request):
     return JsonResponse({'ok': True, 'order_num': order.order_num, 'total': total})
 
 
+@never_cache
 def api_foods_view(request):
     """Public menu API used by the Vue user app so admin edits (names, prices,
-    and especially images) show up on the user-facing site immediately."""
+    and especially images) show up on the user-facing site immediately.
+    never_cache: browsers/devices must refetch the menu each visit instead of
+    showing a stale cached one."""
     foods = Food.objects.filter(v_id__gt=0, is_active=True).select_related('category')
     payload = []
     for f in foods:
@@ -965,7 +990,7 @@ def api_foods_view(request):
             'price': f.price,
             'icon': f.icon or '🍽️',
             'img': img,
-            'rating': float(f.rating),
+            'rating': float(f.rating) if f.rating is not None else None,
             'popular': f.popular,
             'desc': f.description or '',
             'descSw': f.description_sw or '',

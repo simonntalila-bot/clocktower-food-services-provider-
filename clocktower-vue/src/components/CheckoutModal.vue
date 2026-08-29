@@ -151,6 +151,7 @@ function handleSubmit() {
 
     emit('order-placed', { orderNum, total, customerName: name.value.trim() });
     cart.clearCart();
+    menu.refresh();
     processing.value = false;
     done.value = true;
 
