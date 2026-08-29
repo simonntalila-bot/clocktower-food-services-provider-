@@ -18,6 +18,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://127.0.0.1:5173',
 ]
 
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure_view'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Jaribu Tena - ClockTower{% endblock %}
+{% block body %}
+<style>
+    .csrf-box {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, #0B3D2E 0%, #14532d 100%);
+        font-family: 'Inter', sans-serif;
+    }
+    .csrf-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 2.5rem;
+        max-width: 430px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4);
+    }
+    .csrf-card .code {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #d94a4a;
+        line-height: 1;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+    .csrf-card h1 {
+        font-size: 1.15rem;
+        margin: 0.4rem 0 0.3rem;
+        color: #0f172a;
+    }
+    .csrf-card p {
+        font-size: 0.85rem;
+        color: #5c6b7e;
+        line-height: 1.6;
+        margin: 0 0 1.5rem;
+    }
+    .csrf-card a {
+        display: inline-block;
+        text-decoration: none;
+        padding: 0.6rem 1.4rem;
+        border-radius: 10px;
+        background: #0B3D2E;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+    .csrf-card a:hover { opacity: 0.88; }
+</style>
+<div class="csrf-box">
+    <div class="csrf-card">
+        <div class="code">403</div>
+        <h1>Jaribu tena / Try Again</h1>
+        <p>Fomu ilituma data yenye kidhibiti ambacho hakifai (token imechakaa). Ukurasa unaburudishwa kiotomatiki — jaza tena na ubonyeze Submit.</p>
+        <a href="#" onclick="location.replace(location.href); return false;">Jaribu tena / Reload page</a>
+    </div>
+</div>
+<script>
+    setTimeout(function () { location.replace(location.href); }, 2500);
+</script>
+<script src="{% static 'js/admin.js' %}"></script>
+{% endblock %}

@@ -99,6 +99,14 @@ def logout_view(request):
     return redirect('login')
 
 
+def csrf_failure_view(request, reason=''):
+    """Friendly replacement for Django's default CSRF 403 page. Reloads the
+    page so the form gets a fresh token (fixes stale-token-after-login)."""
+    if getattr(request.user, 'is_authenticated', False):
+        log_activity(request.user, 'CSRF imezuia (reload)', reason[:120])
+    return render(request, 'core/csrf_error.html', {'reason': reason}, status=403)
+
+
 @csrf_exempt
 def api_login_view(request):
     if request.method == 'OPTIONS':
@@ -939,7 +947,6 @@ def notifications_delete_view(request):
 # ========== EXPORT / IMPORT ==========
 
 @login_required
-@require_POST
 def export_view(request):
     foods = list(Food.objects.all().values())
     orders_data = list(Order.objects.all().values())
@@ -951,11 +958,10 @@ def export_view(request):
 
 
 @login_required
-@require_POST
 def export_report_view(request):
-    period = request.POST.get('period', '')
+    period = request.POST.get('period', '') or request.GET.get('period', '') or 'day'
     if period not in ('day', 'week', 'month', 'year'):
-        return redirect('admin_dashboard')
+        period = 'day'
     rep = _report_build(period)
     import csv
     from io import StringIO

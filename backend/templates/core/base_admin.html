@@ -223,7 +223,7 @@ button{font-family:inherit;cursor:pointer;}
       </a>
       {% endif %}
       {% if 'reset_data' in admin_allowed %}
-      <a href="{% url 'reset_data' %}" class="{% if request.resolver_match.url_name == 'reset_data' %}active{% endif %}">
+      <a href="{% url 'admin_settings' %}#reset" class="{% if request.resolver_match.url_name == 'admin_settings' %}active{% endif %}">
         <i class="li-n-refresh"></i> <span data-i18n="reset_data">Reset System</span>
       </a>
       {% endif %}
@@ -333,6 +333,16 @@ document.addEventListener('DOMContentLoaded', function() {
   var lang = localStorage.getItem('ctfAdminLang') || 'sw';
   document.documentElement.setAttribute('lang', lang);
   applyAdminLang(lang);
+
+  var csrfCookie = (document.cookie.match(/csrftoken=([^;\s]+)/) || [])[1];
+  if (csrfCookie) {
+    document.querySelectorAll('meta[name="csrf-token"]').forEach(function(m) {
+      m.setAttribute('content', csrfCookie);
+    });
+    document.querySelectorAll('input[name="csrfmiddlewaretoken"]').forEach(function(i) {
+      i.value = csrfCookie;
+    });
+  }
 
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.addEventListener('click', function() {
