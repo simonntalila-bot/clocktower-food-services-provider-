@@ -87,28 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
   });
 
-  // Notification dropdown
-  var notifBtn = document.querySelector('.notif-btn');
-  var notifDrop = document.querySelector('.notif-dropdown');
-  if (notifBtn && notifDrop) {
-    notifBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      notifDrop.classList.toggle('show');
-    });
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.notif-dropdown') && !e.target.closest('.notif-btn')) {
-        notifDrop.classList.remove('show');
-      }
-    });
-  }
-
-  // Sidebar toggle
-  var hamburger = document.querySelector('.hamburger');
-  var sidebar = document.querySelector('.sidebar');
-  if (hamburger && sidebar) {
-    hamburger.addEventListener('click', function() { sidebar.classList.toggle('open'); });
-  }
-
   // Confirm dialogs
   window.showConfirm = function(title, msg, callback) {
     var overlay = document.getElementById('confirmOverlay');

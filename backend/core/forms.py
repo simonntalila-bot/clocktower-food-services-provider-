@@ -28,9 +28,9 @@ class FoodForm(forms.ModelForm):
     icon = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={
         'placeholder': 'e.g. 🍕',
     }))
-
-    def clean_icon(self):
-        return self.cleaned_data.get('icon') or '🍽️'
+    rating = forms.DecimalField(required=False, max_digits=3, decimal_places=1, widget=forms.NumberInput(attrs={
+        'min': 0, 'max': 5, 'step': 0.1, 'placeholder': 'e.g. 4.5',
+    }))
 
     class Meta:
         model = Food

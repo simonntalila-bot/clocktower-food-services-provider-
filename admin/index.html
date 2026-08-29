@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="sw">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#10b981;--accent2:#059669;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--overlay:rgba(4,7,12,0.72);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);--sidebar-bg:#0d1219;--sidebar-w:260px;}
-html[data-theme="light"]{--bg:#f4f6f9;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.92);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#ffffff;}
+:root{--bg:#ffffff;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.95);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#0B3D2E;--sidebar-w:260px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(16,185,129,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(5,150,105,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);min-height:100vh;overflow-x:hidden;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;cursor:pointer;}
 
@@ -72,18 +71,19 @@ button{font-family:inherit;cursor:pointer;}
 .sidebar .brand-area .logo{font-size:26px;line-height:0;}
 .sidebar .brand-area .logo img{width:40px;height:auto;object-fit:contain;}
 .sidebar .brand-area h2{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;line-height:1.15;}
-.sidebar .brand-area h2 em{font-style:normal;color:var(--accent);}
-.sidebar .brand-area small{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;}
+.sidebar .brand-area h2 em{font-style:normal;color:#ffb84d;}
+.sidebar .brand-area small{font-size:9px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.12em;}
 .sidebar nav{flex:1;padding:10px;overflow-y:auto;}
-.sidebar nav .nav-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:12px 14px 4px;font-weight:600;}
-.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);transition:all .15s;margin-bottom:1px;position:relative;}
-.sidebar nav a:hover{color:var(--text);background:var(--card);}
-.sidebar nav a.active{color:var(--accent);background:rgba(16,185,129,0.10);}
-.sidebar nav a i{width:18px;text-align:center;font-size:14px;}
+.sidebar nav .nav-label{font-size:10px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.1em;padding:12px 14px 4px;font-weight:600;}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.78);transition:all .15s;margin-bottom:1px;position:relative;}
+.sidebar nav a:hover{color:#fff;background:rgba(255,255,255,0.08);}
+.sidebar nav a.active{color:#ffb84d;background:rgba(255,184,77,0.14);}
+.sidebar nav a:hover i,.sidebar nav a:hover svg{color:#ffd9a0;}
+.sidebar nav a i{width:18px;text-align:center;font-size:14px;color:#ffb84d;}
 .sidebar nav .badge-dot{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--danger);display:none;}
 .sidebar nav .badge-dot.show{display:block;}
-.sidebar .sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);text-align:center;}
-.sidebar .sidebar-footer a{color:var(--accent);}
+.sidebar .sidebar-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,0.12);font-size:10px;color:rgba(255,255,255,0.7);text-align:center;}
+.sidebar .sidebar-footer a{color:#ffb84d;}
 
 /* MAIN */
 .main{flex:1;margin-left:var(--sidebar-w);padding:0;min-height:100vh;}
@@ -97,8 +97,6 @@ button{font-family:inherit;cursor:pointer;}
 .notif-btn:hover{border-color:var(--accent);color:var(--accent);}
 .notif-btn .notif-count{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;}
 .notif-btn .notif-count.show{display:flex;}
-.theme-btn{background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.theme-btn:hover{border-color:var(--accent);color:var(--accent);}
 .logout-btn{background:none;border:1px solid var(--danger);color:var(--danger);padding:7px 14px;border-radius:10px;font-size:12px;font-weight:600;transition:all .15s;}
 .logout-btn:hover{background:var(--danger);color:#fff;}
 .content{padding:24px;}
@@ -393,7 +391,6 @@ button{font-family:inherit;cursor:pointer;}
           <button class="lang-btn" type="button" data-lang="en" onclick="setAdminLang('en')">EN</button>
           <button class="lang-btn active" type="button" data-lang="sw" onclick="setAdminLang('sw')">SW</button>
         </div>
-        <button class="theme-btn" onclick="toggleTheme()" title="Badilisha Mandhari"><i class="li-n-moon" id="themeIcon"></i></button>
         <button class="logout-btn" onclick="doLogout()"><i class="li-n-logout"></i> <span data-i18n="topbar.logout">Ondoka</span></button>
       </div>
     </div>
@@ -947,10 +944,9 @@ button{font-family:inherit;cursor:pointer;}
     }
   };
 
-  /* ===== THEME ===== */
-  function loadTheme(){var th=localStorage.getItem(THEME_KEY)||'dark';document.documentElement.setAttribute('data-theme',th);updateThemeIcon(th);}
-  function updateThemeIcon(th){var btn=document.querySelector('.theme-btn');if(btn)btn.innerHTML=lineIcon(th==='dark'?'moon':'sun',15,'currentColor');}
-  window.toggleTheme=function(){var cur=document.documentElement.getAttribute('data-theme'),next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem(THEME_KEY,next);updateThemeIcon(next);};
+  /* ===== THEME (white-only) ===== */
+  function loadTheme(){document.documentElement.setAttribute('data-theme','light');}
+  window.toggleTheme=function(){document.documentElement.setAttribute('data-theme','light');};
 
   /* ===== PERMISSIONS ===== */
   function currRole(){var u=getCurrUser();return u?u.role:'admin';}

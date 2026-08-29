@@ -121,17 +121,62 @@ def admin_dashboard(request):
     orders = Order.objects.all()
     today_orders = orders.filter(date=today)
 
+    def rev(qs):
+        return qs.aggregate(s=Sum('total'))['s'] or 0
+
+    def growth(cur, prev):
+        if prev <= 0:
+            return 0
+        return round((cur - prev) / prev * 100)
+
     paid = orders.filter(payment_status='paid')
+
     revenue_series = []
     for i in range(6, -1, -1):
         day = today - timedelta(days=i)
         day_orders = orders.filter(date=day)
-        day_rev = day_orders.aggregate(s=Sum('total'))['s'] or 0
         revenue_series.append({
             'label': day.strftime('%d %b'),
-            'revenue': day_rev,
+            'revenue': rev(day_orders),
             'count': day_orders.count(),
         })
+
+    yesterday = today - timedelta(days=1)
+    today_rev = rev(today_orders)
+    yesterday_rev = rev(orders.filter(date=yesterday))
+
+    start_of_week = today - timedelta(days=today.weekday())
+    prev_week_end = start_of_week - timedelta(days=1)
+    prev_week_start = prev_week_end - timedelta(days=6)
+    week_rev = rev(orders.filter(date__gte=start_of_week))
+    prev_week_rev = rev(orders.filter(date__gte=prev_week_start, date__lte=prev_week_end))
+    week_orders = orders.filter(date__gte=start_of_week).count()
+
+    start_of_month = today.replace(day=1)
+    prev_month_end = start_of_month - timedelta(days=1)
+    prev_month_start = prev_month_end.replace(day=1)
+    month_rev = rev(orders.filter(date__gte=start_of_month))
+    prev_month_rev = rev(orders.filter(date__gte=prev_month_start, date__lte=prev_month_end))
+    month_orders = orders.filter(date__gte=start_of_month).count()
+
+    year_rev = rev(orders.filter(date__year=today.year))
+    prev_year_rev = rev(orders.filter(date__year=today.year - 1))
+    year_orders = orders.filter(date__year=today.year).count()
+
+    sw_months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ago', 'Sep', 'Okt', 'Nov', 'Des']
+    month_series = []
+    index = today.year * 12 + (today.month - 1)
+    for i in range(index - 7, index + 1):
+        m = i % 12 + 1
+        mo_orders = orders.filter(date__year=i // 12, date__month=m)
+        month_series.append({
+            'label': sw_months[m - 1] + (f" '{str(i // 12)[2:]}" if (i // 12) != today.year else ''),
+            'revenue': rev(mo_orders),
+            'count': mo_orders.count(),
+        })
+    graph_max = max([s['revenue'] for s in month_series] or [1])
+    if graph_max <= 0:
+        graph_max = 1
 
     avg_order = 0
     if orders.count() > 0:
@@ -141,13 +186,30 @@ def admin_dashboard(request):
     if max_rev <= 0:
         max_rev = 1
 
+    prev_prev_start = (prev_month_start - timedelta(days=1)).replace(day=1)
+    pm_orders = orders.filter(date__gte=prev_month_start, date__lte=prev_month_end)
+    ppm_orders = orders.filter(date__gte=prev_prev_start, date__lte=prev_month_start - timedelta(days=1))
+    prev_month_report = {
+        'month': prev_month_end.strftime('%B %Y'),
+        'revenue': rev(pm_orders),
+        'orders': pm_orders.count(),
+        'customers': pm_orders.values('phone').distinct().count(),
+        'avg_order': (rev(pm_orders) // pm_orders.count()) if pm_orders.count() else 0,
+        'growth': growth(rev(pm_orders), rev(ppm_orders)),
+    }
+
     stats = {
         'total_foods': foods.count(),
         'total_orders': orders.count(),
         'today_orders': today_orders.count(),
         'total_revenue': orders.aggregate(s=Sum('total'))['s'] or 0,
-        'today_revenue': today_orders.aggregate(s=Sum('total'))['s'] or 0,
-        'paid_revenue': paid.aggregate(s=Sum('total'))['s'] or 0,
+        'today_revenue': today_rev,
+        'today_orders_count': today_orders.count(),
+        'today_growth': growth(today_rev, yesterday_rev),
+        'week_rev': week_rev, 'week_orders': week_orders, 'week_growth': growth(week_rev, prev_week_rev),
+        'month_rev': month_rev, 'month_orders': month_orders, 'month_growth': growth(month_rev, prev_month_rev),
+        'year_rev': year_rev, 'year_orders': year_orders, 'year_growth': growth(year_rev, prev_year_rev),
+        'paid_revenue': rev(paid),
         'unpaid_count': orders.filter(payment_status='unpaid').count(),
         'avg_order': avg_order,
         'total_customers': Order.objects.values('phone').distinct().count(),
@@ -155,6 +217,14 @@ def admin_dashboard(request):
         'pending_count': orders.filter(status='new').count(),
         'revenue_series': revenue_series,
         'max_rev': max_rev,
+        'month_series': month_series,
+        'graph_max': graph_max,
+        'graph_json': json.dumps(month_series),
+        'prev_month_report': prev_month_report,
+        'day_chart_json': json.dumps(_report_build('day')['buckets']),
+        'week_chart_json': json.dumps(_report_build('week')['buckets']),
+        'month_chart_json': json.dumps(_report_build('month')['buckets']),
+        'year_chart_json': json.dumps(_report_build('year')['buckets']),
     }
 
     recent_orders = orders[:5]
@@ -165,6 +235,78 @@ def admin_dashboard(request):
     context = {**stats, 'recent_orders': recent_orders, 'today_customers': today_customers,
                'notifications': notifications, 'unread_notifs': unread_notifs}
     return render(request, 'core/dashboard.html', context)
+
+
+def _report_build(period, today=None):
+    """Bucketed sales series + summary for day / week / month / year."""
+    from calendar import monthrange
+
+    today = today or date.today()
+    orders = Order.objects.all()
+
+    def rev(qs):
+        return qs.aggregate(s=Sum('total'))['s'] or 0
+
+    def growth(cur, prev):
+        if prev <= 0:
+            return 0
+        return round((cur - prev) / prev * 100)
+
+    buckets, title, label, qf = [], '', '', {}
+    if period == 'day':
+        title, label = 'Ripoti ya Leo', today.isoformat()
+        qf = {'date': today}
+        tz = timezone.get_current_timezone()
+        rows = list(orders.filter(date=today).values_list('created_at', 'total'))
+        hours = [{'label': f'{h:02d}:00', 'revenue': 0, 'count': 0} for h in range(24)]
+        for ts, total in rows:
+            lt = ts.astimezone(tz) if getattr(ts, 'tzinfo', None) else ts
+            hours[lt.hour]['revenue'] += total or 0
+            hours[lt.hour]['count'] += 1
+        now_h = timezone.localtime().hour
+        buckets = [b for i, b in enumerate(hours) if i <= now_h]
+        prev = rev(orders.filter(date=today - timedelta(days=1)))
+    elif period == 'week':
+        monday = today - timedelta(days=today.weekday())
+        title, label = 'Ripoti ya Wiki', f'{monday.isoformat()} - {today.isoformat()}'
+        qf = {'date__gte': monday, 'date__lte': today}
+        dnam = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        for i in range(7):
+            dd = monday + timedelta(days=i)
+            if dd > today:
+                break
+            qs = orders.filter(date=dd)
+            buckets.append({'label': f'{dnam[i]} {dd.day}', 'revenue': rev(qs), 'count': qs.count()})
+        prev = rev(orders.filter(date__gte=monday - timedelta(days=7), date__lt=monday))
+    elif period == 'month':
+        title, label = 'Ripoti ya Mwezi Huu', today.strftime('%B %Y')
+        qf = {'date__year': today.year, 'date__month': today.month}
+        for dd in range(1, today.day + 1):
+            qs = orders.filter(date=today.replace(day=dd))
+            buckets.append({'label': str(dd), 'revenue': rev(qs), 'count': qs.count()})
+        sm = today.replace(day=1)
+        pm_end = sm - timedelta(days=1)
+        prev = rev(orders.filter(date__gte=pm_end.replace(day=1), date__lte=pm_end))
+    elif period == 'year':
+        title, label = 'Ripoti ya Mwaka Huu', str(today.year)
+        qf = {'date__year': today.year}
+        mon = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ago', 'Sep', 'Okt', 'Nov', 'Des']
+        for m in range(1, 13):
+            qs = orders.filter(date__year=today.year, date__month=m)
+            buckets.append({'label': mon[m - 1], 'revenue': rev(qs), 'count': qs.count()})
+        prev = rev(orders.filter(date__year=today.year - 1))
+
+    current = orders.filter(**qf)
+    total_revenue = rev(current) or sum(b['revenue'] for b in buckets)
+    return {
+        'title': title,
+        'period_label': label,
+        'buckets': buckets,
+        'total_revenue': total_revenue,
+        'total_orders': current.count(),
+        'total_customers': current.values('phone').distinct().count(),
+        'growth': growth(total_revenue, prev),
+    }
 
 
 # ========== ORDERS ==========
@@ -572,6 +714,26 @@ def notifications_clear_view(request):
     return JsonResponse({'ok': True})
 
 
+@login_required
+def notifications_view(request):
+    notifs = Notification.objects.all()
+    total = notifs.count()
+    unread = notifs.filter(is_read=False).count()
+    return render(request, 'core/notifications.html', {
+        'notifications': notifs[:80],
+        'unread_notifs': unread,
+        'total_notifs': total,
+    })
+
+
+@login_required
+@require_POST
+def notifications_delete_view(request):
+    Notification.objects.all().delete()
+    log_activity(request.user, 'Notifications zimefutwa', 'All notifications cleared')
+    return JsonResponse({'ok': True})
+
+
 # ========== EXPORT / IMPORT ==========
 
 @login_required
@@ -583,6 +745,32 @@ def export_view(request):
     from django.http import HttpResponse
     response = HttpResponse(data, content_type='application/json')
     response['Content-Disposition'] = f'attachment; filename="clocktower-backup-{date.today()}.json"'
+    return response
+
+
+@login_required
+@require_POST
+def export_report_view(request):
+    period = request.POST.get('period', '')
+    if period not in ('day', 'week', 'month', 'year'):
+        return redirect('admin_dashboard')
+    rep = _report_build(period)
+    import csv
+    from io import StringIO
+    buf = StringIO()
+    w = csv.writer(buf)
+    w.writerow([rep['title'], rep['period_label']])
+    w.writerow([])
+    w.writerow(['Kipindi', 'Mapato (TSh)', 'Maagizo'])
+    for b in rep['buckets']:
+        w.writerow([b['label'], b['revenue'], b['count']])
+    w.writerow([])
+    w.writerow(['Jumla', rep['total_revenue'], rep['total_orders']])
+    w.writerow(['Wateja', rep['total_customers'], ''])
+    w.writerow(['Ukuaji (%)', rep['growth'], ''])
+    from django.http import HttpResponse
+    response = HttpResponse(buf.getvalue(), content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = f'attachment; filename="clocktower-report-{period}-{date.today().isoformat()}.csv"'
     return response
 
 

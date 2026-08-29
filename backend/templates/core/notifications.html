@@ -1,0 +1,135 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Arifa / Notifications{% endblock %}
+
+{% block content %}
+<style>
+    .notif-head {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    .notif-head h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin: 0; }
+    .notif-head .count-pill {
+        background: rgba(255,184,77,0.15); color: var(--accent);
+        font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.7rem; border-radius: 20px;
+    }
+    .notif-actions { margin-left: auto; display: flex; gap: 0.5rem; }
+    .notif-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+    .notif-row {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 0.95rem 1.1rem;
+        border-bottom: 1px solid var(--border);
+    }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-row.unread { background: rgba(255,184,77,0.05); }
+    .notif-ic {
+        width: 40px; height: 40px; border-radius: 10px; flex: 0 0 auto;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,184,77,0.12); color: var(--accent); font-size: 17px;
+    }
+    .notif-tx { flex: 1; min-width: 0; }
+    .notif-tx strong { display: block; font-size: 0.9rem; color: var(--text); }
+    .notif-tx span { display: block; font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+    .notif-tx small { display: block; font-size: 0.7rem; color: var(--muted); opacity: 0.8; margin-top: 0.3rem; }
+    .notif-dot {
+        width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto;
+        background: var(--accent); box-shadow: 0 0 0 3px rgba(255,184,77,0.2);
+    }
+    .mark-read { padding: 0.45rem 0.9rem; font-size: 0.78rem; }
+    .read-tag { font-size: 0.72rem; color: var(--green); font-weight: 600; white-space: nowrap; }
+    .notif-empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+    .btn-danger {
+        background: rgba(239,68,68,0.1); color: var(--danger);
+        border: 1px solid rgba(239,68,68,0.3);
+    }
+    .btn-danger:hover { background: rgba(239,68,68,0.2); color: var(--danger); }
+    @media (max-width: 560px) {
+        .notif-actions { margin-left: 0; width: 100%; }
+        .notif-actions .btn { flex: 1; justify-content: center; }
+    }
+</style>
+
+<div class="section-title" style="margin-bottom:1rem;"><i class="li-n-bell"></i> Arifa Zote</div>
+
+<div class="notif-head">
+    <h3>Notifications</h3>
+    <span class="count-pill">{{ total_notifs }} jumla · {{ unread_notifs }} hazijasomwa</span>
+    <div class="notif-actions">
+        <button type="button" id="markAllBtn" class="btn btn-primary">Weka Zote Zimesomwa</button>
+        <button type="button" id="clearAllBtn" class="btn btn-danger">Futa Zote</button>
+    </div>
+</div>
+
+<div class="notif-card">
+    {% for n in notifications %}
+    <div class="notif-row{% if not n.is_read %} unread{% endif %}">
+        <div class="notif-ic"><i class="li-n-bell" data-li-size="18"></i></div>
+        <div class="notif-tx">
+            <strong>{{ n.title }}</strong>
+            {% if n.detail %}<span>{{ n.detail|linebreaksbr }}</span>{% endif %}
+            <small>{{ n.created_at|date:"d M Y, H:i" }}</small>
+        </div>
+        {% if not n.is_read %}
+        <span class="notif-dot" title="Haijasomwa"></span>
+        <button type="button" class="mark-read btn btn-outline" data-id="{{ n.id }}">Soma</button>
+        {% else %}
+        <span class="read-tag">Imesomwa</span>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="notif-empty">Hakuna notifications</div>
+    {% endfor %}
+</div>
+
+<form id="csrfForm" style="display:none;">{% csrf_token %}</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var tokenEl = document.querySelector('#csrfForm input[name=csrfmiddlewaretoken]');
+    var token = tokenEl ? tokenEl.value : '';
+    var clearUrl = '{% url "notifs_clear" %}';
+    var deleteUrl = '{% url "notifs_delete" %}';
+
+    function post(url, cb) {
+        fetch(url, { method: 'POST', credentials: 'same-origin', headers: { 'X-CSRFToken': token } })
+            .then(function(r) { return r.json(); })
+            .then(cb)
+            .catch(function() { location.reload(); });
+    }
+
+    var markAll = document.getElementById('markAllBtn');
+    if (markAll) {
+        markAll.addEventListener('click', function() {
+            post(clearUrl, function() { location.reload(); });
+        });
+    }
+
+    var clearAll = document.getElementById('clearAllBtn');
+    if (clearAll) {
+        clearAll.addEventListener('click', function() {
+            window.showConfirm('Futa Zote', 'Hakika unataka kufuta notifications zote?', function() {
+                post(deleteUrl, function() { location.reload(); });
+            });
+        });
+    }
+
+    document.querySelectorAll('.mark-read').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            post('/api/notifications/' + btn.dataset.id + '/read/', function() { location.reload(); });
+        });
+    });
+});
+</script>
+{% endblock %}

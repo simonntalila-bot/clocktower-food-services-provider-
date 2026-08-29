@@ -132,7 +132,7 @@ button{font-family:inherit;cursor:pointer;}
       <a href="{% url 'admin_comments' %}" class="{% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
         <i class="li-n-comments"></i> <span data-i18n="comments">Maoni</span>
       </a>
-      <a href="#" id="sidebarNotifLink">
+      <a href="{% url 'admin_notifications' %}" id="sidebarNotifLink" class="{% if request.resolver_match.url_name == 'admin_notifications' %}active{% endif %}">
         <i class="li-n-bell"></i> <span data-i18n="notifications">Arifa</span>
         <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="sidebarNotifDot"></span>
         <span class="notif-count-side{% if unread_notifs %} show{% endif %}" id="sidebarNotifCount">{{ unread_notifs }}</span>
@@ -177,32 +177,10 @@ button{font-family:inherit;cursor:pointer;}
         <span class="pill" data-i18n="role_{{ user.role }}">{{ user.get_role_display }}</span>
       </div>
       <div class="right">
-        <div class="notif-wrapper">
-          <button class="notif-btn" id="notifBtn">
-            <i class="li-n-bell"></i>
-            <span class="notif-count{% if unread_notifs %} show{% endif %}" id="notifCount">{{ unread_notifs }}</span>
-          </button>
-          <div class="notif-dropdown" id="notifDropdown">
-            <div class="notif-header">
-              <h4>Notifications</h4>
-            </div>
-            <div class="notif-list">
-            {% for notif in notifications %}
-            <div class="notif-item{% if not notif.is_read %} unread{% endif %}">
-              <div class="notif-icon" style="background:rgba(255,184,77,0.12);color:var(--accent);">
-                <i class="li-n-bell" data-li-size="14"></i>
-              </div>
-              <div class="notif-text">
-                <strong>{{ notif.title }}</strong>
-                <span>{{ notif.detail|linebreaksbr }}</span>
-              </div>
-            </div>
-            {% empty %}
-            <div class="notif-empty">Hakuna notifications</div>
-            {% endfor %}
-            </div>
-          </div>
-        </div>
+        <a href="{% url 'admin_notifications' %}" class="notif-btn" id="notifBtn" title="Arifa" aria-label="Arifa">
+          <i class="li-n-bell"></i>
+          <span class="notif-count{% if unread_notifs %} show{% endif %}" id="notifCount">{{ unread_notifs }}</span>
+        </a>
         <div class="lang-toggle" id="langToggle">
           <button type="button" class="lang-btn" data-lang="en">EN</button>
           <button type="button" class="lang-btn" data-lang="sw">KISWA</button>
@@ -285,18 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   var notifBtn = document.getElementById('notifBtn');
-  var notifDrop = document.getElementById('notifDropdown');
-  if (notifBtn && notifDrop) {
-    notifBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      notifDrop.classList.toggle('show');
-    });
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.notif-dropdown') && !e.target.closest('.notif-btn')) {
-        notifDrop.classList.remove('show');
-      }
-    });
-  }
 
   var hamburger = document.getElementById('hamburgerBtn');
   var sidebar = document.getElementById('sidebar');
@@ -335,16 +301,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var sideDot = document.getElementById('sidebarNotifDot');
   var sideCount = document.getElementById('sidebarNotifCount');
   var prevUnread = unreadEl ? parseInt(unreadEl.textContent, 10) || 0 : 0;
-
-  var notifLink = document.getElementById('sidebarNotifLink');
-  if (notifLink) {
-    notifLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      if (notifBtn && notifDrop) {
-        notifDrop.classList.toggle('show');
-      }
-    });
-  }
 
   function playNotifSound() {
     try {

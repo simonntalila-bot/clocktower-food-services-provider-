@@ -183,7 +183,7 @@
                 </td>
                 <td><span class="cat-badge cat-{{ food.category }}">{{ food.category }}</span></td>
                 <td><strong>TSh {{ food.price|floatformat:0 }}</strong></td>
-                <td><span class="rating">⭐ {{ food.rating|floatformat:1 }}</span></td>
+                <td><span class="rating">⭐ {% if food.rating %}{{ food.rating|floatformat:1 }}{% else %}—{% endif %}</span></td>
                 <td>
                     {% if food.popular %}
                     <span class="popular-yes"><i class="li-n-fire"></i> Ndiyo</span>

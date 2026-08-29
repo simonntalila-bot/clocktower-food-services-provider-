@@ -158,6 +158,37 @@
     .chart-bar .bar-label { font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
     .chart-bar .bar-val { font-size: 0.68rem; font-weight: 700; color: var(--text); }
     .chart-bar .bar.zero { background: var(--card2); }
+    .growth-chip{display:inline-block;padding:1px 9px;border-radius:12px;font-size:0.7rem;font-weight:700;margin-left:4px;}
+    .growth-chip.up{background:rgba(34,197,94,0.15);color:#15803d;}
+    .growth-chip.down{background:rgba(239,68,68,0.15);color:var(--danger);}
+    .line-chart{width:100%;overflow:hidden;}
+    .line-chart svg{display:block;}
+    .trend-legend{font-size:0.72rem;color:var(--muted);display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;}
+    .trend-legend b.up{color:#15803d;}
+    .trend-legend b.down{color:var(--danger);}
+    .report-note{font-size:0.72rem;color:var(--muted);margin-left:auto;}
+    .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+    @media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
+    .chart-panel{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:0.95rem 1rem;}
+    .cp-head{display:flex;align-items:center;gap:0.5rem;}
+    .cp-dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 3px rgba(0,0,0,0.06);}
+    .cp-ttl{min-width:0;}
+    .cp-title{font-size:0.85rem;font-weight:700;color:var(--text);}
+    .cp-hint{font-size:0.68rem;color:var(--muted);line-height:1.25;}
+    .cp-value{margin-left:auto;font-size:1rem;font-weight:800;color:var(--text);white-space:nowrap;}
+    .cp-sub{font-size:0.72rem;color:var(--muted);margin:0.2rem 0 0.3rem;}
+    .chart-empty{padding:26px 10px;text-align:center;color:var(--muted);font-size:0.78rem;border:1px dashed var(--border);border-radius:10px;}
+    .barchart{width:100%;margin-top:0.25rem;}
+    .barchart svg{display:block;width:100%;height:auto;}
+    .export-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.9rem;}
+    .btn-export{display:flex;align-items:center;justify-content:center;gap:0.55rem;width:100%;padding:0.85rem 1rem;border:none;border-radius:12px;font-weight:700;font-size:0.85rem;color:#fff;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+    .btn-export:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,0.16);}
+    .btn-export:active{transform:translateY(0);}
+    .btn-export svg{width:18px;height:18px;}
+    .btn-export.orange{background:linear-gradient(135deg,#ffa726,#ff7043);}
+    .btn-export.violet{background:linear-gradient(135deg,#7c4dff,#a78bfa);}
+    .btn-export.green{background:linear-gradient(135deg,#10b981,#15803d);}
+    .btn-export.blue{background:linear-gradient(135deg,#3b82f6,#60a5fa);}
     @media (max-width: 500px) { .chart { height: 120px; } }
 </style>
 
@@ -244,21 +275,112 @@
             <div class="biz-stat-label">Mapato ya Malipo</div>
         </div>
     </div>
-    <div class="chart-box">
-        <h4>Mapato kwa Siku 7 za Mwisho</h4>
-        <div class="chart">
-            {% for day in revenue_series %}
-            <div class="chart-bar" title="{{ day.label }}: TSh {{ day.revenue }} (maagizo {{ day.count }})">
-                <span class="bar-val">{% if day.revenue > 0 %}TSh {{ day.revenue|floatformat:0 }}{% endif %}</span>
-                {% if day.revenue > 0 %}
-                <div class="bar" style="height: {% widthratio day.revenue max_rev 100 %}%;"></div>
-                {% else %}
-                <div class="bar zero" style="height: 3px;"></div>
-                {% endif %}
-                <span class="bar-label">{{ day.label }}</span>
-            </div>
-            {% endfor %}
+    </div>
+</div>
+
+<div class="biz-section">
+    <div class="biz-head">
+        <div class="biz-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            Mwelekeo wa Mauzo (Leo · Wiki · Mwezi · Mwaka)
         </div>
+    </div>
+    <div class="charts-grid">
+        <div class="chart-panel">
+            <div class="cp-head">
+                <span class="cp-dot" style="background:#ffa726;"></span>
+                <div class="cp-ttl">
+                    <div class="cp-title">Mauzo ya Leo</div>
+                    <div class="cp-hint">Kila saa ya leo</div>
+                </div>
+                <span class="cp-value">TSh {{ today_revenue|floatformat:0|intcomma }}</span>
+            </div>
+            <div class="cp-sub">Maagizo {{ today_orders_count }} <span class="growth-chip {% if today_growth >= 0 %}up{% else %}down{% endif %}">{{ today_growth|stringformat:'+d' }}%</span></div>
+            <div class="barchart" id="bar-day"></div>
+            <script type="application/json" id="barDayData">{{ day_chart_json|safe }}</script>
+        </div>
+        <div class="chart-panel">
+            <div class="cp-head">
+                <span class="cp-dot" style="background:#7c4dff;"></span>
+                <div class="cp-ttl">
+                    <div class="cp-title">Mauzo ya Wiki</div>
+                    <div class="cp-hint">Siku za wiki hii (Mon–Leo)</div>
+                </div>
+                <span class="cp-value">TSh {{ week_rev|floatformat:0|intcomma }}</span>
+            </div>
+            <div class="cp-sub">Maagizo {{ week_orders }} <span class="growth-chip {% if week_growth >= 0 %}up{% else %}down{% endif %}">{{ week_growth|stringformat:'+d' }}%</span></div>
+            <div class="barchart" id="bar-week"></div>
+            <script type="application/json" id="barWeekData">{{ week_chart_json|safe }}</script>
+        </div>
+        <div class="chart-panel">
+            <div class="cp-head">
+                <span class="cp-dot" style="background:#10b981;"></span>
+                <div class="cp-ttl">
+                    <div class="cp-title">Mauzo ya Mwezi Huu</div>
+                    <div class="cp-hint">Siku za mwezi huu (1–Leo)</div>
+                </div>
+                <span class="cp-value">TSh {{ month_rev|floatformat:0|intcomma }}</span>
+            </div>
+            <div class="cp-sub">Maagizo {{ month_orders }} <span class="growth-chip {% if month_growth >= 0 %}up{% else %}down{% endif %}">{{ month_growth|stringformat:'+d' }}%</span></div>
+            <div class="barchart" id="bar-month"></div>
+            <script type="application/json" id="barMonthData">{{ month_chart_json|safe }}</script>
+        </div>
+        <div class="chart-panel">
+            <div class="cp-head">
+                <span class="cp-dot" style="background:#3b82f6;"></span>
+                <div class="cp-ttl">
+                    <div class="cp-title">Mauzo ya Mwaka Huu</div>
+                    <div class="cp-hint">Miezi 12 ya mwaka</div>
+                </div>
+                <span class="cp-value">TSh {{ year_rev|floatformat:0|intcomma }}</span>
+            </div>
+            <div class="cp-sub">Maagizo {{ year_orders }} <span class="growth-chip {% if year_growth >= 0 %}up{% else %}down{% endif %}">{{ year_growth|stringformat:'+d' }}%</span></div>
+            <div class="barchart" id="bar-year"></div>
+            <script type="application/json" id="barYearData">{{ year_chart_json|safe }}</script>
+        </div>
+    </div>
+</div>
+
+<div class="biz-section">
+    <div class="biz-head">
+        <div class="biz-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Pakua Ripoti (Export)
+        </div>
+    </div>
+    <div class="export-grid">
+        <form method="post" action="{% url 'export_report' %}" style="margin:0">
+            {% csrf_token %}
+            <input type="hidden" name="period" value="day">
+            <button type="submit" class="btn-export orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Ripoti ya Leo
+            </button>
+        </form>
+        <form method="post" action="{% url 'export_report' %}" style="margin:0">
+            {% csrf_token %}
+            <input type="hidden" name="period" value="week">
+            <button type="submit" class="btn-export violet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Ripoti ya Wiki
+            </button>
+        </form>
+        <form method="post" action="{% url 'export_report' %}" style="margin:0">
+            {% csrf_token %}
+            <input type="hidden" name="period" value="month">
+            <button type="submit" class="btn-export green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Ripoti ya Mwezi
+            </button>
+        </form>
+        <form method="post" action="{% url 'export_report' %}" style="margin:0">
+            {% csrf_token %}
+            <input type="hidden" name="period" value="year">
+            <button type="submit" class="btn-export blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Ripoti ya Mwaka
+            </button>
+        </form>
     </div>
 </div>
 
@@ -285,6 +407,38 @@
         <div class="biz-item">
             <div class="biz-stat-value">{{ unpaid_count }}</div>
             <div class="biz-stat-label">Haijalipwa</div>
+        </div>
+    </div>
+</div>
+
+<div class="biz-section">
+    <div class="biz-head">
+        <div class="biz-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+            Ripoti ya Mwezi Uliopita ({{ prev_month_report.month }})
+            <span class="report-note">Ripoti inatolewa na mfumo kila mwisho wa mwezi</span>
+        </div>
+    </div>
+    <div class="biz-grid">
+        <div class="biz-item">
+            <div class="biz-stat-value">TSh {{ prev_month_report.revenue|floatformat:0|intcomma }}</div>
+            <div class="biz-stat-label">Mapato ya Mwezi</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ prev_month_report.orders }}</div>
+            <div class="biz-stat-label">Maagizo</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ prev_month_report.customers }}</div>
+            <div class="biz-stat-label">Wateja</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">TSh {{ prev_month_report.avg_order|floatformat:0|intcomma }}</div>
+            <div class="biz-stat-label">Wastani wa Agizo</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value"><span class="growth-chip {% if prev_month_report.growth >= 0 %}up{% else %}down{% endif %}" style="font-size:1.1rem;">{{ prev_month_report.growth|stringformat:'+d' }}%</span></div>
+            <div class="biz-stat-label">Ukuaji dhidi ya Mwezi Uliotangulia</div>
         </div>
     </div>
 </div>
@@ -325,4 +479,55 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  function fmt(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(0) + 'k';
+    return String(n);
+  }
+  function draw(id, dataId, pal) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var d = [];
+    try { d = JSON.parse(document.getElementById(dataId).textContent || '[]'); } catch (e) {}
+    if (!d.length) {
+      el.innerHTML = '<div class="chart-empty">Hakuna data ya mauzo bado</div>';
+      return;
+    }
+    var W = 540, H = 220, PT = 22, PB = 22, PX = 6;
+    var max = Math.max.apply(null, d.map(function(x) { return x.revenue; }));
+    if (max <= 0) max = 1;
+    if (max === 1 && !d.some(function(x) { return x.revenue > 0; })) {
+      el.innerHTML = '<div class="chart-empty">Bado hakuna mauzo kwa kipindi hiki</div>';
+      return;
+    }
+    var n = d.length, slot = (W - 2 * PX) / n, bw = Math.min(40, slot * 0.6), bh = H - PT - PB;
+    var gid = 'g' + id;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '"><defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="' + pal[0] + '"/><stop offset="100%" stop-color="' + pal[1] + '"/></linearGradient></defs>';
+    d.forEach(function(x, i) {
+      var cx = PX + slot * i + slot / 2;
+      if (x.revenue > 0) {
+        var hh = Math.max(6, (x.revenue / max) * bh), y = H - PB - hh;
+        s += '<rect x="' + (cx - bw / 2) + '" y="' + y + '" width="' + bw + '" height="' + hh + '" rx="6" fill="url(#' + gid + ')"><title>TSh ' +
+          x.revenue.toLocaleString('en') + ' - maagizo ' + x.count + ' (' + x.label + ')</title></rect>';
+        if (hh > 14) s += '<text x="' + cx + '" y="' + (y - 5) + '" text-anchor="middle" font-size="10" font-weight="700" fill="' + pal[1] + '">TSh ' + fmt(x.revenue) + '</text>';
+      } else {
+        s += '<rect x="' + (cx - bw / 5) + '" y="' + (H - PB - 5) + '" width="' + (bw * 0.4) + '" height="5" rx="2.5" fill="#cdd2da"><title>' + x.label + ': TSh 0</title></rect>';
+      }
+      s += '<text x="' + cx + '" y="' + (H - 7) + '" text-anchor="middle" font-size="9" fill="var(--muted)">' + x.label + '</text>';
+    });
+    s += '</svg>';
+    el.innerHTML = s;
+  }
+  draw('bar-day', 'barDayData', ['#ffa726', '#ff7043']);
+  draw('bar-week', 'barWeekData', ['#7c4dff', '#a78bfa']);
+  draw('bar-month', 'barMonthData', ['#10b981', '#15803d']);
+  draw('bar-year', 'barYearData', ['#3b82f6', '#60a5fa']);
+})();
+</script>
 {% endblock %}
