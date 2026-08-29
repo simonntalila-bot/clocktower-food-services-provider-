@@ -23,6 +23,7 @@ const sharePayment = ref('');
 const sharePhone = ref('');
 const nameError = ref(false);
 const phoneError = ref(false);
+const tableError = ref(false);
 const processing = ref(false);
 const done = ref(false);
 
@@ -121,12 +122,14 @@ function resetForm() {
   sharePhone.value = '';
   nameError.value = false;
   phoneError.value = false;
+  tableError.value = false;
 }
 
 function handleSubmit() {
   nameError.value = name.value.trim().length < 2;
-  phoneError.value = !/^[0-9+\s()-]{7,}$/.test(phone.value.trim());
-  if (nameError.value || phoneError.value) return;
+  tableError.value = !table.value.trim();
+  phoneError.value = false;
+  if (nameError.value || tableError.value) return;
 
   processing.value = true;
 
@@ -236,14 +239,14 @@ function handleOverlayClick(e) {
                 <option value="Other" v-html="lang.$t('co.pay.other')"></option>
               </select>
             </div>
-            <div class="field" :class="{ invalid: phoneError }">
+            <div class="field">
               <label v-html="lang.$t('co.lbl.phone')"></label>
               <input type="tel" v-model="phone" :placeholder="lang.$t('co.ph.phone')">
-              <div class="err" v-html="lang.$t('co.err.phone')"></div>
             </div>
-            <div class="field">
+            <div class="field" :class="{ invalid: tableError }">
               <label v-html="lang.$t('co.lbl.table')"></label>
               <input type="text" v-model="table" :placeholder="lang.$t('co.ph.table')">
+              <div class="err" v-html="lang.$t('co.err.table')"></div>
             </div>
 
             <label class="share-toggle">
@@ -282,7 +285,7 @@ function handleOverlayClick(e) {
               <label v-html="lang.$t('co.lbl.comments')"></label>
               <textarea v-model="comments" :placeholder="lang.$t('co.ph.comments')"></textarea>
             </div>
-            <button class="place-btn" type="submit" v-html="lang.$t('co.submit')"></button>
+            <button class="place-btn" type="submit" v-html="(payment === 'Cash' || payment === 'Other') ? lang.$t('co.submitCash') : lang.$t('co.submit')"></button>
           </form>
         </div>
       </div>

@@ -721,11 +721,11 @@
   .field.invalid .err{display:block;}
   .place-btn{
     width:100%;padding:16px;border:none;border-radius:13px;
-    background:#F97316;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
-    margin-top:10px;box-shadow:0 12px 30px -10px rgba(249,115,22,0.55);
+background:#16A34A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
+    margin-top:10px;box-shadow:0 12px 30px -10px rgba(22,163,74,0.55);
     transition:transform .12s ease, background .15s ease;cursor:pointer;
   }
-  .place-btn:hover{transform:translateY(-2px);background:#EA580C;}
+  .place-btn:hover{transform:translateY(-2px);background:#15803D;}
 
   /* Share Bill */
   .share-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;margin-top:10px;}

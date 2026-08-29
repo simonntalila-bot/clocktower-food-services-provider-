@@ -828,9 +828,9 @@ def place_order_view(request):
         notes = request.POST.get('notes', '').strip()
         comments_text = request.POST.get('comments', '').strip()
 
-        if not name or not phone:
+        if not name:
             return render(request, 'core/place_order.html', {
-                'error': 'Jina na simu ni lazima.',
+                'error': 'Jina ni lazima.',
                 'foods': Food.objects.filter(is_active=True),
             })
 
@@ -901,8 +901,8 @@ def api_order_view(request):
 
     name = (data.get('name') or '').strip()
     phone = (data.get('phone') or '').strip()
-    if not name or not phone:
-        return JsonResponse({'ok': False, 'error': 'name and phone required'}, status=400)
+    if not name:
+        return JsonResponse({'ok': False, 'error': 'name required'}, status=400)
 
     payment = (data.get('payment') or '').strip() or 'mpesa'
     payment_status = 'paid' if data.get('paid') else 'unpaid'
