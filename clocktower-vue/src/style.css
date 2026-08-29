@@ -307,10 +307,10 @@
   }
   .hero-content .btn-primary:hover{background:#0A9A4A;}
   .hero-content .btn-ghost{
-    border:1px solid rgba(255,255,255,0.30);color:#fff;background:rgba(5,10,15,0.35);
-    backdrop-filter:blur(6px);
+    border:none;color:#fff;background:#0F532A;
+    box-shadow:0 12px 30px -10px rgba(15,83,42,0.65);
   }
-  .hero-content .btn-ghost:hover{border-color:#ffb84d;color:#ffd9a0;}
+  .hero-content .btn-ghost:hover{background:#0A3D1F;color:#fff;border-color:transparent;}
   .hero-content .btn-primary:hover,.hero-content .btn-ghost:hover{transform:translateY(-2px);}
   .hero-feats{
     display:flex;gap:20px;flex-wrap:wrap;margin-top:40px;justify-content:center;
@@ -400,6 +400,8 @@
     font-size:13px;color:#ffd9a0;text-decoration:none;
   }
   .forgot-link:hover{text-decoration:underline;color:#ffb84d;}
+  .login-cred-hint{margin:12px 0 0;text-align:center;font-size:12px;color:rgba(255,255,255,0.6);}
+  .login-cred-hint strong{color:#ffd9a0;}
   .login-error{
     background:#fdecec;color:#b91c1c;border:1px solid #fecaca;
     border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px;
@@ -524,13 +526,13 @@
   .add-btn{
     display:inline-flex;align-items:center;justify-content:center;gap:5px;
     padding:0 12px;border:none;border-radius:8px;
-    background:#228B22;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
+    background:#0F532A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;
     transition:background .15s ease, transform .12s ease, box-shadow .15s ease;
     height:32px;cursor:pointer;white-space:nowrap;min-width:74px;
   }
-  .add-btn:hover{background:#1B5E20;transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(34,139,34,0.50);}
-  .add-btn:focus-visible{outline:2px solid #228B22;outline-offset:2px;}
-  .add-btn.success{background:#2E9E2E;}
+  .add-btn:hover{background:#0A3D1F;transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(15,83,42,0.55);}
+  .add-btn:focus-visible{outline:2px solid #0F532A;outline-offset:2px;}
+  .add-btn.success{background:#1B8A3C;}
   .food-card.added{border-color:#16A34A;}
 
   /* ---------- CART SIDEBAR ---------- */
@@ -721,11 +723,11 @@
   .field.invalid .err{display:block;}
   .place-btn{
     width:100%;padding:16px;border:none;border-radius:13px;
-background:#228B22;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
-    margin-top:10px;box-shadow:0 12px 30px -10px rgba(34,139,34,0.55);
+    background:#0F532A;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;
+    margin-top:10px;box-shadow:0 12px 30px -10px rgba(15,83,42,0.55);
     transition:transform .12s ease, background .15s ease;cursor:pointer;
   }
-  .place-btn:hover{transform:translateY(-2px);background:#1B5E20;}
+  .place-btn:hover{transform:translateY(-2px);background:#0A3D1F;}
 
   /* Share Bill */
   .share-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;margin-top:10px;}

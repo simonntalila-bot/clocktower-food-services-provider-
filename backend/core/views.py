@@ -127,6 +127,39 @@ def api_login_view(request):
     return JsonResponse({'ok': False, 'error': 'Username au password si sahihi.'}, status=401)
 
 
+@csrf_exempt
+def api_forgot_view(request):
+    if request.method == 'OPTIONS':
+        return JsonResponse({'ok': True})
+    if request.method != 'POST':
+        return JsonResponse({'ok': False, 'error': 'Method not allowed'}, status=405)
+
+    try:
+        data = json.loads(request.body or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'error': 'Invalid data'}, status=400)
+
+    username = (data.get('username') or '').strip()
+    answer = (data.get('answer') or '').strip().lower()
+    new_pw = data.get('new_password') or ''
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({'ok': False, 'error': 'Username haipatikani.'}, status=404)
+
+    if answer != 'helen':
+        return JsonResponse({'ok': False, 'error': 'Jibu si sahihi.'}, status=400)
+
+    if len(new_pw) < 6:
+        return JsonResponse({'ok': False, 'error': 'Password lazima iwe na herufi 6+.'}, status=400)
+
+    user.set_password(new_pw)
+    user.save()
+    log_activity(user, 'Password imebadilishwa (forgot)', username)
+    return JsonResponse({'ok': True, 'message': 'Password mpya imewekwa! Ingia sasa.'})
+
+
 # ========== ADMIN PANEL ==========
 
 @login_required

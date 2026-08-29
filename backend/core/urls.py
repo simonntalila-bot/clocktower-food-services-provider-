@@ -37,6 +37,7 @@ urlpatterns = [
 
     # API
     path('api/login/', views.api_login_view, name='api_login'),
+    path('api/forgot/', views.api_forgot_view, name='api_forgot'),
     path('api/order/', views.api_order_view, name='api_order'),
     path('api/foods/', views.api_foods_view, name='api_foods'),
     path('api/notifications/', views.notifications_api, name='notifications_api'),

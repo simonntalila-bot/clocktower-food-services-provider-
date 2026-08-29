@@ -74,7 +74,8 @@ async function handleSubmit() {
         <button class="login-btn-submit" type="submit" :disabled="loading">
           {{ loading ? 'Inaingia...' : 'Login' }}
         </button>
-        <a class="forgot-link" href="/forgot/">Umesahau password?</a>
+        <a class="forgot-link" @click.prevent="router.push('/forgot')" href="#/forgot">Umesahau password?</a>
+        <p class="login-cred-hint">Default: <strong>admin</strong> / <strong>Clocktower@2026</strong></p>
       </form>
     </div>
   </div>
