@@ -1,0 +1,157 @@
+{% extends 'core/base_admin.html' %}
+
+{% block title %}Mteja Walk-in / Walk-in Order{% endblock %}
+
+{% block content %}
+<style>
+    .wi-wrap { max-width: 720px; margin: 0 auto; }
+    .wi-head {
+        display: flex; align-items: center; gap: 0.75rem;
+        background: linear-gradient(135deg, #0F532A, #0A3D1F);
+        color: #fff; border-radius: 14px; padding: 1.1rem 1.3rem;
+        margin-bottom: 1.25rem;
+    }
+    .wi-head .icon {
+        width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,255,255,0.15); font-size: 22px;
+    }
+    .wi-head h2 { font-size: 1.05rem; font-weight: 800; margin: 0; font-family: 'Space Grotesk', sans-serif; }
+    .wi-head p { font-size: 0.8rem; margin: 0.2rem 0 0; opacity: 0.85; }
+
+    .wi-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.3rem 1.4rem;
+    }
+    .wi-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0 0 1rem; display: flex; align-items: center; gap: 0.45rem; }
+    .wi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    @media (max-width: 560px) { .wi-grid { grid-template-columns: 1fr; } }
+    .wi-grid .full { grid-column: 1 / -1; }
+    .form-group { margin-bottom: 0.85rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.3rem; }
+    .form-group input[type="text"],
+    .form-group input[type="tel"],
+    .form-group input[type="number"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.6rem 0.85rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        font-size: 0.92rem;
+        box-sizing: border-box;
+        font-family: inherit;
+    }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+    .submit-btn {
+        padding: 0.8rem 1.4rem;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #fff;
+        border: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        width: 100%;
+    }
+    .submit-btn:hover { opacity: 0.88; }
+    .error-msg {
+        background: rgba(217,74,74,0.12);
+        color: var(--danger);
+        border: 1px solid rgba(217,74,74,0.25);
+        padding: 0.6rem 0.85rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+    .wi-note { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
+</style>
+
+<div class="wi-wrap">
+    <div class="wi-head">
+        <div class="icon">🚶</div>
+        <div>
+            <h2>Mteja Walk-in / Walk-in Customer</h2>
+            <p>Mteja ambaye hajatuma malipo ya simu (M-Pesa) — andika agizo, tuma kwa Admin & Mhasibu</p>
+        </div>
+    </div>
+
+    <div class="wi-card">
+        <h3><i class="li-n-plus"></i> Andika Agizo / Record Order</h3>
+        {% if error %}<div class="error-msg">{{ error }}</div>{% endif %}
+        <form method="post" action="{% url 'walkin_add' %}">
+            {% csrf_token %}
+            <div class="wi-grid">
+                <div class="form-group">
+                    <label for="id_name">Jina la Mteja / Customer Name *</label>
+                    <input type="text" name="name" id="id_name" required placeholder="Mf. Juma Hassan">
+                </div>
+                <div class="form-group">
+                    <label for="id_phone">Namba ya Simu / Phone No</label>
+                    <input type="tel" name="phone" id="id_phone" placeholder="Mf. 0712345678">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_food">Aina ya Chakula / Food Type</label>
+                    <select name="food" id="id_food" onchange="window.wiFill(this)">
+                        <option value="">-- Chagua kutoka Menyu / Select from Menu --</option>
+                        {% for f in foods %}
+                        <option value="{{ f.pk }}" data-name="{{ f.name }}" data-price="{{ f.price }}">{{ f.icon }} {{ f.name }} — TSh {{ f.price }}</option>
+                        {% endfor %}
+                        <option value="">-- Sio kwenye menyu / Not on menu --</option>
+                    </select>
+                    <div class="wi-note">Ama chagua kutoka menyu ambapo bei ijazwe moja kwa moja, au chagua "Sio kwenye menyu" na uandike chini.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_food_desc">Chakula (kama sio kwenye menyu) / Food (if not on menu)</label>
+                    <input type="text" name="food_desc" id="id_food_desc" placeholder="Mf. Ugali na Nyama">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_qty">Idadi / Quantity</label>
+                    <input type="number" name="qty" id="id_qty" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="id_price">Bei / Price (TZS) *</label>
+                    <input type="number" name="price" id="id_price" value="0" min="0" placeholder="Mf. 5000">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_payment">Alilipa kwa Njia / Payment Method *</label>
+                    <select name="payment" id="id_payment">
+                        <option value="cash">Cash / Taslimu</option>
+                        <option value="mpesa">M-Pesa</option>
+                        <option value="tigo">Tigo Pesa</option>
+                        <option value="airtel">Airtel Money</option>
+                        <option value="halo">Halopesa</option>
+                        <option value="bank">Bank Transfer</option>
+                        <option value="other">Nyingine</option>
+                    </select>
+                </div>
+
+                <div class="form-group full">
+                    <label for="id_notes">Maelezo / Notes</label>
+                    <textarea name="notes" id="id_notes" placeholder="Hiari / Optional"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn"><i class="li-n-paperplane"></i> Tumisha kwa Admin &amp; Mhasibu / Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+window.wiFill = function(sel) {
+    var opt = sel.options[sel.selectedIndex];
+    if (opt && opt.value && opt.dataset) {
+        var price = document.getElementById('id_price');
+        if (price) price.value = opt.dataset.price || '0';
+    }
+};
+</script>
+{% endblock %}

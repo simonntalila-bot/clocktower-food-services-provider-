@@ -11,6 +11,7 @@ PERMISSIONS = {
     'order_pay': ('admin', 'accountant', 'receptionist'),
     'order_delete': ('admin', 'accountant'),
     'orders_clear': ('admin',),
+    'walkin_add': ('admin', 'accountant', 'receptionist', 'staff'),
     'admin_customers': ('admin', 'accountant', 'receptionist'),
     'admin_comments': ('admin', 'receptionist'),
     'comments_clear': ('admin',),

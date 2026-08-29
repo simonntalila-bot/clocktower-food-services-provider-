@@ -780,6 +780,94 @@ def expense_delete_view(request, pk):
     return redirect('admin_expenses')
 
 
+# ========== WALK-IN ORDER ==========
+
+@login_required
+def walkin_order_view(request):
+    """Record a walk-in customer order (no phone/M-Pesa payment).
+
+    Lets staff quickly capture: customer name, phone, food type, price and
+    payment method. Creates an Order (with an OrderItem when a menu food is
+    picked) and pushes a notification that admin & accountant see instantly.
+    """
+    error = ''
+    foods = Food.objects.filter(is_active=True).select_related('category')
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        food_id = request.POST.get('food', '').strip()
+        food_desc = request.POST.get('food_desc', '').strip()
+        qty = request.POST.get('qty', '1').strip()
+        price = request.POST.get('price', '').strip()
+        payment = request.POST.get('payment', 'cash').strip()
+        notes = request.POST.get('notes', '').strip()
+
+        if not name:
+            error = 'Tafadhali jaza jina la mteja.'
+        else:
+            price_i = 0
+            try:
+                price_i = int(price) if price else 0
+            except ValueError:
+                error = 'Bei (price) lazima iwe namba.'
+
+            if not error:
+                qty_i = 1
+                try:
+                    qty_i = int(qty) if qty else 1
+                    if qty_i < 1:
+                        qty_i = 1
+                except ValueError:
+                    qty_i = 1
+
+                food = None
+                if food_id:
+                    food = Food.objects.filter(pk=food_id).first()
+                if (not food) and food_desc:
+                    notes = (food_desc + (' | ' + notes if notes else '')).strip()
+
+                total = price_i if price_i > 0 else (food.price * qty_i if food else 0)
+
+                order = Order.objects.create(
+                    order_num=generate_order_num(),
+                    name=name,
+                    phone=phone,
+                    table_location='Walk-in',
+                    payment_method=payment if payment else 'cash',
+                    payment_status='paid',
+                    total=total,
+                    notes=notes,
+                    handled_by=request.user,
+                    date=date.today(),
+                )
+
+                if food:
+                    OrderItem.objects.create(
+                        order=order, food=food, quantity=qty_i, price=food.price,
+                    )
+                    order.total = food.price * qty_i
+                    order.save()
+
+                label = food.name if food else (food_desc or 'Mlo')
+                push_notification(
+                    f'Mteja Walk-in! #{order.order_num}',
+                    f'Mteja: {name}\nChakula: {label} x{qty_i}\nBei: TSh {order.total:,}\nMalipo: {order.get_payment_method_display()}'
+                )
+                log_activity(request.user, 'Agizo la mteja walk-in', f'#{order.order_num} {name} TSh {order.total:,}')
+                clear_caches()
+                return redirect('admin_orders')
+
+    notifications = Notification.objects.all()[:20]
+    unread_notifs = Notification.objects.filter(is_read=False).count()
+
+    return render(request, 'core/walkin_order.html', {
+        'foods': foods,
+        'error': error,
+        'notifications': notifications, 'unread_notifs': unread_notifs,
+    })
+
+
 # ========== SETTINGS ==========
 
 @login_required

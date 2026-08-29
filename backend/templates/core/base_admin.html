@@ -146,6 +146,11 @@ button{font-family:inherit;cursor:pointer;}
         <i class="li-n-grid"></i> <span data-i18n="dashboard">Dashboard</span>
       </a>
       {% endif %}
+      {% if 'walkin_add' in admin_allowed %}
+      <a href="{% url 'walkin_add' %}" class="{% if request.resolver_match.url_name == 'walkin_add' %}active{% endif %}" style="background:rgba(15,157,114,0.14);">
+        <i class="li-n-pluscircle"></i> <span data-i18n="walkin">Mteja Walk-in</span>
+      </a>
+      {% endif %}
       {% if 'admin_orders' in admin_allowed %}
       <a href="{% url 'admin_orders' %}" class="{% if request.resolver_match.url_name == 'admin_orders' %}active{% endif %}">
         <i class="li-n-receipt"></i> <span data-i18n="orders">Maagizo</span>
@@ -296,6 +301,7 @@ var CTF_LANG = {
     back_site: 'Back to website', notifications: 'Notifications',
     nav_finance: 'Finance', expenses: 'Expenses', nav_more: 'More',
     export_data: 'Export Data', export_report: 'Report', reset_data: 'Reset System',
+    walkin: 'Walk-in Customer',
     role_admin: 'Admin', role_accountant: 'Accountant', role_staff: 'Staff', role_receptionist: 'Receptionist',
     role_price_manager: 'Price Manager'
   },
@@ -307,6 +313,7 @@ var CTF_LANG = {
     back_site: 'Rudi kwenye tovuti', notifications: 'Arifa',
     nav_finance: 'Fedha', expenses: 'Matumizi (Expenses)', nav_more: 'Zaidi',
     export_data: 'Pakua Data', export_report: 'Ripoti', reset_data: 'Reset Mfumo',
+    walkin: 'Mteja Walk-in',
     role_admin: 'Admin', role_accountant: 'Mhasibu', role_staff: 'Mfanyakazi', role_receptionist: 'Msaidizi',
     role_price_manager: 'Msimamizi wa Bei'
   }

@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin-panel/orders/<int:pk>/delete/', views.order_delete_view, name='order_delete'),
     path('admin-panel/orders/clear/', views.orders_clear_view, name='orders_clear'),
     path('admin-panel/customers/', views.customers_view, name='admin_customers'),
+    path('admin-panel/walk-in/', views.walkin_order_view, name='walkin_add'),
     path('admin-panel/foods/', views.foods_view, name='admin_foods'),
     path('admin-panel/foods/add/', views.food_add_view, name='food_add'),
     path('admin-panel/foods/<int:pk>/edit/', views.food_edit_view, name='food_edit'),
