@@ -79,9 +79,8 @@ function initLineIcons(root){
 
 document.addEventListener('DOMContentLoaded', function() {
   initLineIcons();
-  // Theme
-  var saved = localStorage.getItem('ctfAdminTheme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
+  // White-only theme (dark mode removed)
+  document.documentElement.setAttribute('data-theme', 'light');
 
   // Auto-dismiss messages
   document.querySelectorAll('.messages li').forEach(function(el) {

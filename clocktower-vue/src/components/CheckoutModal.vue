@@ -86,6 +86,29 @@ function sendOrderToProviders(msg) {
   window.open('mailto:' + ORDER_EMAIL + '?subject=' + subject + '&body=' + encodeURIComponent(msg), '_blank');
 }
 
+function postOrderToBackend(orderNum) {
+  const payload = {
+    name: name.value.trim(),
+    phone: normalizePhone(phone.value.trim()),
+    payment: (payment.value || 'M-Pesa').toLowerCase().replace(/[^a-z]/g, '') || 'mpesa',
+    paid: false,
+    table: table.value.trim(),
+    notes: notes.value.trim(),
+    comments: comments.value.trim(),
+    share_bill: shareBill.value,
+    share_payment: sharePayment.value.trim(),
+    share_phone: sharePhone.value.trim(),
+    items: cart.items
+      .filter(i => menu.byId(i.foodId))
+      .map(i => ({ v_id: i.foodId, quantity: i.quantity }))
+  };
+  fetch('/api/order/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+}
+
 function resetForm() {
   name.value = '';
   phone.value = '';
@@ -124,6 +147,7 @@ function handleSubmit() {
 
     const msg = buildOrderMessage(orderNum);
     sendOrderToProviders(msg);
+    postOrderToBackend(orderNum);
 
     emit('order-placed', { orderNum, total, customerName: name.value.trim() });
     cart.clearCart();

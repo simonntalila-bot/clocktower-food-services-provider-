@@ -4,11 +4,10 @@
 {% block body %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 <style>
-:root{--bg:#0b0f14;--bg2:#0f151c;--card:#161d26;--card2:#1c2530;--border:rgba(255,255,255,0.08);--text:#f2f5f8;--muted:#9aa7b5;--accent:#ffb84d;--accent2:#ff7a45;--green:#34d399;--purple:#a78bfa;--danger:#ff6b6b;--nav-bg:rgba(11,15,20,0.92);--overlay:rgba(4,7,12,0.72);--shadow:0 18px 40px -18px rgba(0,0,0,0.65);--sidebar-bg:#0B3D2E;--sidebar-w:260px;}
-html[data-theme="light"]{--bg:#f4f6f9;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.92);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#0B3D2E;}
+:root{--bg:#ffffff;--bg2:#ffffff;--card:#ffffff;--card2:#f0f3f7;--border:rgba(15,23,42,0.10);--text:#0f172a;--muted:#5c6b7e;--accent:#e08a1e;--accent2:#e2601f;--green:#0f9d72;--purple:#7c5cf0;--danger:#d94a4a;--nav-bg:rgba(255,255,255,0.95);--overlay:rgba(15,23,42,0.5);--shadow:0 18px 40px -20px rgba(15,23,42,0.25);--sidebar-bg:#0B3D2E;--sidebar-w:260px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(255,184,77,0.06),transparent 45%),radial-gradient(circle at 100% 18%,rgba(255,122,69,0.04),transparent 42%),var(--bg);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);min-height:100vh;overflow-x:hidden;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;cursor:pointer;}
 .app{display:flex;min-height:100vh;}
@@ -27,6 +26,8 @@ button{font-family:inherit;cursor:pointer;}
 .sidebar nav a i{width:18px;text-align:center;font-size:14px;}
 .sidebar nav .badge-dot{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--danger);display:none;}
 .sidebar nav .badge-dot.show{display:block;}
+.sidebar nav .notif-count-side{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--danger);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 5px;}
+.sidebar nav .notif-count-side.show{display:flex;}
 .sidebar .sidebar-footer{padding:12px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);text-align:center;}
 .sidebar .sidebar-footer a{color:var(--accent);}
 .main{flex:1;margin-left:var(--sidebar-w);padding:0;min-height:100vh;}
@@ -40,8 +41,10 @@ button{font-family:inherit;cursor:pointer;}
 .notif-btn:hover{border-color:var(--accent);color:var(--accent);}
 .notif-btn .notif-count{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;}
 .notif-btn .notif-count.show{display:flex;}
-.theme-btn{background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.theme-btn:hover{border-color:var(--accent);color:var(--accent);}
+.lang-toggle{display:flex;align-items:center;gap:2px;background:var(--card2);border:1px solid var(--border);border-radius:18px;padding:3px;}
+.lang-btn{background:none;border:none;color:var(--muted);font-size:11px;font-weight:700;padding:4px 10px;border-radius:14px;cursor:pointer;letter-spacing:0.03em;transition:all .15s;}
+.lang-btn:hover{color:var(--text);}
+.lang-btn.active{background:var(--accent);color:#fff;}
 .logout-btn{background:none;border:1px solid var(--danger);color:var(--danger);padding:7px 14px;border-radius:10px;font-size:12px;font-weight:600;transition:all .15s;}
 .logout-btn:hover{background:var(--danger);color:#fff;}
 .content{padding:24px;}
@@ -96,11 +99,12 @@ button{font-family:inherit;cursor:pointer;}
 .sidebar nav .nav-label,
 .sidebar .sidebar-footer{color:rgba(255,255,255,0.7);}
 .sidebar nav a{color:rgba(255,255,255,0.75);}
-.sidebar nav a i,.sidebar nav a svg{width:18px;height:18px;flex-shrink:0;color:var(--accent);}
+.sidebar nav a i,.sidebar nav a svg{width:18px;height:18px;flex-shrink:0;color:#ffb84d;}
 .sidebar nav a:hover{color:#fff;background:rgba(255,255,255,0.08);}
 .sidebar nav a:hover i,.sidebar nav a:hover svg{color:#ffd9a0;}
+.sidebar nav a.active{color:#ffb84d;}
 .sidebar .sidebar-footer{border-top-color:rgba(255,255,255,0.12);}
-.sidebar .sidebar-footer a{color:var(--accent);}
+.sidebar .sidebar-footer a{color:#ffb84d;}
 </style>
 
 <div class="app">
@@ -116,47 +120,52 @@ button{font-family:inherit;cursor:pointer;}
     </div>
     <nav>
       <a href="{% url 'admin_dashboard' %}" class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
-        <i class="li-n-grid"></i> Dashboard
+        <i class="li-n-grid"></i> <span data-i18n="dashboard">Dashboard</span>
       </a>
       <a href="{% url 'admin_orders' %}" class="{% if request.resolver_match.url_name == 'admin_orders' %}active{% endif %}">
-        <i class="li-n-receipt"></i> Maagizo / Orders
+        <i class="li-n-receipt"></i> <span data-i18n="orders">Maagizo</span>
         <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="orderBadge"></span>
       </a>
       <a href="{% url 'admin_customers' %}" class="{% if request.resolver_match.url_name == 'admin_customers' %}active{% endif %}">
-        <i class="li-n-users"></i> Wateja / Customers
+        <i class="li-n-users"></i> <span data-i18n="customers">Wateja</span>
       </a>
       <a href="{% url 'admin_comments' %}" class="{% if request.resolver_match.url_name == 'admin_comments' %}active{% endif %}">
-        <i class="li-n-comments"></i> Maoni / Comments
+        <i class="li-n-comments"></i> <span data-i18n="comments">Maoni</span>
+      </a>
+      <a href="#" id="sidebarNotifLink">
+        <i class="li-n-bell"></i> <span data-i18n="notifications">Arifa</span>
+        <span class="badge-dot{% if unread_notifs %} show{% endif %}" id="sidebarNotifDot"></span>
+        <span class="notif-count-side{% if unread_notifs %} show{% endif %}" id="sidebarNotifCount">{{ unread_notifs }}</span>
       </a>
 
-      <div class="nav-label">Menyu</div>
+      <div class="nav-label" data-i18n="nav_menu">Menyu</div>
       <a href="{% url 'admin_foods' %}" class="{% if request.resolver_match.url_name == 'admin_foods' %}active{% endif %}">
-        <i class="li-n-utensils"></i> Menyu / Foods
+        <i class="li-n-utensils"></i> <span data-i18n="foods">Menyu</span>
       </a>
       <a href="{% url 'food_add' %}" class="{% if request.resolver_match.url_name == 'food_add' %}active{% endif %}">
-        <i class="li-n-pluscircle"></i> Ongeza Chakula
+        <i class="li-n-pluscircle"></i> <span data-i18n="add_food">Ongeza Chakula</span>
       </a>
 
       {% if user.role == 'admin' %}
-      <div class="nav-label">Usimamizi</div>
+      <div class="nav-label" data-i18n="nav_manage">Usimamizi</div>
       <a href="{% url 'admin_users' %}" class="{% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
-        <i class="li-n-shielduser"></i> Watumiaji / Users
+        <i class="li-n-shielduser"></i> <span data-i18n="users">Watumiaji</span>
       </a>
       <a href="{% url 'admin_activity' %}" class="{% if request.resolver_match.url_name == 'admin_activity' %}active{% endif %}">
-        <i class="li-n-history"></i> Activity Log
+        <i class="li-n-history"></i> <span data-i18n="activity">Activity Log</span>
       </a>
       {% endif %}
 
-      <div class="nav-label">Mifumo</div>
+      <div class="nav-label" data-i18n="nav_systems">Mifumo</div>
       <a href="{% url 'admin_profile' %}" class="{% if request.resolver_match.url_name == 'admin_profile' %}active{% endif %}">
-        <i class="li-n-user"></i> Profaili / Profile
+        <i class="li-n-user"></i> <span data-i18n="profile">Profaili</span>
       </a>
       <a href="{% url 'admin_settings' %}" class="{% if request.resolver_match.url_name == 'admin_settings' %}active{% endif %}">
-        <i class="li-n-gear"></i> Settings
+        <i class="li-n-gear"></i> <span data-i18n="settings">Settings</span>
       </a>
     </nav>
     <div class="sidebar-footer">
-      <a href="/"><i class="li-n-arrowleft"></i> Rudi kwenye tovuti</a>
+      <a href="/"><i class="li-n-arrowleft"></i> <span data-i18n="back_site">Rudi kwenye tovuti</span></a>
     </div>
   </aside>
 
@@ -164,8 +173,8 @@ button{font-family:inherit;cursor:pointer;}
     <header class="topbar">
       <div class="left">
         <button class="hamburger" id="hamburgerBtn"><i class="li-n-menu" data-li-size="20"></i></button>
-        <h1>{% block topbar_title %}Dashboard{% endblock %}</h1>
-        <span class="pill">{{ user.get_role_display }}</span>
+        <h1><span data-i18n="page_title">Dashboard</span></h1>
+        <span class="pill" data-i18n="role_{{ user.role }}">{{ user.get_role_display }}</span>
       </div>
       <div class="right">
         <div class="notif-wrapper">
@@ -194,7 +203,10 @@ button{font-family:inherit;cursor:pointer;}
             </div>
           </div>
         </div>
-        <button class="theme-btn" id="themeToggle"><i class="li-n-moon"></i></button>
+        <div class="lang-toggle" id="langToggle">
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="sw">KISWA</button>
+        </div>
         <a href="{% url 'logout' %}" class="logout-btn"><i class="li-n-logout" data-li-size="14"></i> Logout</a>
       </div>
     </header>
@@ -225,9 +237,48 @@ button{font-family:inherit;cursor:pointer;}
 </div>
 
 <script>
+var CTF_LANG = {
+  en: {
+    page_title: 'Dashboard', dashboard: 'Dashboard', orders: 'Orders', customers: 'Customers',
+    comments: 'Comments', nav_menu: 'Menu', foods: 'Menu', add_food: 'Add Food',
+    nav_manage: 'Management', users: 'Users', activity: 'Activity Log',
+    nav_systems: 'Systems', profile: 'Profile', settings: 'Settings',
+    back_site: 'Back to website', notifications: 'Notifications',
+    role_admin: 'Admin', role_accountant: 'Accountant', role_staff: 'Staff', role_receptionist: 'Receptionist'
+  },
+  sw: {
+    page_title: 'Dashibodi', dashboard: 'Dashibodi', orders: 'Maagizo', customers: 'Wateja',
+    comments: 'Maoni', nav_menu: 'Menyu', foods: 'Menyu', add_food: 'Ongeza Chakula',
+    nav_manage: 'Usimamizi', users: 'Watumiaji', activity: 'Activity Log',
+    nav_systems: 'Mifumo', profile: 'Profaili', settings: 'Settings',
+    back_site: 'Rudi kwenye tovuti', notifications: 'Arifa',
+    role_admin: 'Admin', role_accountant: 'Mhasibu', role_staff: 'Mfanyakazi', role_receptionist: 'Msaidizi'
+  }
+};
+function applyAdminLang(lang) {
+  if (!CTF_LANG[lang]) lang = 'sw';
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var k = el.getAttribute('data-i18n');
+    if (CTF_LANG[lang][k]) el.textContent = CTF_LANG[lang][k];
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+  });
+}
 document.addEventListener('DOMContentLoaded', function() {
-  var saved = localStorage.getItem('ctfAdminTheme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
+  document.documentElement.setAttribute('data-theme', 'light');
+  var lang = localStorage.getItem('ctfAdminLang') || 'sw';
+  document.documentElement.setAttribute('lang', lang);
+  applyAdminLang(lang);
+
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      var next = b.getAttribute('data-lang');
+      localStorage.setItem('ctfAdminLang', next);
+      document.documentElement.setAttribute('lang', next);
+      applyAdminLang(next);
+    });
+  });
 
   document.querySelectorAll('.messages li').forEach(function(el) {
     setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
@@ -263,18 +314,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  var themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', function() {
-      var current = document.documentElement.getAttribute('data-theme');
-      var next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('ctfAdminTheme', next);
-      var icon = themeBtn.querySelector('[class*="li-n-"]');
-      if (icon) icon.outerHTML = lineIcon(next === 'dark' ? 'moon' : 'sun', 16, 'currentColor');
-    });
-  }
-
   window.showConfirm = function(title, msg, callback) {
     var o = document.getElementById('confirmOverlay');
     if (!o) return;
@@ -293,18 +332,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var unreadEl = document.getElementById('notifCount');
   var badgeEl = document.getElementById('orderBadge');
+  var sideDot = document.getElementById('sidebarNotifDot');
+  var sideCount = document.getElementById('sidebarNotifCount');
+  var prevUnread = unreadEl ? parseInt(unreadEl.textContent, 10) || 0 : 0;
+
+  var notifLink = document.getElementById('sidebarNotifLink');
+  if (notifLink) {
+    notifLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (notifBtn && notifDrop) {
+        notifDrop.classList.toggle('show');
+      }
+    });
+  }
+
+  function playNotifSound() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var now = ctx.currentTime;
+      [880, 1174.66, 1567.98].forEach(function(freq, i) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.001, now + i * 0.14);
+        gain.gain.exponentialRampToValueAtTime(0.25, now + i * 0.14 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.14 + 0.13);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.14);
+        osc.stop(now + i * 0.14 + 0.15);
+      });
+    } catch (e) {}
+  }
+
+  function refreshNotifUI(data) {
+    if (unreadEl) {
+      if (data.unread > 0) { unreadEl.textContent = data.unread; unreadEl.classList.add('show'); }
+      else { unreadEl.classList.remove('show'); }
+    }
+    if (badgeEl) badgeEl.classList.toggle('show', data.unread > 0);
+    if (sideDot) sideDot.classList.toggle('show', data.unread > 0);
+    if (sideCount) {
+      if (data.unread > 0) { sideCount.textContent = data.unread; sideCount.classList.add('show'); }
+      else { sideCount.classList.remove('show'); }
+    }
+    if (data.unread > prevUnread) {
+      playNotifSound();
+      var nlist = document.querySelector('.notif-dropdown .notif-list');
+      if (nlist) {
+        nlist.innerHTML = '';
+        (data.notifications || []).slice(0, 10).forEach(function(n) {
+          var div = document.createElement('div');
+          div.className = 'notif-item' + (n.read ? '' : ' unread');
+          div.innerHTML = '<div class="notif-icon" style="background:rgba(255,184,77,0.12);color:var(--accent);"><i class="li-n-bell" data-li-size="14"></i></div>' +
+            '<div class="notif-text"><strong></strong><span></span></div>';
+          div.querySelector('strong').textContent = n.title;
+          div.querySelector('span').textContent = n.detail;
+          div.addEventListener('click', function() {
+            fetch('/api/notifications/' + n.id + '/read/', { method: 'POST' }).catch(function() {});
+            div.classList.remove('unread');
+          });
+          nlist.appendChild(div);
+        });
+      }
+    }
+    prevUnread = data.unread;
+  }
+
   setInterval(function() {
     fetch('/api/notifications/')
       .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (unreadEl) {
-          if (data.unread > 0) { unreadEl.textContent = data.unread; unreadEl.classList.add('show'); }
-          else { unreadEl.classList.remove('show'); }
-        }
-        if (badgeEl) badgeEl.classList.toggle('show', data.unread > 0);
-      })
+      .then(function(data) { refreshNotifUI(data); })
       .catch(function() {});
-  }, 10000);
+  }, 8000);
 });
 </script>
 {% endblock %}

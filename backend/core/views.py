@@ -121,13 +121,40 @@ def admin_dashboard(request):
     orders = Order.objects.all()
     today_orders = orders.filter(date=today)
 
+    paid = orders.filter(payment_status='paid')
+    revenue_series = []
+    for i in range(6, -1, -1):
+        day = today - timedelta(days=i)
+        day_orders = orders.filter(date=day)
+        day_rev = day_orders.aggregate(s=Sum('total'))['s'] or 0
+        revenue_series.append({
+            'label': day.strftime('%d %b'),
+            'revenue': day_rev,
+            'count': day_orders.count(),
+        })
+
+    avg_order = 0
+    if orders.count() > 0:
+        avg_order = (orders.aggregate(s=Sum('total'))['s'] or 0) // orders.count()
+
+    max_rev = max([r['revenue'] for r in revenue_series] or [0])
+    if max_rev <= 0:
+        max_rev = 1
+
     stats = {
         'total_foods': foods.count(),
         'total_orders': orders.count(),
         'today_orders': today_orders.count(),
         'total_revenue': orders.aggregate(s=Sum('total'))['s'] or 0,
         'today_revenue': today_orders.aggregate(s=Sum('total'))['s'] or 0,
+        'paid_revenue': paid.aggregate(s=Sum('total'))['s'] or 0,
         'unpaid_count': orders.filter(payment_status='unpaid').count(),
+        'avg_order': avg_order,
+        'total_customers': Order.objects.values('phone').distinct().count(),
+        'today_customers_count': today_orders.values('phone').distinct().count(),
+        'pending_count': orders.filter(status='new').count(),
+        'revenue_series': revenue_series,
+        'max_rev': max_rev,
     }
 
     recent_orders = orders[:5]
@@ -187,6 +214,10 @@ def order_pay_view(request, pk):
     order = get_object_or_404(Order, pk=pk)
     order.payment_status = 'paid'
     order.save()
+    push_notification(
+        f'Malipo yamerekodiwa! #{order.order_num}',
+        f'Mteja: {order.name}\nMalipo yamethibitishwa TSh {order.total:,}'
+    )
     log_activity(request.user, 'Malipo yamerekodiwa', f'#{order.order_num} TSh {order.total:,}')
     return redirect('admin_orders')
 
@@ -646,3 +677,84 @@ def place_order_view(request):
 
     foods = Food.objects.filter(is_active=True)
     return render(request, 'core/place_order.html', {'foods': foods})
+
+
+@csrf_exempt
+def api_order_view(request):
+    """JSON API used by the Vue user app to file orders so the admin panel
+    receives real-time notifications (with sound)."""
+    if request.method != 'POST':
+        return JsonResponse({'ok': False, 'error': 'POST only'}, status=405)
+
+    try:
+        data = json.loads(request.body or b'{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'ok': False, 'error': 'invalid json'}, status=400)
+
+    name = (data.get('name') or '').strip()
+    phone = (data.get('phone') or '').strip()
+    if not name or not phone:
+        return JsonResponse({'ok': False, 'error': 'name and phone required'}, status=400)
+
+    payment = (data.get('payment') or '').strip() or 'mpesa'
+    payment_status = 'paid' if data.get('paid') else 'unpaid'
+
+    order = Order.objects.create(
+        order_num=generate_order_num(),
+        name=name,
+        phone=phone,
+        email=(data.get('email') or '').strip(),
+        table_location=(data.get('table') or '').strip(),
+        payment_method=payment,
+        payment_phone=(data.get('payment_phone') or '').strip(),
+        share_bill=bool(data.get('share_bill')),
+        share_payment_method=(data.get('share_payment') or '').strip(),
+        share_payment_phone=(data.get('share_phone') or '').strip(),
+        notes=(data.get('notes') or '').strip(),
+        comments=(data.get('comments') or '').strip(),
+        payment_status=payment_status,
+        total=0,
+        date=date.today(),
+    )
+
+    total = 0
+    items_list = []
+    for item in data.get('items') or []:
+        vid = item.get('v_id')
+        qty = int(item.get('quantity') or 0)
+        if not vid or qty <= 0:
+            continue
+        food = Food.objects.filter(v_id=vid, is_active=True).first()
+        if not food:
+            continue
+        OrderItem.objects.create(order=order, food=food, quantity=qty, price=food.price)
+        total += food.price * qty
+        items_list.append(f'{food.name} x{qty}')
+
+    order.total = total
+    order.save()
+
+    comment_text = (data.get('comments') or '').strip()
+    if comment_text:
+        Comment.objects.create(name=name, email=(data.get('email') or '').strip(),
+                               text=comment_text, order=order)
+
+    items_summary = ', '.join(items_list) or 'Hakuna bidhaa'
+    push_notification(
+        f'Agizo Jipya! #{order.order_num}',
+        f'Mteja: {name}\nBidhaa: {items_summary}\nJumla: TSh {total:,}'
+    )
+    if payment_status == 'paid':
+        push_notification(
+            f'Lipa Limepokelewa! #{order.order_num}',
+            f'Mteja: {name}\nAmetuma malipo TSh {total:,}'
+        )
+    log_activity(None, 'Agizo kipya (API)', f'#{order.order_num} {name} TSh {total:,}')
+
+    try:
+        from .notifications import send_order_notifications
+        send_order_notifications(order)
+    except Exception:
+        pass
+
+    return JsonResponse({'ok': True, 'order_num': order.order_num, 'total': total})

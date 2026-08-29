@@ -12,18 +12,30 @@
         margin-bottom: 1.5rem;
     }
     .stat-card {
-        background: #0B3D2E;
-        border: 1px solid rgba(255,255,255,0.12);
+        background: #fff;
+        border: 1px solid var(--border);
         border-radius: 12px;
         padding: 1.5rem;
         text-align: center;
         transition: transform 0.2s;
     }
     .stat-card:hover { transform: translateY(-2px); }
-    .stat-card .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-    .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
-    .stat-card .stat-label { color: rgba(255,255,255,0.75); font-size: 0.85rem; margin-top: 0.25rem; }
-    .stat-card.orange, .stat-card.green, .stat-card.purple, .stat-card.red { border-top: 3px solid #34d399; }
+    .stat-icon-wrap {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 0.75rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .stat-icon-wrap svg { width: 26px; height: 26px; }
+    .stat-icon-wrap.orange { background: rgba(249,115,22,0.12); color: #f97316; }
+    .stat-icon-wrap.green { background: rgba(34,197,94,0.12); color: #22c55e; }
+    .stat-icon-wrap.purple { background: rgba(168,85,247,0.12); color: #a855f7; }
+    .stat-icon-wrap.red { background: rgba(239,68,68,0.12); color: #ef4444; }
+    .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text); }
+    .stat-card .stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
 
     .quick-actions {
         display: grid;
@@ -32,11 +44,11 @@
         margin-bottom: 1.5rem;
     }
     .quick-actions a, .quick-actions button {
-        background: #0B3D2E;
-        border: 1px solid rgba(255,255,255,0.12);
+        background: #fff;
+        border: 1px solid var(--border);
         border-radius: 10px;
         padding: 1rem;
-        color: #fff;
+        color: var(--text);
         text-decoration: none;
         text-align: center;
         font-weight: 500;
@@ -45,10 +57,11 @@
         align-items: center;
         gap: 0.5rem;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: background 0.2s, border-color 0.2s;
     }
-    .quick-actions a:hover, .quick-actions button:hover { background: #0E4A38; }
-    .quick-actions .qa-icon { font-size: 1.4rem; }
+    .quick-actions a:hover, .quick-actions button:hover { background: #f6fbf9; border-color: var(--accent); }
+    .quick-actions .qa-icon { width: 26px; height: 26px; color: var(--accent); }
+    .quick-actions .qa-icon svg { width: 26px; height: 26px; }
 
     .section-title {
         font-size: 1.1rem;
@@ -115,26 +128,73 @@
         gap: 1.5rem;
     }
     @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+    .biz-section {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .biz-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+    .biz-head .biz-title { font-size: 1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+    .biz-head .biz-title svg { width: 20px; height: 20px; color: var(--accent); }
+    .biz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+    .biz-item { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 0.9rem 1rem; }
+    .biz-item .biz-stat-value { font-size: 1.35rem; font-weight: 700; color: var(--text); }
+    .biz-item .biz-stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .biz-item .biz-stat-sub { font-size: 0.72rem; color: var(--green); margin-top: 0.2rem; }
+
+    .chart-box { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border); }
+    .chart-box h4 { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; }
+    .chart { display: flex; align-items: flex-end; gap: 10px; height: 160px; }
+    .chart-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; }
+    .chart-bar .bar {
+        width: 100%; max-width: 42px; border-radius: 6px 6px 2px 2px;
+        background: linear-gradient(180deg, var(--accent), var(--accent2));
+        min-height: 3px; position: relative;
+        transition: height 0.4s ease;
+    }
+    .chart-bar .bar-label { font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
+    .chart-bar .bar-val { font-size: 0.68rem; font-weight: 700; color: var(--text); }
+    .chart-bar .bar.zero { background: var(--card2); }
+    @media (max-width: 500px) { .chart { height: 120px; } }
 </style>
 
 <div class="stats-grid">
     <div class="stat-card orange">
-        <div class="stat-icon">🍽️</div>
+        <div class="stat-icon-wrap orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="13" r="8"/><path d="M9 13a3 3 0 0 0 6 0"/><path d="M5 5l3-1M8 4a4 4 0 0 0 8 0"/><path d="M12 5v8"/>
+            </svg>
+        </div>
         <div class="stat-value">{{ total_foods }}</div>
         <div class="stat-label">Chakula Jumla</div>
     </div>
     <div class="stat-card green">
-        <div class="stat-icon">📋</div>
+        <div class="stat-icon-wrap green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/>
+            </svg>
+        </div>
         <div class="stat-value">{{ total_orders }}</div>
         <div class="stat-label">Maagizo</div>
     </div>
     <div class="stat-card purple">
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon-wrap purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+        </div>
         <div class="stat-value">TSh {{ total_revenue|floatformat:0|intcomma }}</div>
         <div class="stat-label">Mapato</div>
     </div>
     <div class="stat-card red">
-        <div class="stat-icon">❌</div>
+        <div class="stat-icon-wrap red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+        </div>
         <div class="stat-value">{{ unpaid_count }}</div>
         <div class="stat-label">Haijalipwa</div>
     </div>
@@ -144,18 +204,89 @@
     <form method="post" action="{% url 'export_data' %}" style="margin:0">
         {% csrf_token %}
         <button type="submit">
-            <span class="qa-icon">📊</span>
+            <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
             Export Data
         </button>
     </form>
     <a href="{% url 'food_add' %}">
-        <span class="qa-icon">➕</span>
+        <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
         Ongeza Chakula
     </a>
     <a href="{% url 'admin_foods' %}">
-        <span class="qa-icon">🍽️</span>
+        <span class="qa-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M4 6v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6"/><path d="M8 4a2 2 0 0 1 4 0v2H8z"/></svg></span>
         Menyu
     </a>
+</div>
+
+<div class="biz-section">
+    <div class="biz-head">
+        <div class="biz-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Mapato na Mauzo
+        </div>
+    </div>
+    <div class="biz-grid">
+        <div class="biz-item">
+            <div class="biz-stat-value">TSh {{ today_revenue|floatformat:0|intcomma }}</div>
+            <div class="biz-stat-label">Mapato ya Leo</div>
+            <div class="biz-stat-sub">Maagizo {{ today_orders }} leo</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ total_orders }}</div>
+            <div class="biz-stat-label">Jumla ya Maagizo</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">TSh {{ avg_order|floatformat:0|intcomma }}</div>
+            <div class="biz-stat-label">Wastani wa Agizo</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">TSh {{ paid_revenue|floatformat:0|intcomma }}</div>
+            <div class="biz-stat-label">Mapato ya Malipo</div>
+        </div>
+    </div>
+    <div class="chart-box">
+        <h4>Mapato kwa Siku 7 za Mwisho</h4>
+        <div class="chart">
+            {% for day in revenue_series %}
+            <div class="chart-bar" title="{{ day.label }}: TSh {{ day.revenue }} (maagizo {{ day.count }})">
+                <span class="bar-val">{% if day.revenue > 0 %}TSh {{ day.revenue|floatformat:0 }}{% endif %}</span>
+                {% if day.revenue > 0 %}
+                <div class="bar" style="height: {% widthratio day.revenue max_rev 100 %}%;"></div>
+                {% else %}
+                <div class="bar zero" style="height: 3px;"></div>
+                {% endif %}
+                <span class="bar-label">{{ day.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="biz-section">
+    <div class="biz-head">
+        <div class="biz-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Wateja
+        </div>
+    </div>
+    <div class="biz-grid">
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ total_customers }}</div>
+            <div class="biz-stat-label">Jumla ya Wateja</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ today_customers_count }}</div>
+            <div class="biz-stat-label">Wateja wa Leo</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ pending_count }}</div>
+            <div class="biz-stat-label">Maagizo Mapya</div>
+        </div>
+        <div class="biz-item">
+            <div class="biz-stat-value">{{ unpaid_count }}</div>
+            <div class="biz-stat-label">Haijalipwa</div>
+        </div>
+    </div>
 </div>
 
 <div class="two-col">
