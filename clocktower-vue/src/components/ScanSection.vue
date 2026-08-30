@@ -4,7 +4,16 @@ import { useLangStore } from '../stores/lang';
 import LineIcon from './LineIcon.vue';
 
 const lang = useLangStore();
-const SITE_URL = typeof window !== 'undefined' ? window.location.origin : 'https://simonntalila-bot.github.io/clocktower-food-services-provider-';
+function buildSiteUrl() {
+  if (typeof window === 'undefined') {
+    return 'https://simonntalila-bot.github.io/clocktower-food-services-provider-/';
+  }
+  let base = window.location.origin + window.location.pathname;
+  base = base.replace(/index\.html$/, '');
+  if (!/\/$/.test(base)) base += '/';
+  return base;
+}
+const SITE_URL = buildSiteUrl();
 
 const qrUrl = computed(() => SITE_URL);
 const qrImg = computed(() => 'https://api.qrserver.com/v1/create-qr-code/?size=340x340&margin=8&data=' + encodeURIComponent(SITE_URL));
