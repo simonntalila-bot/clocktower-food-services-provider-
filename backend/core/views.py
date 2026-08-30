@@ -71,16 +71,12 @@ def login_view(request):
 def forgot_password_view(request):
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
-        answer = request.POST.get('answer', '').strip().lower()
         new_pw = request.POST.get('new_password', '')
 
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             return render(request, 'core/forgot.html', {'error': 'Username haipatikani.'})
-
-        if answer != 'helen':
-            return render(request, 'core/forgot.html', {'error': 'Jibu si sahihi.'})
 
         if len(new_pw) < 6:
             return render(request, 'core/forgot.html', {'error': 'Password lazima iwe na herufi 6+.'})
@@ -149,16 +145,12 @@ def api_forgot_view(request):
         return JsonResponse({'ok': False, 'error': 'Invalid data'}, status=400)
 
     username = (data.get('username') or '').strip()
-    answer = (data.get('answer') or '').strip().lower()
     new_pw = data.get('new_password') or ''
 
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         return JsonResponse({'ok': False, 'error': 'Username haipatikani.'}, status=404)
-
-    if answer != 'helen':
-        return JsonResponse({'ok': False, 'error': 'Jibu si sahihi.'}, status=400)
 
     if len(new_pw) < 6:
         return JsonResponse({'ok': False, 'error': 'Password lazima iwe na herufi 6+.'}, status=400)

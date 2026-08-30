@@ -7,7 +7,6 @@ import { API_BASE } from '../api.js';
 const router = useRouter();
 
 const username = ref('');
-const answer = ref('');
 const newPassword = ref('');
 const showPw = ref(false);
 const error = ref('');
@@ -15,8 +14,8 @@ const success = ref('');
 const loading = ref(false);
 
 async function handleSubmit() {
-  if (!username.value.trim() || !answer.value.trim() || !newPassword.value) {
-    error.value = 'Jaza username, jibu na password mpya.';
+  if (!username.value.trim() || !newPassword.value) {
+    error.value = 'Jaza username na password mpya.';
     success.value = '';
     return;
   }
@@ -35,7 +34,6 @@ async function handleSubmit() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: username.value.trim(),
-        answer: answer.value.trim(),
         new_password: newPassword.value,
       }),
     });
@@ -60,17 +58,13 @@ async function handleSubmit() {
       <button class="modal-close login-close" type="button" aria-label="Close" @click="router.push('/')">&times;</button>
       <div class="forgot-brand">
         <span class="forgot-title">Sahau Password?</span>
-        <span class="forgot-sub">Weka username yako na ujibu swali la usalama ili upate password mpya</span>
+        <span class="forgot-sub">Weka username yako na password mpya</span>
       </div>
 
       <form novalidate @submit.prevent="handleSubmit">
         <div class="field">
           <label for="fg-user">Username</label>
           <input id="fg-user" type="text" v-model="username" placeholder="mf. admin" autocomplete="username">
-        </div>
-        <div class="field">
-          <label for="fg-answer">Swali la Usalama: Jina la mkewe mwanasayansi Newton?</label>
-          <input id="fg-answer" type="text" v-model="answer" placeholder="Jibu" autocomplete="off">
         </div>
         <div class="field">
           <label for="fg-pass">Password Mpya</label>

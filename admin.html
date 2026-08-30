@@ -322,17 +322,13 @@ button{font-family:inherit;cursor:pointer;}
     <div class="forgot-card" id="forgotCard">
       <div class="logo">🔑</div>
       <h1 data-i18n="forgot.title">Sahau Password?</h1>
-      <p data-i18n="forgot.sub">Weka username yako na jibu swali la usalama</p>
+      <p data-i18n="forgot.sub">Weka username yako na password mpya</p>
       <div class="field">
         <label data-i18n="forgot.username">Username</label>
         <input type="text" id="fpUser" placeholder="Weka username yako">
       </div>
-      <div class="field">
-        <label data-i18n="forgot.question">Swali la Usalama: Jina la mkewe mwanasayansi Newton?</label>
-        <input type="text" id="fpAnswer" placeholder="Jibu swali hili">
-      </div>
       <button class="login-btn" onclick="doForgot()"><span data-i18n="forgot.btn">PATA PASSWORD MPYA</span></button>
-      <div class="login-err" id="fpErr"><span data-i18n="forgot.err">Jibu si sahihi au username haipatikani.</span></div>
+      <div class="login-err" id="fpErr"><span data-i18n="forgot.err">Password lazima iwe na herufi 6+.</span></div>
       <div class="login-links"><a onclick="hideForgot()"><span data-i18n="forgot.back">← Rudi kwenye Login</span></a></div>
     </div>
   </div>
@@ -653,11 +649,10 @@ button{font-family:inherit;cursor:pointer;}
       'login.password':'Password','login.password_ph':'Enter password',
       'login.btn':'LOG IN','login.err':'Invalid username or password. Please try again.',
       'login.forgot':'Forgot password?','login.footer':'Default: admin / clocktower2026',
-      'forgot.title':'Forgot Password?','forgot.sub':'Enter your username and answer the security question',
+      'forgot.title':'Forgot Password?','forgot.sub':'Enter your username and a new password',
       'forgot.username':'Username','forgot.username_ph':'Enter your username',
-      'forgot.question':'Security Question: What was Newton\'s wife\'s name?',
-      'forgot.answer_ph':'Answer this question','forgot.btn':'GET NEW PASSWORD',
-      'forgot.err':'Wrong answer or username not found.','forgot.back':'← Back to Login',
+      'forgot.btn':'GET NEW PASSWORD',
+      'forgot.err':'Username not found or password too short.','forgot.back':'← Back to Login',
       'sidebar.role':'Admin Panel',
       'nav.dashboard':'Dashboard','nav.orders':'Orders','nav.customers':'Customers',
       'nav.comments':'Comments','nav.foods':'Menu / Foods','nav.addfood':'Add Food',
@@ -715,11 +710,10 @@ button{font-family:inherit;cursor:pointer;}
       'login.password':'Password / Neno la Siri','login.password_ph':'Weka password',
       'login.btn':'INGIA (LOG IN)','login.err':'Username au password si sahihi. Tafadhali jaribu tena.',
       'login.forgot':'Umesahau password?','login.footer':'Default: admin / clocktower2026',
-      'forgot.title':'Sahau Password?','forgot.sub':'Weka username yako na jibu swali la usalama',
+      'forgot.title':'Sahau Password?','forgot.sub':'Weka username yako na password mpya',
       'forgot.username':'Username','forgot.username_ph':'Weka username yako',
-      'forgot.question':'Swali la Usalama: Jina la mkewe mwanasayansi Newton?',
-      'forgot.answer_ph':'Jibu swali hili','forgot.btn':'PATA PASSWORD MPYA',
-      'forgot.err':'Jibu si sahihi au username haipatikani.','forgot.back':'← Rudi kwenye Login',
+      'forgot.btn':'PATA PASSWORD MPYA',
+      'forgot.err':'Username haipatikani au password fupi.','forgot.back':'← Rudi kwenye Login',
       'sidebar.role':'Admin Panel',
       'nav.dashboard':'Dashboard','nav.orders':'Maagizo / Orders','nav.customers':'Wateja / Customers',
       'nav.comments':'Maoni / Comments','nav.foods':'Menyu / Foods','nav.addfood':'Ongeza Chakula',
@@ -863,10 +857,9 @@ button{font-family:inherit;cursor:pointer;}
   window.hideForgot=function(){document.getElementById('loginMain').classList.remove('hide');document.getElementById('forgotCard').classList.remove('show');};
   window.doForgot=function(){
     var un=document.getElementById('fpUser').value.trim();
-    var ans=document.getElementById('fpAnswer').value.trim().toLowerCase();
     var users=getUsers();
     var u=users.find(function(x){return x.username===un;});
-    if(u&&ans==='helen'){
+    if(u){
       var np=prompt('Jina la mtumiaji: '+un+'\nWeka password mpya:');
       if(np&&np.length>=6){
         u.password=np;saveUsers(users);
@@ -875,7 +868,7 @@ button{font-family:inherit;cursor:pointer;}
         hideForgot();
       } else if(np){toast('Password lazima iwe na herufi 6+.','error');}
     } else {
-      showLoginErr('fpErr','Jibu si sahihi au username haipatikani. (Hint: jina la mkewe Newton = Helen)');
+      showLoginErr('fpErr','Username haipatikani.');
     }
   };
 
