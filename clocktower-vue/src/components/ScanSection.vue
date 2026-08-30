@@ -4,7 +4,7 @@ import { useLangStore } from '../stores/lang';
 import LineIcon from './LineIcon.vue';
 
 const lang = useLangStore();
-const SITE_URL = 'http://localhost:5173/';
+const SITE_URL = 'https://simonntalila-bot.github.io/clocktower-food-services-provider-/';
 
 const qrUrl = computed(() => SITE_URL);
 const qrImg = computed(() => 'https://api.qrserver.com/v1/create-qr-code/?size=340x340&margin=8&data=' + encodeURIComponent(SITE_URL));
