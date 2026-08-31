@@ -154,5 +154,9 @@ onUnmounted(() => {
       <LineIcon name="login" size="15" color="#ffb84d" />
       <span>Login</span>
     </button>
+    <button class="mobile-login muted" type="button" @click="router.push('/admin-panel/activity')">
+      <LineIcon name="history" size="15" color="#ffb84d" />
+      <span>Activity Logs</span>
+    </button>
   </div>
 </template>

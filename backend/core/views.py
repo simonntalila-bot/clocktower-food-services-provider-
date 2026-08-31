@@ -700,6 +700,42 @@ def activity_clear_view(request):
     return redirect('admin_activity')
 
 
+@csrf_exempt
+def api_me_view(request):
+    """Return the current session user (used by the SPA to know who is logged in)."""
+    if request.method == 'OPTIONS':
+        return JsonResponse({'ok': True})
+    if getattr(request.user, 'is_authenticated', False):
+        return JsonResponse({
+            'ok': True,
+            'username': request.user.username,
+            'role': request.user.role,
+            'name': request.user.get_full_name() or request.user.username,
+        })
+    return JsonResponse({'ok': False}, status=401)
+
+
+@csrf_exempt
+def api_activity_logs_view(request):
+    """Return activity/audit logs (who logged in, what action, when) for admin."""
+    if request.method == 'OPTIONS':
+        return JsonResponse({'ok': True})
+    if not getattr(request.user, 'is_authenticated', False):
+        return JsonResponse({'ok': False, 'error': 'Unatakiwa uingie.'}, status=401)
+    if request.user.role != 'admin':
+        return JsonResponse({'ok': False, 'error': 'Huna ruhusa.'}, status=403)
+
+    logs = ActivityLog.objects.select_related('user')[:200]
+    data = [{
+        'id': log.id,
+        'action': log.action,
+        'detail': log.detail,
+        'user': log.user.username if log.user else 'System',
+        'time': log.created_at.strftime('%Y-%m-%d %H:%M'),
+    } for log in logs]
+    return JsonResponse({'ok': True, 'logs': data})
+
+
 # ========== COMMENTS ==========
 
 @login_required
