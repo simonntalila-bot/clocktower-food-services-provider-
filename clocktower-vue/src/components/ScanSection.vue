@@ -7,7 +7,7 @@ const lang = useLangStore();
 const SITE_URL = 'https://simonntalila-bot.github.io/clocktower-food-services-provider-/';
 
 const qrUrl = computed(() => SITE_URL);
-const qrImg = computed(() => 'https://api.qrserver.com/v1/create-qr-code/?size=340x340&margin=8&data=' + encodeURIComponent(SITE_URL));
+const qrImg = computed(() => 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(SITE_URL));
 
 function copyLink() {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -30,26 +30,12 @@ function downloadQr() {
 </script>
 
 <template>
-  <div class="scan-layout">
+  <div class="scan-layout" style="display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center">
     <div class="scan-qr">
-      <div class="qr-table">
-        <div class="qr-table-head">
-          <LineIcon name="clocktower" size="22" color="#F57C00" />
-          <span class="qt-w">{{ lang.$t('qr.welcome') }}</span>
-          <span class="qt-brand">CLOCKTOWER</span>
-          <span class="qt-sub">{{ lang.$t('qr.welcome2') }}</span>
-        </div>
-        <div class="qr-table-code">
-          <img :src="qrImg" alt="QR Code" width="300" height="300">
-        </div>
-        <div class="qr-table-foot">
-          <LineIcon name="heart" size="13" color="#F57C00" />
-          {{ lang.$t('qr.thanks') }}
-          <LineIcon name="heart" size="13" color="#F57C00" />
-        </div>
-      </div>
-
-      <div class="qr-actions">
+      <img :src="qrImg" alt="QR Code" width="220" height="220" style="border-radius:8px">
+      <p style="margin-top:10px;font-size:12px;color:#666;word-break:break-all">https://simonntalila-bot.github.io/clocktower-food-services-provider-/</p>
+      
+      <div class="qr-actions" style="margin-top:16px;display:flex;gap:8px;justify-content:center">
         <button class="btn btn-ghost" type="button" @click="printQr"><LineIcon name="print" size="14" color="#0A5C36" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.print')"></span></button>
         <button class="btn btn-ghost" type="button" @click="downloadQr"><LineIcon name="download" size="14" color="#0A5C36" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.download')"></span></button>
         <button class="btn btn-ghost" type="button" @click="copyLink"><LineIcon name="copy" size="14" color="#0A5C36" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.copy')"></span></button>

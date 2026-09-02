@@ -4,6 +4,7 @@ import LineIcon from './LineIcon.vue';
 import heroFood from '../assets/hero-food.png';
 
 const lang = useLangStore();
+const emit = defineEmits(['scroll-to-menu', 'open-cart']);
 </script>
 
 <template>
@@ -20,6 +21,11 @@ const lang = useLangStore();
       </span>
       <h1>{{ lang.$t('hero.title') }}</h1>
       <p class="hero-sub">{{ lang.$t('hero.sub') }}</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" type="button" @click="emit('scroll-to-menu')">
+          {{ lang.$t('cats.view') }} <LineIcon name="arrowright" size="14" color="#ffffff" style="vertical-align:-2px" />
+        </button>
+      </div>
     </div>
   </section>
 </template>

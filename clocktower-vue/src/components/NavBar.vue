@@ -75,7 +75,7 @@ onUnmounted(() => {
             <LineIcon name="clocktower" size="26" color="#0A5C36" />
           </span>
         </span>
-        <span class="b2">clocktower food services</span>
+        <span class="b2">{{ lang.$t('nav.brand') }}</span>
       </a>
       <nav>
         <ul class="nav-links">
@@ -153,7 +153,7 @@ onUnmounted(() => {
     </button>
     <button class="mobile-login muted" type="button" @click="router.push('/admin-panel/activity')">
       <LineIcon name="history" size="15" color="#0A5C36" />
-      <span>Activity Logs</span>
+      <span>{{ lang.$t('nav.activityLogs') }}</span>
     </button>
   </div>
 </template>

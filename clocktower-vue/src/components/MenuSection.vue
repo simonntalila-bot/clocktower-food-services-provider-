@@ -25,8 +25,8 @@ const filterColors = {
 
     <div class="toolbar">
       <div class="menu-tagline">
-        <h2 class="mt-title"><span>Clocktower</span> Restaurant</h2>
-        <p class="mt-sub">Every Bite, Fresh &amp; Delicious — Enjoy tasty breakfast, lunch &amp; dinner, freshly made with love, feels like home.</p>
+        <h2 class="mt-title" v-html="lang.$t('menu.restaurant')"></h2>
+        <p class="mt-sub" v-html="lang.$t('menu.tagline')"></p>
       </div>
       <div class="search-box">
         <svg class="sico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">

@@ -334,6 +334,7 @@
   }
   .hero-content .btn-ghost:hover{background:#0A3D1F;color:#fff;border-color:transparent;}
   .hero-content .btn-primary:hover,.hero-content .btn-ghost:hover{transform:translateY(-2px);}
+  .hero-actions{margin-top:26px;display:flex;justify-content:center;}
   .hero-feats{
     display:flex;gap:20px;flex-wrap:wrap;margin-top:40px;justify-content:center;
     color:rgba(255,255,255,0.85);font-size:13.5px;font-weight:600;

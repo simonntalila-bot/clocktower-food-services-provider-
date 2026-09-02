@@ -24,7 +24,7 @@ const lang = useLangStore();
       <span class="em"><LineIcon name="envelope" size="18" color="#ffb84d" /></span>
       <span>
         <span class="nm">clocktowercafetz2020@gmail.com</span>
-        <span class="tg" style="display:block;">Email us</span>
+        <span class="tg" style="display:block;">{{ lang.$t('contact.email') }}</span>
       </span>
     </a>
   </div>

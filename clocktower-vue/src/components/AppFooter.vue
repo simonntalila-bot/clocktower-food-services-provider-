@@ -25,6 +25,6 @@ const year = new Date().getFullYear();
       </a>
     </div>
     <div class="foot-note" v-html="lang.$t('foot.note')"></div>
-    <div style="margin-top:10px;">&copy; {{ year }} <b>clocktower food service provider</b> &mdash; <span v-html="lang.$t('footer.tag')"></span></div>
+    <div style="margin-top:10px;">&copy; {{ year }} <b v-html="lang.$t('footer.brand')"></b> &mdash; <span v-html="lang.$t('footer.tag')"></span></div>
   </footer>
 </template>
