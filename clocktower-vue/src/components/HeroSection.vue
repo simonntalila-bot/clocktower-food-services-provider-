@@ -1,30 +1,25 @@
 <script setup>
 import { useLangStore } from '../stores/lang';
+import LineIcon from './LineIcon.vue';
+import heroFood from '../assets/hero-food.png';
+
 const lang = useLangStore();
-const emit = defineEmits(['scroll-to-menu', 'open-cart']);
 </script>
 
 <template>
   <section class="hero" id="home">
     <div class="hero-bg">
-      <img src="https://simonntalila-bot.github.io/clocktower-food-services-provider-/1.jpg" alt="ClockTower Food Service Provider Restaurant" loading="eager">
+      <img :src="heroFood" alt="ClockTower delicious food" loading="eager" />
     </div>
     <div class="hero-overlay"></div>
-    <div class="hero-glow"></div>
+
     <div class="hero-content">
-      <span class="badge">{{ lang.$t('hero.badge') }}</span>
-      <h1 v-html="lang.$t('hero.title')"></h1>
-      <p class="lede">{{ lang.$t('hero.lede') }}</p>
-      <div class="hero-btns">
-        <button class="btn btn-primary" type="button" @click="emit('scroll-to-menu')">{{ lang.$t('hero.explore') }}</button>
-        <button class="btn btn-ghost" type="button" @click="emit('open-cart')">{{ lang.$t('hero.viewcart') }}</button>
-      </div>
-      <div class="hero-feats">
-        <span>🌿 <span>{{ lang.$t('feat.fresh') }}</span></span>
-        <span>⚡ <span>{{ lang.$t('feat.fast') }}</span></span>
-        <span>✓ <span>{{ lang.$t('feat.hyg') }}</span></span>
-        <span>♥ <span>{{ lang.$t('feat.love') }}</span></span>
-      </div>
+      <span class="badge">
+        <LineIcon name="clocktower" size="14" color="#F57C00" />
+        {{ lang.$t('hero.badge') }}
+      </span>
+      <h1>{{ lang.$t('hero.title') }}</h1>
+      <p class="hero-sub">{{ lang.$t('hero.sub') }}</p>
     </div>
   </section>
 </template>

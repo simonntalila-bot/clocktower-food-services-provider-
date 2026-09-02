@@ -3,16 +3,16 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '../stores/cart';
 import { useLangStore } from '../stores/lang';
-import { useMenuStore } from '../stores/menu';
 import LineIcon from './LineIcon.vue';
 
 const router = useRouter();
 const cart = useCartStore();
 const lang = useLangStore();
-const menu = useMenuStore();
 
 const emit = defineEmits(['set-filter']);
-const menuDropOpen = ref(false);
+const props = defineProps({
+  ghost: { type: Boolean, default: false }
+});
 const mobileOpen = ref(false);
 const scrolled = ref(false);
 
@@ -25,20 +25,25 @@ const dropCats = [
 
 function handleFilter(cat) {
   emit('set-filter', cat.key === 'meals' ? 'lunch' : cat.key);
-  menuDropOpen.value = false;
   mobileOpen.value = false;
 }
 
-function onDocClick(e) {
-  if (!e.target.closest('.nav-drop')) menuDropOpen.value = false;
-}
-
-function scrollTo(id) {
-  if (window.location.pathname !== '/') {
-    router.push('/');
-    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 100);
+function goSection(id) {
+  if (router.currentRoute.value.path !== '/') {
+    router.push('/').then(() => {
+      requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }));
+    });
   } else {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }
+  mobileOpen.value = false;
+}
+
+function goHome() {
+  if (router.currentRoute.value.path !== '/') {
+    router.push('/');
+  } else {
+    document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
   }
   mobileOpen.value = false;
 }
@@ -48,61 +53,53 @@ function goToLogin() {
   mobileOpen.value = false;
 }
 
-function toggleDrop() {
-  menuDropOpen.value = !menuDropOpen.value;
-}
-
 function onScroll() {
   scrolled.value = window.scrollY > 20;
 }
 
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('click', onDocClick);
 });
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll);
-  document.removeEventListener('click', onDocClick);
 });
 </script>
 
 <template>
-  <header class="nav" :class="{ 'nav-scrolled': scrolled }">
+  <header class="nav" :class="{ 'nav-scrolled': scrolled, 'nav-ghost': props.ghost && !scrolled }">
     <div class="nav-inner">
-      <a class="brand" href="#home" @click.prevent="scrollTo('home')">
-        <img class="brand-logo" src="../assets/logo.png" alt="ClockTower logo">
-        <span class="b2">food service provider</span>
+      <a class="brand" href="#home" @click.prevent="goHome">
+        <span class="brand-row">
+          <img class="brand-logo" src="../assets/logo.png" alt="ClockTower logo">
+          <span class="brand-badge" aria-hidden="true">
+            <LineIcon name="clocktower" size="26" color="#0A5C36" />
+          </span>
+        </span>
+        <span class="b2">clocktower food services</span>
       </a>
       <nav>
         <ul class="nav-links">
           <li>
-            <a href="#home" @click.prevent="scrollTo('home')">
-              <LineIcon name="house" size="15" color="#0A9A4A" />
+            <a href="#home" @click.prevent="goHome">
+              <LineIcon name="house" size="15" />
               <span>{{ lang.$t('nav.home') }}</span>
             </a>
           </li>
-          <li class="drop nav-drop" :class="{ open: menuDropOpen }">
-            <button class="drop-trigger" type="button" @click="toggleDrop">
-              <LineIcon name="utensils" size="15" color="#0A9A4A" />
+          <li>
+            <a href="#menu" @click.prevent="goSection('menu')">
+              <LineIcon name="utensils" size="15" />
               <span>{{ lang.$t('nav.menu') }}</span>
-              <svg class="car" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-            </button>
-            <div class="drop-menu">
-              <a v-for="cat in dropCats" :key="cat.key" href="#menu" @click.prevent="handleFilter(cat)">
-                <span class="em"><LineIcon :name="cat.icon" size="16" color="#0A9A4A" /></span>
-                <span>{{ lang.$t('cat.' + cat.key) }}</span>
-              </a>
-            </div>
+            </a>
           </li>
           <li>
-            <a href="#scan" @click.prevent="scrollTo('scan')">
-              <LineIcon name="qrcode" size="15" color="#0A9A4A" />
+            <a href="#scan" @click.prevent="goSection('scan')">
+              <LineIcon name="qrcode" size="15" />
               <span>{{ lang.$t('nav.scan') }}</span>
             </a>
           </li>
           <li>
-            <a href="#contact" @click.prevent="scrollTo('contact')">
-              <LineIcon name="envelope" size="15" color="#0A9A4A" />
+            <a href="#contact" @click.prevent="goSection('contact')">
+              <LineIcon name="phone" size="15" />
               <span>{{ lang.$t('nav.contact') }}</span>
             </a>
           </li>
@@ -114,11 +111,11 @@ onUnmounted(() => {
           <button class="lang-btn" :class="{ active: lang.lang === 'sw' }" type="button" @click="lang.setLang('sw')">SW</button>
         </div>
         <button class="login-btn" type="button" @click="goToLogin">
-          <LineIcon name="login" size="15" color="#ffb84d" />
-          <span class="lbl">Login</span>
+          <LineIcon name="login" size="15" color="#0A5C36" />
+          <span class="lbl">{{ lang.$t('nav.login') || 'Login' }}</span>
         </button>
         <button class="cart-btn" :class="{ 'has-items': cart.cartQuantity > 0 }" type="button" @click="cart.showCart = true">
-          <LineIcon name="cart" size="16" color="#ffb84d" />
+          <LineIcon name="cart" size="16" color="#ffffff" />
           <span class="lbl">{{ lang.$t('nav.cart') }}</span>
           <span class="cnt">{{ cart.cartQuantity }}</span>
         </button>
@@ -130,32 +127,32 @@ onUnmounted(() => {
   </header>
 
   <div class="mobile-menu" :class="{ open: mobileOpen }">
-    <a href="#home" @click.prevent="scrollTo('home')">
-      <LineIcon name="house" size="15" color="#0A9A4A" />
+    <a href="#home" @click.prevent="goHome">
+      <LineIcon name="house" size="15" color="#0A5C36" />
       <span>{{ lang.$t('nav.home') }}</span>
     </a>
-    <a href="#menu" @click.prevent="scrollTo('menu')">
-      <LineIcon name="utensils" size="15" color="#0A9A4A" />
+    <a href="#menu" @click.prevent="goSection('menu')">
+      <LineIcon name="utensils" size="15" color="#0A5C36" />
       <span>{{ lang.$t('nav.menu') }}</span>
     </a>
     <a v-for="cat in dropCats" :key="cat.key" href="#menu" @click.prevent="handleFilter(cat)" class="mobile-sub">
-      <LineIcon :name="cat.icon" size="15" color="#0A9A4A" />
+      <LineIcon :name="cat.icon" size="15" color="#0A5C36" />
       <span>{{ lang.$t('cat.' + cat.key) }}</span>
     </a>
-    <a href="#scan" @click.prevent="scrollTo('scan')">
-      <LineIcon name="qrcode" size="15" color="#0A9A4A" />
+    <a href="#scan" @click.prevent="goSection('scan')">
+      <LineIcon name="qrcode" size="15" color="#0A5C36" />
       <span>{{ lang.$t('nav.scan') }}</span>
     </a>
-    <a href="#contact" @click.prevent="scrollTo('contact')">
-      <LineIcon name="envelope" size="15" color="#0A9A4A" />
+    <a href="#contact" @click.prevent="goSection('contact')">
+      <LineIcon name="phone" size="15" color="#0A5C36" />
       <span>{{ lang.$t('nav.contact') }}</span>
     </a>
     <button class="mobile-login" type="button" @click="goToLogin">
-      <LineIcon name="login" size="15" color="#ffb84d" />
-      <span>Login</span>
+      <LineIcon name="login" size="15" color="#0A5C36" />
+      <span>{{ lang.$t('nav.login') || 'Login' }}</span>
     </button>
     <button class="mobile-login muted" type="button" @click="router.push('/admin-panel/activity')">
-      <LineIcon name="history" size="15" color="#ffb84d" />
+      <LineIcon name="history" size="15" color="#0A5C36" />
       <span>Activity Logs</span>
     </button>
   </div>

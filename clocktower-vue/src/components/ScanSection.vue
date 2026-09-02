@@ -30,15 +30,30 @@ function downloadQr() {
 </script>
 
 <template>
-  <div class="qr-box">
-    <div class="qr-frame">
-      <img :src="qrImg" alt="QR Code" width="280" height="280">
-    </div>
-    <p class="qr-url">{{ qrUrl }}</p>
-    <div class="qr-actions">
-      <button class="btn btn-ghost" type="button" @click="printQr"><LineIcon name="print" size="14" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.print')"></span></button>
-      <button class="btn btn-ghost" type="button" @click="downloadQr"><LineIcon name="download" size="14" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.download')"></span></button>
-      <button class="btn btn-ghost" type="button" @click="copyLink"><LineIcon name="copy" size="14" color="#0A9A4A" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.copy')"></span></button>
+  <div class="scan-layout">
+    <div class="scan-qr">
+      <div class="qr-table">
+        <div class="qr-table-head">
+          <LineIcon name="clocktower" size="22" color="#F57C00" />
+          <span class="qt-w">{{ lang.$t('qr.welcome') }}</span>
+          <span class="qt-brand">CLOCKTOWER</span>
+          <span class="qt-sub">{{ lang.$t('qr.welcome2') }}</span>
+        </div>
+        <div class="qr-table-code">
+          <img :src="qrImg" alt="QR Code" width="300" height="300">
+        </div>
+        <div class="qr-table-foot">
+          <LineIcon name="heart" size="13" color="#F57C00" />
+          {{ lang.$t('qr.thanks') }}
+          <LineIcon name="heart" size="13" color="#F57C00" />
+        </div>
+      </div>
+
+      <div class="qr-actions">
+        <button class="btn btn-ghost" type="button" @click="printQr"><LineIcon name="print" size="14" color="#0A5C36" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.print')"></span></button>
+        <button class="btn btn-ghost" type="button" @click="downloadQr"><LineIcon name="download" size="14" color="#0A5C36" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.download')"></span></button>
+        <button class="btn btn-ghost" type="button" @click="copyLink"><LineIcon name="copy" size="14" color="#0A5C36" style="vertical-align:-2px" /> <span v-html="lang.$t('qr.copy')"></span></button>
+      </div>
     </div>
   </div>
 </template>

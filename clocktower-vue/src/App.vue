@@ -1,9 +1,10 @@
 <script setup>
 import { useMenuStore } from './stores/menu';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 
 const router = useRouter();
+const route = useRoute();
 const menu = useMenuStore();
 
 function handleSetFilter(cat) {
@@ -17,6 +18,7 @@ function handleSetFilter(cat) {
 
 <template>
   <NavBar
+    :ghost="route.path === '/'"
     @set-filter="handleSetFilter"
   />
 
