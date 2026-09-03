@@ -24,6 +24,7 @@ const sharePayment = ref('');
 const sharePhone = ref('');
 const nameError = ref(false);
 const phoneError = ref(false);
+const sharePhoneError = ref(false);
 const tableError = ref(false);
 const processing = ref(false);
 const done = ref(false);
@@ -36,6 +37,10 @@ function normalizePhone(p) {
   if (p.charAt(0) === '+') p = p.slice(1);
   else if (p.charAt(0) === '0') p = '255' + p.slice(1);
   return p;
+}
+
+function isValidTZPhone(p) {
+  return /^255(6[25]|6[5789]|7[123456])\d{7}$/.test(normalizePhone(p));
 }
 
 function buildOrderMessage(orderNum) {
@@ -123,14 +128,17 @@ function resetForm() {
   sharePhone.value = '';
   nameError.value = false;
   phoneError.value = false;
+  sharePhoneError.value = false;
   tableError.value = false;
 }
 
 function handleSubmit() {
   nameError.value = name.value.trim().length < 2;
   tableError.value = !table.value.trim();
-  phoneError.value = false;
-  if (nameError.value || tableError.value) return;
+  const isCash = payment.value === 'Cash' || payment.value === 'Other';
+  phoneError.value = !isValidTZPhone(phone.value) && !isCash;
+  sharePhoneError.value = shareBill.value && sharePhone.value.trim() !== '' && !isValidTZPhone(sharePhone.value);
+  if (nameError.value || tableError.value || phoneError.value || sharePhoneError.value) return;
 
   processing.value = true;
 
@@ -240,9 +248,10 @@ function handleOverlayClick(e) {
                 <option value="Other" v-html="lang.$t('co.pay.other')"></option>
               </select>
             </div>
-            <div class="field">
+            <div class="field" :class="{ invalid: phoneError }">
               <label v-html="lang.$t('co.lbl.phone')"></label>
               <input type="tel" v-model="phone" :placeholder="lang.$t('co.ph.phone')">
+              <div class="err" v-html="lang.$t('co.err.phone')"></div>
             </div>
             <div class="field" :class="{ invalid: tableError }">
               <label v-html="lang.$t('co.lbl.table')"></label>
@@ -273,9 +282,10 @@ function handleOverlayClick(e) {
                   <option value="Other">Nyingine</option>
                 </select>
               </div>
-              <div class="field">
+              <div class="field" :class="{ invalid: sharePhoneError }">
                 <label v-html="lang.$t('co.lbl.sharephone')"></label>
                 <input type="tel" v-model="sharePhone" :placeholder="lang.$t('co.ph.sharephone')">
+                <div class="err" v-html="lang.$t('co.err.phone')"></div>
               </div>
             </div>
             <div class="field">

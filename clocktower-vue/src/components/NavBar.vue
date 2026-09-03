@@ -15,16 +15,19 @@ const props = defineProps({
 });
 const mobileOpen = ref(false);
 const scrolled = ref(false);
+const menuOpen = ref(false);
 
 const dropCats = [
   { key: 'breakfast', icon: 'egg' },
   { key: 'visinia', icon: 'bowlfood' },
-  { key: 'meals', icon: 'platewheat' },
-  { key: 'drinks', icon: 'glasswater' }
+  { key: 'drinks', icon: 'glasswater' },
+  { key: 'lunch', icon: 'platewheat' },
+  { key: 'dinner', icon: 'platewheat' }
 ];
 
 function handleFilter(cat) {
-  emit('set-filter', cat.key === 'meals' ? 'lunch' : cat.key);
+  menuOpen.value = false;
+  emit('set-filter', cat.key);
   mobileOpen.value = false;
 }
 
@@ -55,13 +58,22 @@ function goToLogin() {
 
 function onScroll() {
   scrolled.value = window.scrollY > 20;
+  menuOpen.value = false;
+}
+
+function closeMenu(e) {
+  if (!e.target.closest('.drop')) {
+    menuOpen.value = false;
+  }
 }
 
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('click', closeMenu);
 });
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll);
+  document.removeEventListener('click', closeMenu);
 });
 </script>
 
@@ -85,11 +97,18 @@ onUnmounted(() => {
               <span>{{ lang.$t('nav.home') }}</span>
             </a>
           </li>
-          <li>
-            <a href="#menu" @click.prevent="goSection('menu')">
+          <li class="drop" :class="{ open: menuOpen }">
+            <button class="drop-trigger" type="button" @click="menuOpen = !menuOpen">
               <LineIcon name="utensils" size="15" />
               <span>{{ lang.$t('nav.menu') }}</span>
-            </a>
+              <LineIcon class="car" name="arrowright" size="12" />
+            </button>
+            <div class="drop-menu">
+              <a v-for="cat in dropCats" :key="cat.key" href="#menu" @click.prevent="handleFilter(cat)">
+                <span class="em"><LineIcon :name="cat.icon" size="16" color="#0A5C36" /></span>
+                {{ lang.$t('cat.' + cat.key) }}
+              </a>
+            </div>
           </li>
           <li>
             <a href="#scan" @click.prevent="goSection('scan')">

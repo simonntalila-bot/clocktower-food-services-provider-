@@ -1,7 +1,6 @@
 <script setup>
 import { useLangStore } from '../stores/lang';
 import LineIcon from './LineIcon.vue';
-import heroFood from '../assets/hero-food.png';
 
 const lang = useLangStore();
 const emit = defineEmits(['scroll-to-menu', 'open-cart']);
@@ -9,10 +8,9 @@ const emit = defineEmits(['scroll-to-menu', 'open-cart']);
 
 <template>
   <section class="hero" id="home">
-    <div class="hero-bg">
-      <img :src="heroFood" alt="ClockTower delicious food" loading="eager" />
-    </div>
+    <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
+    <img src="/welcome.png" class="hero-welcome-img" alt="Welcome" />
 
     <div class="hero-content">
       <span class="badge">
@@ -24,6 +22,9 @@ const emit = defineEmits(['scroll-to-menu', 'open-cart']);
       <div class="hero-actions">
         <button class="btn btn-primary" type="button" @click="emit('scroll-to-menu')">
           {{ lang.$t('cats.view') }} <LineIcon name="arrowright" size="14" color="#ffffff" style="vertical-align:-2px" />
+        </button>
+        <button class="btn btn-ghost" type="button" @click="emit('open-cart')">
+          ORDER NOW <LineIcon name="cart" size="14" color="#ffffff" style="vertical-align:-2px" />
         </button>
       </div>
     </div>
